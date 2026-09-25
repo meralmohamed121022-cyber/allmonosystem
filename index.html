@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة المشاريع</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="https://github.com/meralmohamed121022-cyber/OFFERSTRANS/blob/main/icon.png?raw=true" type="image/png">
+    <link rel="apple-touch-icon" href="https://github.com/meralmohamed121022-cyber/OFFERSTRANS/blob/main/icon.png?raw=true">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button id="back-btn" class="back-btn hidden" onclick="goHome()" title="العودة للرئيسية">
+        🏠
+    </button>
+
+    <div id="main-container" class="container">
+        <header id="main-header">
+            <h1>مشاريعي</h1>
+            <p>اختر أحد الروابط لعرضه بملء الشاشة</p>
+        </header>
+        
+        <div id="cards-grid" class="cards-grid">
+            <button class="card" onclick="loadUrl('./Offers Trans.html')">
+                <div class="card-icon">🚀</div>
+                <div class="card-content">
+                    <h2>Offers Trans</h2>
+                </div>
+            </button>
+
+            <button class="card" onclick="loadUrl('./Offers Dash.html')">
+                <div class="card-icon">📊</div>
+                <div class="card-content">
+                    <h2>Offers Dash</h2>
+                </div>
+            </button>
+
+            <button class="card" onclick="loadUrl('https://projectlocator.vercel.app/')">
+                <div class="card-icon">📍</div>
+                <div class="card-content">
+                    <h2>Project Locator</h2>
+                </div>
+            </button>
+
+            <button class="card" onclick="loadUrl('./offers_photos.html')">
+                <div class="card-icon">📸</div>
+                <div class="card-content">
+                    <h2>Offers Photos</h2>
+                </div>
+            </button>
+        </div>
+
+        <div id="iframe-container" class="iframe-container hidden">
+            <div id="loading" class="loading hidden">جاري التحميل...</div>
+            <iframe id="content-frame" src="about:blank" title="Project Preview"></iframe>
+        </div>
+    </div>
+
+    <script>
+        const iframeContainer = document.getElementById('iframe-container');
+        const contentFrame = document.getElementById('content-frame');
+        const loading = document.getElementById('loading');
+        const mainHeader = document.getElementById('main-header');
+        const cardsGrid = document.getElementById('cards-grid');
+        const backBtn = document.getElementById('back-btn');
+        const mainContainer = document.getElementById('main-container');
+
+        function loadUrl(url) {
+            // Hide home elements
+            mainHeader.style.display = 'none';
+            cardsGrid.style.display = 'none';
+            
+            // Transform container to fullscreen mode
+            mainContainer.classList.add('fullscreen-mode');
+            
+            // Show iframe and back button
+            iframeContainer.classList.remove('hidden');
+            backBtn.classList.remove('hidden');
+            loading.classList.remove('hidden');
+            
+            // Set URL
+            contentFrame.src = url;
+            
+            // Hide loading when done
+            contentFrame.onload = () => {
+                loading.classList.add('hidden');
+            };
+        }
+
+        function goHome() {
+            // Clear iframe
+            contentFrame.src = 'about:blank';
+            
+            // Show home elements
+            mainHeader.style.display = 'block';
+            cardsGrid.style.display = 'grid'; // because it's a grid
+            
+            // Revert container
+            mainContainer.classList.remove('fullscreen-mode');
+            
+            // Hide iframe and back button
+            iframeContainer.classList.add('hidden');
+            backBtn.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
