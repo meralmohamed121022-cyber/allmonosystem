@@ -77,14 +77,36 @@
             background-color: rgba(0,0,0,0.4) !important;
         }
         .glass-panel tbody {
-            background-color: white !important;
+            background-color: rgba(15, 23, 42, 0.4) !important;
+        }
+        .glass-panel tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
         }
         .glass-panel tbody tr td {
-            border-color: rgba(0, 0, 0, 0.1) !important;
-            color: #334155 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #f8fafc !important;
         }
         .glass-panel tbody tr td * {
-            color: #334155 !important;
+            color: #f8fafc !important;
+        }
+        .glass-panel tbody tr td span {
+            background-color: rgba(59, 130, 246, 0.2) !important;
+            color: #93c5fd !important;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .glass-panel tbody tr td button {
+            background-color: rgba(59, 130, 246, 0.8) !important;
+            color: white !important;
+        }
+        .glass-panel tbody tr td button:hover {
+            background-color: rgba(37, 99, 235, 1) !important;
+        }
+        .glass-panel tbody tr td button.text-red-500 {
+            background-color: rgba(220, 38, 38, 0.8) !important;
+            color: white !important;
+        }
+        .glass-panel tbody tr td button.text-red-500:hover {
+            background-color: rgba(185, 28, 28, 1) !important;
         }
         #dropZone:hover *, #dropZone.drag-active * {
             color: #334155 !important;
@@ -97,6 +119,9 @@
         }
         #fileNameDisplay button {
             color: white !important;
+        }
+        #statsBadge {
+            color: #1e40af !important;
         }
     </style>
 </head>
@@ -236,23 +261,23 @@
         </div>
 
         <!-- Preview Table -->
-        <div id="previewContainer" style="display: none;" class="glass-panel p-6 overflow-hidden">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold">مراجعة العروض المستخرجة (يمكنك تعديل
+        <div id="previewContainer" style="display: none;" class="glass-panel p-4 md:p-6 overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 text-center md:text-right">
+                <h2 class="text-lg md:text-xl font-bold">مراجعة العروض المستخرجة (يمكنك تعديل
                     القيم مباشرة)</h2>
-                <span id="statsBadge" class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full"></span>
+                <span id="statsBadge" class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full shrink-0"></span>
             </div>
 
             <div class="overflow-x-auto rounded-lg border border-slate-200">
                 <table class="w-full text-sm text-right text-slate-500">
                     <thead class="text-xs text-slate-700 uppercase bg-slate-50">
                         <tr>
-                            <th class="px-4 py-3 border-b">إجراء</th>
-                            <th class="px-4 py-3 border-b">اسم الشيت</th>
-                            <th class="px-4 py-3 border-b">العرض (عربي)</th>
-                            <th class="px-4 py-3 border-b">العرض (إنجليزي)</th>
-                            <th class="px-4 py-3 border-b">الأكواد</th>
-                            <th class="px-4 py-3 border-b">ستايل CSS</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">إجراء</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">اسم الشيت</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">العرض (عربي)</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">العرض (إنجليزي)</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">الأكواد</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">ستايل CSS</th>
                         </tr>
                     </thead>
                     <tbody id="previewBody" class="divide-y divide-slate-200 bg-white">
@@ -1175,19 +1200,19 @@ else if (/^\d+$/.test(sheetName)) {
                     : `<button onclick="openCodesModal(this.closest('td'))" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">تعديل</button>`;
 
                 tr.innerHTML = `
-                    <td class="px-4 py-4">
+                    <td class="px-2 py-2 md:px-4 md:py-4">
                         <button onclick="this.closest('tr').remove(); updateStats();" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded">حذف</button>
                     </td>
-                    <td class="px-4 py-4 text-xs font-bold text-gray-500 col-sheet">${offer.sheetName || ''}</td>
-                    <td class="px-4 py-4 font-bold text-slate-800 col-ar" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerTypeAR}</td>
-                    <td class="px-4 py-4 font-medium col-en" dir="ltr" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerType}</td>
-                    <td class="px-4 py-4 col-codes-container" data-codes="${offer.codes.join(' ')}">
+                    <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-500 col-sheet">${offer.sheetName || ''}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 font-bold text-slate-800 col-ar" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerTypeAR}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 font-medium col-en" dir="ltr" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerType}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 col-codes-container" data-codes="${offer.codes.join(' ')}">
                         <div class="flex flex-wrap gap-1 items-center">
                             ${badgesHtml}
                             ${editBtn}
                         </div>
                     </td>
-                    <td class="px-4 py-4 col-style" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.styleClass}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 col-style" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.styleClass}</td>
                 `;
                 previewBody.appendChild(tr);
             });
