@@ -939,7 +939,7 @@
                     offersArray.unshift(exportObject);
                 }
 
-                const newArrayStr = JSON.stringify(newOffersArray, null, 12).replace(/^\\[/, "[\\n          ").replace(/]$/, "\\n        ]");
+                const newArrayStr = JSON.stringify(offersArray, null, 12).replace(/^\\[/, "[\\n          ").replace(/]$/, "\\n        ]");
                 const newContentStr = contentStr.substring(0, offersStartIdx + startMarker.length) + newArrayStr + contentStr.substring(offersStartIdx + startMarker.length + lastBracketIdx + 1);
 
                 // Encode to Base64 safely
