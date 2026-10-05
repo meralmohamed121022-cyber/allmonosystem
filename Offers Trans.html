@@ -320,8 +320,8 @@
             <h3 id="customConfirmTitle" class="text-xl font-bold text-center text-gray-800 mb-2">Confirm</h3>
             <p id="customConfirmMessage" class="text-gray-600 text-center mb-6 leading-relaxed"></p>
             <div class="flex gap-3">
-                <button onclick="resolveCustomConfirm(false)" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 font-bold transition-colors">Cancel</button>
-                <button onclick="resolveCustomConfirm(true)" class="flex-1 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold transition-colors shadow-md hover:shadow-lg">Confirm</button>
+                <button id="customConfirmBtnCancel" onclick="resolveCustomConfirm(false)" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 font-bold transition-colors">Cancel</button>
+                <button id="customConfirmBtnOk" onclick="resolveCustomConfirm(true)" class="flex-1 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold transition-colors shadow-md hover:shadow-lg">Confirm</button>
             </div>
         </div>
     </div>
@@ -413,10 +413,12 @@
         }
 
         let confirmResolver = null;
-        function customConfirm(title, message) {
+        function customConfirm(title, message, okText = 'Confirm', cancelText = 'Cancel') {
             return new Promise((resolve) => {
                 document.getElementById('customConfirmTitle').innerText = title;
                 document.getElementById('customConfirmMessage').innerText = message;
+                document.getElementById('customConfirmBtnOk').innerText = okText;
+                document.getElementById('customConfirmBtnCancel').innerText = cancelText;
                 const modal = document.getElementById('customConfirmModal');
                 const box = document.getElementById('customConfirmBox');
                 
@@ -1248,8 +1250,26 @@ else if (/^\d+$/.test(sheetName)) {
             }
 
             // إضافة عروض الـ XY 
-            finalJsonData = [...offersDB, ...xyOffers];
-            renderPreview(finalJsonData);
+            const newOffers = [...offersDB, ...xyOffers];
+            if (finalJsonData && finalJsonData.length > 0) {
+                customConfirm(
+                    'Add Offers from Excel', 
+                    `Do you want to add these new offers to the current ${finalJsonData.length} offers?`,
+                    'Add New Offers',
+                    'Cancel'
+                ).then(append => {
+                    if (append) {
+                        finalJsonData = [...finalJsonData, ...newOffers];
+                        renderPreview(finalJsonData);
+                    } else {
+                        // If cancel, do nothing! Keep existing data as it was.
+                        renderPreview(finalJsonData);
+                    }
+                });
+            } else {
+                finalJsonData = newOffers;
+                renderPreview(finalJsonData);
+            }
         }
 
         // --- Formatting Functions (Python Logic Translation) ---
