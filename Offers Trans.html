@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محول عروض الصيدلية - Offers Automation</title>
+    <title>Pharmacy Offers Automation</title>
     <link rel="icon" type="image/png" href="https://github.com/meralmohamed121022-cyber/OFFERSTRANS/blob/main/icon.png?raw=true">
     <link rel="apple-touch-icon" href="https://github.com/meralmohamed121022-cyber/OFFERSTRANS/blob/main/icon.png?raw=true">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -134,9 +134,9 @@
         <!-- Header -->
         <div class="glass-panel p-6 flex flex-col md:flex-row items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">أداة أتمتة العروض (Excel to JSON) ⚡</h1>
-                <p class="text-slate-500 mt-1">قم برفع ملف الإكسيل الخام الخاص
-                    بالصيدلية وسيتم تحويله تلقائياً لملف عروض جاهز.</p>
+                <h1 class="text-2xl font-bold text-slate-900">Offers Automation Tool (Excel to JSON) ⚡</h1>
+                <p class="text-slate-500 mt-1">Upload the raw Excel file
+                    it will be automatically converted to ready offers.</p>
                 <div id="fileNameDisplay" class="hidden text-center text-sm font-semibold text-blue-600 mt-2 bg-blue-50 p-2 rounded flex justify-center items-center gap-4">
                 <span id="fileNameText"></span>
                 <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors">رفع ملف آخر</button>
@@ -145,11 +145,12 @@
             <div class="flex gap-2 mt-4 md:mt-0">
                 <a href="https://monosystem.vercel.app/" target="_blank"
                     class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl shadow-lg transition-all flex items-center gap-2 text-sm">
-                    الذهاب للموقع
+                    Go to Website
                 </a>
+                <a href="https://github.com/meralmohamed121022-cyber/allmonosystem" target="_blank" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl shadow-lg transition-all flex items-center gap-2 text-sm">GitHub Repo</a>
                 <button id="downloadBtn" style="display: none;"
                     class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-xl shadow-lg transition-all flex items-center gap-2 text-sm">
-                    تحميل JSON
+                    Download JSON
                 </button>
                 <button id="pushGithubBtn" style="display: none;"
                     class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-xl shadow-lg transition-all flex items-center gap-2">
@@ -158,7 +159,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
-                    نشر العروض (الموقع)
+                    Publish Offers (Website)
                 </button>
             </div>
         </div>
@@ -167,28 +168,28 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Settings Form -->
             <div class="glass-panel p-6 flex flex-col gap-4">
-                <h3 class="text-lg font-bold text-slate-700 mb-2">إعدادات العرض (البيانات
-                    الأساسية)</h3>
+                <h3 class="text-lg font-bold text-slate-700 mb-2">Offer Settings (Basic Data)
+                    </h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-600 mb-1">ID العرض</label>
-                        <input type="text" id="offerId" placeholder="مثال: Sep_milk offers"
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">Offer ID</label>
+                        <input type="text" id="offerId" placeholder="Example: Sep_milk offers"
                             class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-600 mb-1">اسم الـ Label</label>
-                        <input type="text" id="offerLabel" placeholder="مثال: milk offers-sept"
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">Label Name</label>
+                        <input type="text" id="offerLabel" placeholder="Example: milk offers-sept"
                             class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-600 mb-1">تاريخ البداية
-                            (Start)</label>
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">Start Date
+                            </label>
                         <input type="date" id="offerStart"
                             class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-600 mb-1">تاريخ النهاية
-                            (End)</label>
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">End Date
+                            </label>
                         <input type="date" id="offerEnd"
                             class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
@@ -196,27 +197,27 @@
 
                 <div style="display: none;">
                     <hr class="border-gray-200 my-2">
-                    <h3 class="text-lg font-bold text-slate-700 mb-2">إعدادات النشر المباشر (GitHub)
+                    <h3 class="text-lg font-bold text-slate-700 mb-2">Direct Publish Settings (GitHub)
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-semibold text-slate-600 mb-1">رمز الوصول (GitHub
-                                Token)</label>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1">Access Token (GitHub)
+                                </label>
                             <input type="password" id="ghToken" value=""
                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <p class="text-xs text-gray-500 mt-1">يفحفظ بأمان في متصفحك فقط ولا
-                                يفشارك.</p>
+                            <p class="text-xs text-gray-500 mt-1">Stored securely in your browser only and is not shared.
+                                </p>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-600 mb-1">المالك /
-                                المستودع</label>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1">Owner /
+                                Repository</label>
                             <input type="text" id="ghRepo" placeholder="owner/repo"
                                 value="meralmohamed121022-cyber/kaph"
                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
                                 dir="ltr">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-600 mb-1">مسار الملف</label>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1">File Path</label>
                             <input type="text" id="ghPath" value="offersgit.html"
                                 class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
                                 dir="ltr">
@@ -231,7 +232,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
-                        إدارة وحذف العروض الحالية
+                        Manage Existing Offers
                     </button>
                 </div>
             </div>
@@ -244,8 +245,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <h3 class="text-lg font-bold text-slate-700">اسحب وأفلت ملف الإكسيل هنا</h3>
-                <p class="text-sm text-slate-500 mt-2">أو اضغط لاختيار الملف من جهازك (.xlsx,
+                <h3 class="text-lg font-bold text-slate-700">Drag and drop Excel file here</h3>
+                <p class="text-sm text-slate-500 mt-2">Or click to select a file from your device (.xlsx,
                     .xls)</p>
                 <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls, .csv">
             </div>
@@ -256,28 +257,33 @@
             <div
                 class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4">
             </div>
-            <p class="text-lg font-bold text-slate-700">جاري معالجة البيانات واستخراج
-                العروض...</p>
+            <p class="text-lg font-bold text-slate-700">Processing data and extracting offers...
+                </p>
         </div>
 
         <!-- Preview Table -->
         <div id="previewContainer" style="display: none;" class="glass-panel p-4 md:p-6 overflow-hidden">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 text-center md:text-right">
-                <h2 class="text-lg md:text-xl font-bold">مراجعة العروض المستخرجة (يمكنك تعديل
-                    القيم مباشرة)</h2>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 text-center md:text-left">
+                <h2 class="text-lg md:text-xl font-bold">Review Extracted Offers (You can edit values directly)
+                    </h2>
                 <span id="statsBadge" class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full shrink-0"></span>
             </div>
 
-            <div class="overflow-x-auto rounded-lg border border-slate-200">
-                <table class="w-full text-sm text-right text-slate-500">
+            
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+                <input type="text" id="searchCodeInput" placeholder="Search by Code..." class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 w-full md:w-1/3">
+                <button id="addNewOfferBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all text-sm">+ Add New Offer</button>
+            </div>
+    \n            <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="w-full text-sm text-left text-slate-500">
                     <thead class="text-xs text-slate-700 uppercase bg-slate-50">
                         <tr>
-                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">إجراء</th>
-                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">اسم الشيت</th>
-                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">العرض (عربي)</th>
-                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">العرض (إنجليزي)</th>
-                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">الأكواد</th>
-                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">ستايل CSS</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">Action</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">Sheet Name</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">Offer (Arabic)</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">Offer (English)</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">Codes</th>
+                            <th class="px-2 py-2 md:px-4 md:py-3 border-b">CSS Style</th>
                         </tr>
                     </thead>
                     <tbody id="previewBody" class="divide-y divide-slate-200 bg-white">
@@ -297,9 +303,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">تنبيه</h3>
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Alert</h3>
             <p id="customAlertMessage" class="text-gray-600 text-center mb-6 leading-relaxed"></p>
-            <button onclick="closeCustomAlert()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-bold transition-all shadow-md hover:shadow-lg focus:ring-4 focus:ring-blue-200">حسناً</button>
+            <button onclick="closeCustomAlert()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-bold transition-all shadow-md hover:shadow-lg focus:ring-4 focus:ring-blue-200">OK</button>
         </div>
     </div>
 
@@ -311,11 +317,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <h3 id="customConfirmTitle" class="text-xl font-bold text-center text-gray-800 mb-2">تأكيد</h3>
+            <h3 id="customConfirmTitle" class="text-xl font-bold text-center text-gray-800 mb-2">Confirm</h3>
             <p id="customConfirmMessage" class="text-gray-600 text-center mb-6 leading-relaxed"></p>
             <div class="flex gap-3">
-                <button onclick="resolveCustomConfirm(false)" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 font-bold transition-colors">إلغاء</button>
-                <button onclick="resolveCustomConfirm(true)" class="flex-1 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold transition-colors shadow-md hover:shadow-lg">تأكيد</button>
+                <button onclick="resolveCustomConfirm(false)" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 font-bold transition-colors">Cancel</button>
+                <button onclick="resolveCustomConfirm(true)" class="flex-1 py-3 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold transition-colors shadow-md hover:shadow-lg">Confirm</button>
             </div>
         </div>
     </div>
@@ -323,18 +329,25 @@
     <!-- Codes Modal -->
     <div id="codesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl p-6 w-11/12 max-w-2xl flex flex-col shadow-2xl">
-            <h3 class="text-xl font-bold mb-4">تعديل الأكواد</h3>
-            <p class="text-sm text-gray-500 mb-2">أدخل الأكواد مفصولة بمسافة أو سطر
-                جديد.</p>
+            <h3 class="text-xl font-bold mb-4">Edit Codes</h3>
+            <p class="text-sm text-gray-500 mb-2">Enter codes separated by space or new line
+                </p>
+            <div class="mb-3 flex gap-2">
+                <div class="relative flex-1">
+                    <input type="text" id="searchInModalInput" placeholder="Search code to highlight..." class="w-full border border-gray-300 rounded p-2 pr-20 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 font-mono">
+                    <span id="searchMatchCount" class="absolute right-3 top-2.5 text-xs text-gray-500 font-bold"></span>
+                </div>
+                <button id="findCodeBtn" type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-bold transition-colors">Find</button>
+            </div>
             <textarea id="codesTextarea"
-                class="w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm leading-relaxed"
+                class="text-slate-800 w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm leading-relaxed"
                 style="height: 300px; direction: ltr;"></textarea>
             <div class="flex justify-end gap-3 mt-6">
                 <button onclick="closeCodesModal()"
-                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors">إلغاء</button>
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors">Cancel</button>
                 <button onclick="saveCodesModal()"
-                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-bold transition-colors">حفظ
-                    التعديلات</button>
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-bold transition-colors">Save
+                    Changes</button>
             </div>
         </div>
     </div>
@@ -342,19 +355,19 @@
     <!-- Manage Offers Modal -->
     <div id="manageOffersModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl p-6 w-11/12 max-w-2xl flex flex-col shadow-2xl max-h-[90vh]">
-            <h3 class="text-xl font-bold mb-4 border-b pb-2">إدارة العروض الحالية (في الموقع)
+            <h3 class="text-xl font-bold mb-4 border-b pb-2">Manage Existing Offers (On Website)
             </h3>
 
             <div id="manageOffersLoading" class="hidden flex-col items-center justify-center py-10">
                 <div
                     class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent mb-4">
                 </div>
-                <p class="text-gray-600 font-bold">جاري جلب العروض من الموقع...</p>
+                <p class="text-gray-600 font-bold">Fetching offers from website...</p>
             </div>
 
             <div id="manageOffersContent" class="hidden flex-col flex-1 overflow-hidden">
-                <p class="text-sm text-gray-500 mb-2">حدد العروض التي تريد <span
-                        class="text-red-500 font-bold">حذفها</span> من الموقع نهائياً:</p>
+                <p class="text-sm text-gray-500 mb-2">Select offers you want to <span
+                        class="text-red-500 font-bold">delete/edit</span> from the website:</p>
                 <div class="overflow-y-auto flex-1 border border-gray-200 rounded-lg p-2 bg-gray-50 flex flex-col gap-2 min-h-[200px]"
                     id="offersListContainer">
                     <!-- Checkboxes will be injected here -->
@@ -363,10 +376,10 @@
 
             <div class="flex justify-between items-center mt-6 border-t pt-4">
                 <button onclick="closeManageOffersModal()"
-                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors">إلغاء</button>
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors">Cancel</button>
                 <button id="btnDeleteSelectedOffers"
                     class="hidden px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white font-bold transition-colors flex items-center gap-2">
-                    حذف المحدد وتحديث الموقع
+                    Delete Selected & Update Website
                 </button>
             </div>
         </div>
@@ -462,9 +475,70 @@
 
         let currentEditCell = null;
 
-        function openCodesModal(tdElement) {
-            currentEditCell = tdElement;
-            codesTextarea.value = tdElement.getAttribute('data-codes');
+        
+        const searchInModalInput = document.getElementById('searchInModalInput');
+        const searchMatchCount = document.getElementById('searchMatchCount');
+
+        
+        function executeFind() {
+            const term = searchInModalInput.value.trim();
+            if (!term) {
+                searchMatchCount.innerText = '';
+                return;
+            }
+            const val = codesTextarea.value;
+            const index = val.indexOf(term);
+            if (index !== -1) {
+                searchMatchCount.innerText = 'Found';
+                searchMatchCount.classList.remove('text-red-500');
+                searchMatchCount.classList.add('text-green-600');
+                
+                codesTextarea.focus();
+                codesTextarea.setSelectionRange(index, index + term.length);
+                
+                const linesBeforeMatch = val.substring(0, index).split(/\r?\n/).length;
+                codesTextarea.scrollTop = Math.max(0, (linesBeforeMatch - 2) * 21);
+            } else {
+                searchMatchCount.innerText = 'Not found';
+                searchMatchCount.classList.remove('text-green-600');
+                searchMatchCount.classList.add('text-red-500');
+            }
+        }
+
+        searchInModalInput.addEventListener('input', function() {
+            const term = this.value.trim();
+            if (!term) {
+                searchMatchCount.innerText = '';
+                return;
+            }
+            const val = codesTextarea.value;
+            if (val.indexOf(term) !== -1) {
+                searchMatchCount.innerText = 'Press Enter';
+                searchMatchCount.classList.remove('text-red-500');
+                searchMatchCount.classList.add('text-green-600');
+            } else {
+                searchMatchCount.innerText = 'Not found';
+                searchMatchCount.classList.remove('text-green-600');
+                searchMatchCount.classList.add('text-red-500');
+            }
+        });
+
+        searchInModalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executeFind();
+            }
+        });
+
+        document.getElementById('findCodeBtn').addEventListener('click', executeFind);
+
+        
+        function openCodesModal(btn) {
+            currentEditCell = btn.closest('td');
+            let codesStr = currentEditCell.getAttribute('data-codes') || '';
+            codesTextarea.value = codesStr.split(' ').join('\n');
+            searchInModalInput.value = '';
+            searchMatchCount.innerText = '';
             codesModal.classList.remove('hidden');
             codesModal.classList.add('flex');
         }
@@ -481,14 +555,26 @@
             const codes = newCodesText.split(/\s+/).filter(c => c);
             const badgesHtml = codes.slice(0, 3).map(c => `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">${c}</span>`).join('');
             
-            const editBtn = codes.length > 3 ? `<button onclick="openCodesModal(this.closest('td'))" class="bg-blue-100 hover :bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">+${codes.length - 3} (تعديل)</button>` 
-                : `<button onclick="openCodesModal(this.closest('td'))" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">تعديل</button>`;
+            const editBtn = codes.length > 3 ? `<button onclick="openCodesModal(this)" class="bg-blue-100 hover :bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">+${codes.length - 3} (Edit)</button>` 
+                : `<button onclick="openCodesModal(this)" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">Edit</button>`;
             
             currentEditCell.querySelector('div').innerHTML = badgesHtml + editBtn;
             closeCodesModal();
             updateStats();
         }
 
+        
+        window.editExistingOffer = function(index) {
+            const offer = parsedOffersArray[index];
+            document.getElementById('offerId').value = offer.id || '';
+            document.getElementById('offerLabel').value = offer.label || '';
+            document.getElementById('offerStart').value = offer.start || '';
+            document.getElementById('offerEnd').value = offer.end || '';
+            finalJsonData = offer.offers || [];
+            renderPreview(finalJsonData);
+            closeManageOffersModal();
+        };
+    
         function closeManageOffersModal() {
             manageOffersModal.classList.add('hidden');
             manageOffersModal.classList.remove('flex');
@@ -510,7 +596,7 @@
             const path = document.getElementById('ghPath').value.trim();
 
             if (!token || !repo || !path) {
-                customAlert('يرجى ملء جميع إعدادات GitHub (Token, Repo, Path) في لوحة الإعدادات قبل الإدارة.');
+                customAlert('Please fill all GitHub settings (Token, Repo, Path) في لوحة الإعدادات قبل الإدارة.');
                 closeManageOffersModal();
                 return;
             }
@@ -521,7 +607,7 @@
                     headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
                 });
 
-        if (!res.ok) throw new Error(`فشل جلب الملف: ${res.statusText}`);
+        if (!res.ok) throw new Error(`Failed to fetch file: ${res.statusText}`);
         const fileData = await res.json();
         gitFileSha = fileData.sha;
 
@@ -530,7 +616,7 @@
             const blobRes = await fetch(`https://api.github.com/repos/${repo}/git/blobs/${gitFileSha}`, {
                 headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
             });
-            if (!blobRes.ok) throw new Error(`فشل جلب Blob: ${blobRes.statusText}`);
+            if (!blobRes.ok) throw new Error(`Failed to fetch Blob: ${blobRes.statusText}`);
             const blobData = await blobRes.json();
             base64Content = blobData.content;
         }
@@ -543,7 +629,7 @@
         const endMarkerIdx = gitContentStr.indexOf(endMarker, offersStartIdx);
 
         if (offersStartIdx === -1 || endMarkerIdx === -1) {
-            throw new Error('لم يتم العثور على مصفوفة العروض في المل?.');
+            throw new Error('Array not found العروض في المل?.');
         }
 
         let arrayStr = gitContentStr.substring(offersStartIdx + startMarker.length, endMarkerIdx);
@@ -558,17 +644,46 @@
 
         // Render list
         parsedOffersArray.forEach((offer, index) => {
-            const id = offer.id || 'بدون ID';
-            const label = offer.label || 'بدون Label';
+            const id = offer.id || 'No ID';
+            const label = offer.label || 'No Label';
             const count = offer.offers ? offer.offers.length  : 0;
 
+            
+            const startD = offer.start || '';
+            const endD = offer.end || '';
+            let statusBadge = '';
+            let borderClass = 'border-gray-200';
+            if (startD && endD) {
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const sDate = new Date(startD);
+                const eDate = new Date(endD);
+                if (eDate < today) {
+                    statusBadge = '<span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Expired</span>';
+                    borderClass = 'border-red-300';
+                } else if (sDate > today) {
+                    statusBadge = '<span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Upcoming</span>';
+                    borderClass = 'border-yellow-300';
+                } else {
+                    statusBadge = '<span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Active</span>';
+                    borderClass = 'border-green-400 border-2';
+                }
+            }
+
             const item = document.createElement('label');
-            item.className = "flex items-center gap-3 p-3 bg-white border border-gray-200 rounded cursor-pointer hover:bg-red-50 transition-colors";
+            item.className = `flex items-center gap-3 p-3 bg-white border ${borderClass} rounded cursor-pointer hover:bg-slate-50 transition-colors relative`;
             item.innerHTML = `
-                        <input type="checkbox" class="offer-delete-checkbox w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500" data-index="${index}">
+                        <div class="flex flex-col gap-2 mr-3 z-10 relative">
+                            <input type="checkbox" class="offer-delete-checkbox w-5 h-5 text-red-600 rounded border-gray-300 focus:ring-red-500" data-index="${index}">
+                            <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs z-10" onclick="event.preventDefault(); event.stopPropagation(); editExistingOffer(${index});">Edit</button>
+                        </div>
                         <div class="flex-1">
-                            <h4 class="font-bold text-gray-800">${label}</h4>
-                            <p class="text-xs text-gray-500">ID: <span dir="ltr">${id}</span> | عدد العناصر: ${count}</p>
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-gray-800">${label}</h4>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">ID: <span dir="ltr">${id}</span> | Items Count: ${count}</p>
+                            <p class="text-xs text-gray-400 mt-1">Start: ${startD} | End: ${endD}</p>
                         </div>
                     `;
             offersListContainer.appendChild(item);
@@ -582,7 +697,7 @@
 
             } catch (err) {
             console.error(err);
-            customAlert(`حدث خطأ أثناء جلب العروض:\n${err.message}`);
+            customAlert(`Error fetching offers:\n${err.message}`);
             closeManageOffersModal();
         }
         });
@@ -590,17 +705,17 @@
         btnDeleteSelectedOffers.addEventListener('click', async () => {
             const checkboxes = document.querySelectorAll('.offer-delete-checkbox:checked');
             if (checkboxes.length === 0) {
-                customAlert('الرجاء تحديد عرض واحد على الأقل للحذ?.');
+                customAlert('Please select at least one offer to delete.');
                 return;
             }
-            if (!await customConfirm('تأكيد الحذف', `هل أنت متأكد من حذف ${checkboxes.length} عرض من الموقع نهائياً؟`)) return;
+            if (!await customConfirm('Confirm الDelete', `هل أنت متأكد من Delete ${checkboxes.length} عرض من الموقع نهائياً؟`)) return;
 
             const token = document.getElementById('ghToken').value.trim();
             const repo = document.getElementById('ghRepo').value.trim();
             const path = document.getElementById('ghPath').value.trim();
 
             btnDeleteSelectedOffers.disabled = true;
-            btnDeleteSelectedOffers.innerHTML = '<div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div> جاري الحذ?...';
+            btnDeleteSelectedOffers.innerHTML = '<div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div> Deleting...';
 
             try {
                 // Get indexes to delete (descending order to not mess up indices, though we will just filter)
@@ -609,7 +724,7 @@
                 const newOffersArray = parsedOffersArray.filter((_, idx) => !indexesToDelete.includes(idx));
 
                 // Format new array
-                const newArrayStr = JSON.stringify(newOffersArray, null, 12).replace(/^\[/, "[\n          ").replace(/]$/, "\n        ]");
+                const newArrayStr = JSON.stringify(newOffersArray, null, 12).replace(/^\\[/, "[\\n          ").replace(/]$/, "\\n        ]");
 
                 const newContentStr = gitContentStr.substring(0, offersStartIdx + "const ALL_PERIODS_OFFERS = ".length) + newArrayStr + gitContentStr.substring(offersEndIdx);
 
@@ -628,22 +743,50 @@
 
                 if (!commitRes.ok) {
                     const errObj = await commitRes.json();
-                    throw new Error(`فشل الحذف: ${errObj.message || JSON.stringify(errObj)}`);
+                    throw new Error(`فشل الDelete: ${errObj.message || JSON.stringify(errObj)}`);
                 }
 
-                customAlert('تم حذف العروض المحددة وتحديث الموقع بنجاح!');
+                customAlert('تم Delete العروض المحددة وتحديث الموقع بنجاح!');
                 closeManageOffersModal();
 
             } catch (err) {
                 console.error(err);
-                customAlert(`حدث خطأ:\n${err.message}`);
+                customAlert(`Error:\n${err.message}`);
             } finally {
                 btnDeleteSelectedOffers.disabled = false;
-                btnDeleteSelectedOffers.innerHTML = 'حذف المحدد وتحديث الموقع';
+                btnDeleteSelectedOffers.innerHTML = 'Delete Selected & Update Website';
             }
         });
 
         // --- Event Listeners ---
+
+        document.getElementById('searchCodeInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase().trim();
+            const rows = previewBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const codes = row.querySelector('.col-codes-container').getAttribute('data-codes') || '';
+                if (codes.includes(term)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('addNewOfferBtn').addEventListener('click', function() {
+            if (!finalJsonData) finalJsonData = [];
+            finalJsonData.push({
+                sheetName: 'New Sheet',
+                offerType: 'New Offer',
+                offerTypeAR: 'عرض جديد',
+                codes: [],
+                styleClass: 'offer-custom',
+                badgeClass: 'offer-custom',
+                offerPrice: {}
+            });
+            renderPreview(finalJsonData);
+        });
+    
         dropZone.addEventListener('click', () => fileInput.click());
         dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-active'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-active'));
@@ -711,7 +854,7 @@
         pushGithubBtn.addEventListener('click', async () => {
             updateFinalDataFromTable();
             if (!finalJsonData || finalJsonData.length === 0) {
-                customAlert('لا يوجد بيانات للرفع. الرجاء معالجة الملف أولاً.');
+                customAlert('No data to upload. Please process a file first.');
                 return;
             }
 
@@ -721,7 +864,7 @@
             const offerEnd = document.getElementById('offerEnd').value || '';
 
             if (!offerStart || !offerEnd) {
-                customAlert('الرجاء اختيار تاريخ بداية ونهاية العرض قبل النشر!');
+                customAlert('Please select start and end dates before publishing!');
                 return;
             }
 
@@ -738,13 +881,13 @@
             const path = document.getElementById('ghPath').value.trim();
 
             if (!token || !repo || !path) {
-                customAlert('يرجى ملء جميع إعدادات GitHub (Token, Repo, Path) في لوحة الإعدادات قبل النشر.');
+                customAlert('Please fill all GitHub settings (Token, Repo, Path) في لوحة الإعدادات قبل النشر.');
                 return;
             }
-            if (!await customConfirm('تأكيد النشر', `سيتم نشر العرض "${offerLabel}" على الموقع مباشرة. هل أنت متأكد؟`)) return;
+            if (!await customConfirm('Confirm النشر', `Offer "${offerLabel}" will be published. Are you sure?`)) return;
 
             pushGithubBtn.disabled = true;
-            pushGithubBtn.innerHTML = '<div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div> جاري الرفع...';
+            pushGithubBtn.innerHTML = '<div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div> Uploading...';
 
             try {
                 // 1. Fetch current file from GitHub
@@ -756,7 +899,7 @@
                     }
                 });
 
-                if (!res.ok) throw new Error(`فشل جلب الملف: ${res.statusText}`);
+                if (!res.ok) throw new Error(`Failed to fetch file: ${res.statusText}`);
                 const fileData = await res.json();
 
                 let base64Content = fileData.content;
@@ -764,7 +907,7 @@
                     const blobRes = await fetch(`https://api.github.com/repos/${repo}/git/blobs/${fileData.sha}`, {
                         headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
                     });
-                    if (!blobRes.ok) throw new Error(`فشل جلب Blob: ${blobRes.statusText}`);
+                    if (!blobRes.ok) throw new Error(`Failed to fetch Blob: ${blobRes.statusText}`);
                     const blobData = await blobRes.json();
                     base64Content = blobData.content;
                 }
@@ -773,20 +916,31 @@
                 base64Content = base64Content.replace(/\s/g, '');
                 const contentStr = decodeURIComponent(escape(atob(base64Content)));
 
-                // 2. Inject new offer
-                const marker = "const ALL_PERIODS_OFFERS = [";
-                const markerIdx = contentStr.indexOf(marker);
+                // 2. Update existing offer or insert new
+                const startMarker = "const ALL_PERIODS_OFFERS = ";
+                const endMarker = "function parseLocalDate";
+                const offersStartIdx = contentStr.indexOf(startMarker);
+                const endMarkerIdx = contentStr.indexOf(endMarker, offersStartIdx);
 
-                if (markerIdx === -1) {
-                    throw new Error('لم يتم العثور على مصفوفة ALL_PERIODS_OFFERS في الملف');
+                if (offersStartIdx === -1 || endMarkerIdx === -1) {
+                    throw new Error('Array not found ALL_PERIODS_OFFERS in file');
                 }
 
-                // Format the new object beautifully
-                let newOfferJson = JSON.stringify(exportObject, null, 12);
-                newOfferJson = `\n          ${newOfferJson},`;
+                let arrayStr = contentStr.substring(offersStartIdx + startMarker.length, endMarkerIdx);
+                const lastBracketIdx = arrayStr.lastIndexOf(']');
+                arrayStr = arrayStr.substring(0, lastBracketIdx + 1);
+                
+                let offersArray = (new Function(`return ${arrayStr};`))();
+                
+                const existingIdx = offersArray.findIndex(o => o.id === offerId);
+                if (existingIdx !== -1) {
+                    offersArray[existingIdx] = exportObject;
+                } else {
+                    offersArray.unshift(exportObject);
+                }
 
-                const insertPos = markerIdx + marker.length;
-                const newContentStr = contentStr.substring(0, insertPos) + newOfferJson + contentStr.substring(insertPos);
+                const newArrayStr = JSON.stringify(newOffersArray, null, 12).replace(/^\\[/, "[\\n          ").replace(/]$/, "\\n        ]");
+                const newContentStr = contentStr.substring(0, offersStartIdx + startMarker.length) + newArrayStr + contentStr.substring(offersStartIdx + startMarker.length + lastBracketIdx + 1);
 
                 // Encode to Base64 safely
                 const newContentB64 = btoa(unescape(encodeURIComponent(newContentStr)));
@@ -808,21 +962,21 @@
 
                 if (!commitRes.ok) {
                     const errObj = await commitRes.json();
-                    throw new Error(`فشل الرفع: ${errObj.message}`);
+                    throw new Error(`Upload failed: ${errObj.message}`);
                 }
 
-                customAlert('تم رفع العرض بنجاح! سيتم تحديث الموقع خلال ثوانف معدودة.');
+                customAlert('Offer uploaded successfully! Website will update in seconds.');
 
             } catch (err) {
                 console.error(err);
-                customAlert(`حدث خطأ:\n${err.message}`);
+                customAlert(`Error:\n${err.message}`);
             } finally {
                 pushGithubBtn.disabled = false;
                 pushGithubBtn.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
-                    نشر العروض (الموقع)
+                    Publish Offers (Website)
                 `;
             }
         });
@@ -836,7 +990,7 @@
             pushGithubBtn.style.display = 'none';
 
             
-            document.getElementById("fileNameText").innerText = "الملف الحالي: " + file.name;
+            document.getElementById("fileNameText").innerText = "Current File: " + file.name;
             fileNameDisplay.classList.remove('hidden');
 
             let cleanName = file.name.replace(/\.xlsx$/i, '');
@@ -850,7 +1004,7 @@
                     const data = new Uint8Array(e.target.result);
                     processExcel(data);
                 } catch (err) {
-                    customAlert('حدث خطأ أثناء معالجة الملف: ' + err.message);
+                    customAlert('Error processing file: ' + err.message);
                     resetUI();
                 }
             };
@@ -878,13 +1032,13 @@
                 let snLower = String(sheetName).toLowerCase().trim();
                 let promoText = String(data[0][0] || "");
 
-                // معالجة شيت الـ XY فقط إذا كان اسم الشيت xy
+                // معالجة شيت الـ XY فقط إذا كان Sheet Name xy
                 if (snLower === 'xy') {
                     for (let i = 0; i < data.length; i++) {
                         const row = data[i];
                         if (!row) continue;
 
-                        // استخراج كل الأكواد المكونة من 6 أرقام في هذا الصف
+                        // استخراج كل Codes المكونة من 6 أرقام في هذا الصف
                         let rowCodes = [];
                         for (let j = 0; j < row.length; j++) {
                             let strVal = String(row[j]).trim();
@@ -1188,7 +1342,7 @@ else if (/^\d+$/.test(sheetName)) {
             pushGithubBtn.style.display = 'flex';
 
             let totalCodes = offers.reduce((acc, offer) => acc + offer.codes.length, 0);
-            statsBadge.innerText = `إجمالي العروض: ${offers.length} | الأكواد: ${totalCodes}`;
+            statsBadge.innerText = `Total Offers: ${offers.length} | Codes: ${totalCodes}`;
 
             previewBody.innerHTML = '';
             offers.forEach((offer, index) => {
@@ -1196,12 +1350,12 @@ else if (/^\d+$/.test(sheetName)) {
                 tr.className = "hover:bg-slate-50 transition-colors";
 
                 let badgesHtml = offer.codes.slice(0, 3).map(c => `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">${c}</span>`).join('');
-                let editBtn = offer.codes.length > 3 ? `<button onclick="openCodesModal(this.closest('td'))" class="bg-blue-100 hover :bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">+${offer.codes.length - 3} (تعديل)</button>`
-                    : `<button onclick="openCodesModal(this.closest('td'))" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">تعديل</button>`;
+                let editBtn = offer.codes.length > 3 ? `<button onclick="openCodesModal(this)" class="bg-blue-100 hover :bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">+${offer.codes.length - 3} (Edit)</button>`
+                    : `<button onclick="openCodesModal(this)" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">Edit</button>`;
 
                 tr.innerHTML = `
                     <td class="px-2 py-2 md:px-4 md:py-4">
-                        <button onclick="this.closest('tr').remove(); updateStats();" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded">حذف</button>
+                        <button onclick="confirmDeleteRow(this)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded">Delete</button>
                     </td>
                     <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-500 col-sheet">${offer.sheetName || ''}</td>
                     <td class="px-2 py-2 md:px-4 md:py-4 font-bold text-slate-800 col-ar" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerTypeAR}</td>
@@ -1217,12 +1371,24 @@ else if (/^\d+$/.test(sheetName)) {
                 previewBody.appendChild(tr);
             });
 
-            // إضافة مستمعين لحدث التعديل لتحديث العدادات
+            // إضافة مستمعين لحدث الEdit لتحديث العدادات
             const editableCells = previewBody.querySelectorAll('[contenteditable="true"]');
             editableCells.forEach(cell => {
                 cell.addEventListener('input', updateStats);
             });
         }
+
+        
+        window.confirmDeleteRow = async function(btn) {
+            const tr = btn.closest('tr');
+            let label = tr.querySelector('.col-sheet').innerText;
+            if(!label) label = "this offer";
+            const ok = await customConfirm('Confirm Delete', `Are you sure you want to delete ${label}?`);
+            if(ok) {
+                tr.remove();
+                updateStats();
+            }
+        };
 
         function updateStats() {
             const rows = previewBody.querySelectorAll('tr');
@@ -1235,7 +1401,7 @@ else if (/^\d+$/.test(sheetName)) {
                     totalCodes += count;
                 }
             });
-            statsBadge.innerText = `إجمالي العروض: ${rows.length} | الأكواد: ${totalCodes}`;
+            statsBadge.innerText = `Total Offers: ${rows.length} | Codes: ${totalCodes}`;
         }
 
         // تشفير التوكن (Obfuscation) لتخطي فحص جيتهاب
