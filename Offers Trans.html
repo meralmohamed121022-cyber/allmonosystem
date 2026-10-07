@@ -1276,7 +1276,7 @@ else if (/^\d+$/.test(sheetName)) {
         function format_offer_ar(text) {
             text = text.replace(/-?\s*custom\s*/ig, ' '); // إزالة كلمة custom
             const text_lower = text.toLowerCase();
-            const nums = text.match(/\d+\.?\d*/g) || [];
+            const nums = (text.match(/\d+\.?\d*/g) || []).map(n => n.replace(/\.00$/, ''));
 
             if (text_lower.includes('sar')) {
                 if (text_lower.includes('2nd') || text_lower.includes('second')) {
@@ -1314,7 +1314,7 @@ else if (/^\d+$/.test(sheetName)) {
         function format_offer_en(text) {
             text = text.replace(/-?\s*custom\s*/ig, ' '); // إزالة كلمة custom
             const text_lower = text.toLowerCase();
-            const nums = text.match(/\d+\.?\d*/g) || [];
+            const nums = (text.match(/\d+\.?\d*/g) || []).map(n => n.replace(/\.00$/, ''));
 
             if (text_lower.includes('sar')) {
                 if (text_lower.includes('2nd') || text_lower.includes('second')) {
