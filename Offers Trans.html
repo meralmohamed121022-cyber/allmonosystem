@@ -193,6 +193,19 @@
                         <input type="date" id="offerEnd"
                             class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-semibold text-slate-600 mb-1">Supervisor Name (for print)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="offerSupervisor" placeholder="Example: Dr-Ibrahim Gamae"
+                                class="flex-1 border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button type="button" id="fetchSupervisorBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all text-sm whitespace-nowrap">
+                                Get Current
+                            </button>
+                            <button type="button" id="updateSupervisorBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all text-sm whitespace-nowrap">
+                                Save Name
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div style="display: none;">
@@ -247,8 +260,8 @@
                 </svg>
                 <h3 class="text-lg font-bold text-slate-700">Drag and drop Excel file here</h3>
                 <p class="text-sm text-slate-500 mt-2">Or click to select a file from your device (.xlsx,
-                    .xls)</p>
-                <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls, .csv">
+                    .xls, .json)</p>
+                <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls, .csv, .json">
             </div>
         </div>
 
@@ -644,6 +657,12 @@
         // Parse the JS array string
         parsedOffersArray = (new Function(`return ${arrayStr};`))();
 
+        const supervisorRegex = /<span[^>]*>Supervisor:<\/span><br\/>\s*([\s\S]*?)\s*<\/div>/i;
+        const supervisorMatch = gitContentStr.match(supervisorRegex);
+        if (supervisorMatch && supervisorMatch[1]) {
+            document.getElementById('offerSupervisor').value = supervisorMatch[1].trim();
+        }
+
         // Render list
         parsedOffersArray.forEach((offer, index) => {
             const id = offer.id || 'No ID';
@@ -757,6 +776,133 @@
             } finally {
                 btnDeleteSelectedOffers.disabled = false;
                 btnDeleteSelectedOffers.innerHTML = 'Delete Selected & Update Website';
+            }
+        });
+
+        // --- Independent Supervisor Update & Fetch ---
+        document.getElementById('fetchSupervisorBtn').addEventListener('click', async () => {
+            const token = document.getElementById('ghToken').value.trim();
+            const repo = document.getElementById('ghRepo').value.trim();
+            const path = document.getElementById('ghPath').value.trim();
+
+            if (!token || !repo || !path) {
+                customAlert('Please fill all GitHub settings (Token, Repo, Path).');
+                return;
+            }
+
+            const btn = document.getElementById('fetchSupervisorBtn');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>';
+
+            try {
+                const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
+                const res = await fetch(apiUrl, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (!res.ok) throw new Error(`Failed to fetch file: ${res.statusText}`);
+                const fileData = await res.json();
+
+                let base64Content = fileData.content;
+                if (!base64Content || base64Content.trim() === '') {
+                    const blobRes = await fetch(`https://api.github.com/repos/${repo}/git/blobs/${fileData.sha}`, {
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    if (!blobRes.ok) throw new Error(`Failed to fetch Blob: ${blobRes.statusText}`);
+                    const blobData = await blobRes.json();
+                    base64Content = blobData.content;
+                }
+
+                base64Content = base64Content.replace(/\s/g, '');
+                const contentStr = decodeURIComponent(escape(atob(base64Content)));
+
+                const supRegex = /<span[^>]*>Supervisor:<\/span><br\/>\s*([\s\S]*?)\s*<\/div>/i;
+                const match = contentStr.match(supRegex);
+                if (match && match[1]) {
+                    document.getElementById('offerSupervisor').value = match[1].trim();
+                } else {
+                    customAlert('لم يتم العثور على اسم المشرف في الملف الحالي.');
+                }
+            } catch (err) {
+                console.error(err);
+                customAlert(`Error:\n${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+
+        document.getElementById('updateSupervisorBtn').addEventListener('click', async () => {
+            const newSupervisor = document.getElementById('offerSupervisor').value.trim();
+            if (!newSupervisor) {
+                customAlert('Please enter a Supervisor Name first.');
+                return;
+            }
+
+            const token = document.getElementById('ghToken').value.trim();
+            const repo = document.getElementById('ghRepo').value.trim();
+            const path = document.getElementById('ghPath').value.trim();
+
+            if (!token || !repo || !path) {
+                customAlert('Please fill all GitHub settings (Token, Repo, Path).');
+                return;
+            }
+
+            const btn = document.getElementById('updateSupervisorBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div> Saving...';
+
+            try {
+                const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
+                const res = await fetch(apiUrl, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (!res.ok) throw new Error(`Failed to fetch file: ${res.statusText}`);
+                const fileData = await res.json();
+
+                let base64Content = fileData.content;
+                if (!base64Content || base64Content.trim() === '') {
+                    const blobRes = await fetch(`https://api.github.com/repos/${repo}/git/blobs/${fileData.sha}`, {
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    if (!blobRes.ok) throw new Error(`Failed to fetch Blob: ${blobRes.statusText}`);
+                    const blobData = await blobRes.json();
+                    base64Content = blobData.content;
+                }
+
+                base64Content = base64Content.replace(/\s/g, '');
+                let contentStr = decodeURIComponent(escape(atob(base64Content)));
+
+                const supRegex = /(<span[^>]*>Supervisor:<\/span><br\/>\s*)([\s\S]*?)(\s*<\/div>)/i;
+                contentStr = contentStr.replace(supRegex, `$1${newSupervisor}$3`);
+
+                const newContentB64 = btoa(unescape(encodeURIComponent(contentStr)));
+
+                const commitRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `Update Supervisor Name to ${newSupervisor}`,
+                        content: newContentB64,
+                        sha: fileData.sha
+                    })
+                });
+
+                if (!commitRes.ok) {
+                    const errObj = await commitRes.json();
+                    throw new Error(`Update failed: ${errObj.message}`);
+                }
+
+                customAlert('تم تحديث اسم المشرف بنجاح!');
+
+            } catch (err) {
+                console.error(err);
+                customAlert(`Error:\n${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Save Name';
             }
         });
 
@@ -942,7 +1088,13 @@
                 }
 
                 const newArrayStr = JSON.stringify(offersArray, null, 12).replace(/^\\[/, "[\\n          ").replace(/]$/, "\\n        ]");
-                const newContentStr = contentStr.substring(0, offersStartIdx + startMarker.length) + newArrayStr + contentStr.substring(offersStartIdx + startMarker.length + lastBracketIdx + 1);
+                let newContentStr = contentStr.substring(0, offersStartIdx + startMarker.length) + newArrayStr + contentStr.substring(offersStartIdx + startMarker.length + lastBracketIdx + 1);
+
+                const newSupervisor = document.getElementById('offerSupervisor').value.trim();
+                if (newSupervisor) {
+                    const supRegex = /(<span[^>]*>Supervisor:<\/span><br\/>\s*)([\s\S]*?)(\s*<\/div>)/i;
+                    newContentStr = newContentStr.replace(supRegex, `$1${newSupervisor}$3`);
+                }
 
                 // Encode to Base64 safely
                 const newContentB64 = btoa(unescape(encodeURIComponent(newContentStr)));
@@ -995,7 +1147,7 @@
             document.getElementById("fileNameText").innerText = "Current File: " + file.name;
             fileNameDisplay.classList.remove('hidden');
 
-            let cleanName = file.name.replace(/\.xlsx$/i, '');
+            let cleanName = file.name.replace(/\.(xlsx|xls|csv|json)$/i, '');
             document.getElementById('offerId').value = cleanName;
             document.getElementById('offerLabel').value = cleanName;
 
@@ -1003,14 +1155,35 @@
             const reader = new FileReader();
             reader.onload = function (e) {
                 try {
-                    const data = new Uint8Array(e.target.result);
-                    processExcel(data);
+                    if (file.name.toLowerCase().endsWith('.json')) {
+                        const jsonText = e.target.result;
+                        const data = JSON.parse(jsonText);
+                        if (data.offers) {
+                            document.getElementById('offerId').value = data.id || cleanName;
+                            document.getElementById('offerLabel').value = data.label || cleanName;
+                            document.getElementById('offerStart').value = data.start || '';
+                            document.getElementById('offerEnd').value = data.end || '';
+                            finalJsonData = data.offers;
+                        } else if (Array.isArray(data)) {
+                            finalJsonData = data;
+                        } else {
+                            throw new Error("Invalid JSON format. Expected an array or an object with 'offers'.");
+                        }
+                        renderPreview(finalJsonData);
+                    } else {
+                        const data = new Uint8Array(e.target.result);
+                        processExcel(data);
+                    }
                 } catch (err) {
                     customAlert('Error processing file: ' + err.message);
                     resetUI();
                 }
             };
-            reader.readAsArrayBuffer(file);
+            if (file.name.toLowerCase().endsWith('.json')) {
+                reader.readAsText(file);
+            } else {
+                reader.readAsArrayBuffer(file);
+            }
         }
 
         function resetUI() {
