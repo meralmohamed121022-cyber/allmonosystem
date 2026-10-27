@@ -284,10 +284,65 @@
 
             
             <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
-                <input type="text" id="searchCodeInput" placeholder="Search by Code..." class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 w-full md:w-1/3">
-                <button id="addNewOfferBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all text-sm">+ Add New Offer</button>
+                <input type="text" id="searchCodeInput" placeholder="Search by Code (one or multiple)..." class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 w-full md:w-1/3">
+                <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+                    <select id="quickOfferTypeSelect" class="bg-slate-800 text-white border border-slate-600 rounded-lg py-2 px-3 text-xs md:text-sm focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        <option value="1+1 free">1+1 free (اشتري حبه واحصل على الثانية مجانا)</option>
+                        <option value="2+1 free">2+1 free (عرض 2 حبات + حبه مجانا)</option>
+                        <option value="2+2 free">2+2 free (اشتري حبتين وأحصل علي حبتين مجانا)</option>
+                        <option value="3+1 free">3+1 free (عرض 3 حبات + حبه مجانا)</option>
+                        <option value="3+3 free">3+3 free (عرض 3 حبات + 3 حبات مجانا)</option>
+                        <option value="4+1 free">4+1 free (عرض 4 حبات + حبه مجانا)</option>
+                        <option value="4+2 free">4+2 free (عرض 4 حبات + 2 حبات مجانا)</option>
+                        <option value="5+1 free">5+1 free (عرض 5 حبات + حبه مجانا)</option>
+                        <option value="Hard Offer">Hard Offer (عرض هارد)</option>
+                        <option value="50% off">50% off (خصم مباشر 50%)</option>
+                        <option value="50% off on 2nd">50% off on 2nd (خصم 50% على الحبة الثانية)</option>
+                        <option value="20% off">20% off (خصم مباشر 20%)</option>
+                        <option value="25% off">25% off (خصم مباشر 25%)</option>
+                        <option value="30% off">30% off (خصم مباشر 30%)</option>
+                        <option value="35% off">35% off (خصم مباشر 35%)</option>
+                        <option value="40% off">40% off (خصم مباشر 40%)</option>
+                        <option value="70% off on 2nd">70% off on 2nd (خصم 70% على الحبة الثانية)</option>
+                        <option value="BUY 1 GET 1 FREE">BUY 1 GET 1 FREE (اشتري 1 واحصل على 1 مجانا)</option>
+                        <option value="BUY 2 GET 1 FREE">BUY 2 GET 1 FREE (اشتري 2 واحصل على 1 مجانا)</option>
+                        <option value="Special Offer">Special Offer (عرض خاص)</option>
+                        <option value="Bundle Offer">Bundle Offer (عرض مجمع)</option>
+                    </select>
+                    <button id="addNewOfferBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-all text-sm flex items-center gap-1 shrink-0">
+                        <span>+ Add New Offer</span>
+                    </button>
+                </div>
             </div>
-    \n            <div class="overflow-x-auto rounded-lg border border-slate-200">
+
+            <!-- Global Datalist for Offer Types -->
+            <datalist id="offerTypesList">
+                <option value="1+1 free">اشتري حبه واحصل على الثانية مجانا</option>
+                <option value="2+1 free">عرض 2 حبات + حبه مجانا</option>
+                <option value="2+2 free">اشتري حبتين وأحصل علي حبتين مجانا</option>
+                <option value="3+1 free">عرض 3 حبات + حبه مجانا</option>
+                <option value="3+3 free">عرض 3 حبات + 3 حبات مجانا</option>
+                <option value="4+1 free">عرض 4 حبات + حبه مجانا</option>
+                <option value="4+2 free">عرض 4 حبات + 2 حبات مجانا</option>
+                <option value="5+1 free">عرض 5 حبات + حبه مجانا</option>
+                <option value="Hard Offer">عرض هارد</option>
+                <option value="50% off">خصم مباشر 50%</option>
+                <option value="50% off on 2nd">خصم 50% على الحبة الثانية</option>
+                <option value="20% off">خصم مباشر 20%</option>
+                <option value="25% off">خصم مباشر 25%</option>
+                <option value="30% off">خصم مباشر 30%</option>
+                <option value="35% off">خصم مباشر 35%</option>
+                <option value="40% off">خصم مباشر 40%</option>
+                <option value="70% off on 2nd">خصم 70% على الحبة الثانية</option>
+                <option value="BUY 1 GET 1 FREE">اشتري 1 واحصل على 1 مجانا</option>
+                <option value="BUY 2 GET 1 FREE">اشتري 2 واحصل على 1 مجانا</option>
+                <option value="Buy 1 @ SAR">اشتري حبة بسعر مخفض</option>
+                <option value="Buy 1 Get 2nd @ SAR">اشتري حبة واحصل على الثانية بسعر مخفض</option>
+                <option value="Special Offer">عرض خاص</option>
+                <option value="Bundle Offer">عرض مجمع</option>
+            </datalist>
+
+            <div class="overflow-x-auto rounded-lg border border-slate-200">
                 <table class="w-full text-sm text-left text-slate-500">
                     <thead class="text-xs text-slate-700 uppercase bg-slate-50">
                         <tr>
@@ -345,12 +400,33 @@
             <h3 class="text-xl font-bold mb-4">Edit Codes</h3>
             <p class="text-sm text-gray-500 mb-2">Enter codes separated by space or new line
                 </p>
-            <div class="mb-3 flex gap-2">
-                <div class="relative flex-1">
-                    <input type="text" id="searchInModalInput" placeholder="Search code to highlight..." class="w-full border border-gray-300 rounded p-2 pr-20 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 font-mono">
-                    <span id="searchMatchCount" class="absolute right-3 top-2.5 text-xs text-gray-500 font-bold"></span>
+            <!-- Multi-code Search & Batch Delete Box -->
+            <div class="mb-4 bg-slate-50 border border-slate-200 rounded-xl p-3 shadow-sm">
+                <div class="flex items-center justify-between mb-1.5">
+                    <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Find & Batch Delete Codes (فحص وحذف أكواد متعددة كجملة):
+                    </label>
+                    <span id="searchStatsBadge" class="text-xs font-bold px-2 py-0.5 rounded hidden"></span>
                 </div>
-                <button id="findCodeBtn" type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-bold transition-colors">Find</button>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="relative flex-1">
+                        <textarea id="searchInModalInput" rows="2" placeholder="Paste 6-digit codes here (separated by new line, space, or comma)..." class="w-full border border-gray-300 rounded-lg p-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 font-mono leading-relaxed resize-y"></textarea>
+                    </div>
+                    <div class="flex sm:flex-col gap-2 shrink-0 justify-center">
+                        <button id="findCodeBtn" type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <span>Find</span>
+                        </button>
+                        <button id="deleteFoundCodesBtn" type="button" class="bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer" disabled>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <span>Delete Found</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="searchResultsDetails" class="mt-2 text-xs space-y-1 hidden"></div>
             </div>
             <textarea id="codesTextarea"
                 class="text-slate-800 w-full border border-gray-300 rounded p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm leading-relaxed"
@@ -489,71 +565,202 @@
         const openManageModalBtn = document.getElementById('openManageModalBtn');
 
         let currentEditCell = null;
+        let lastFoundCodes = [];
 
-        
+        const PRESET_OFFER_TYPES = [
+            { en: '1+1 free', ar: 'اشتري حبه واحصل على الثانية مجانا', style: 'offer-buy-get' },
+            { en: '2+1 free', ar: 'عرض 2 حبات + حبه مجانا', style: 'offer-buy-get' },
+            { en: '2+2 free', ar: 'اشتري حبتين وأحصل علي حبتين مجانا', style: 'offer-buy-get' },
+            { en: '3+1 free', ar: 'عرض 3 حبات + حبه مجانا', style: 'offer-buy-get' },
+            { en: '3+3 free', ar: 'عرض 3 حبات + 3 حبات مجانا', style: 'offer-buy-get' },
+            { en: '4+1 free', ar: 'عرض 4 حبات + حبه مجانا', style: 'offer-buy-get' },
+            { en: '4+2 free', ar: 'عرض 4 حبات + 2 حبات مجانا', style: 'offer-buy-get' },
+            { en: '5+1 free', ar: 'عرض 5 حبات + حبه مجانا', style: 'offer-buy-get' },
+            { en: 'Hard Offer', ar: 'عرض هارد', style: 'offer-buy-get' },
+            { en: '50% off', ar: 'خصم مباشر 50%', style: 'offer-50-direct' },
+            { en: '50% off on 2nd', ar: 'خصم 50% على الحبة الثانية', style: 'offer-50-second' },
+            { en: '20% off', ar: 'خصم مباشر 20%', style: 'offer-20-direct' },
+            { en: '25% off', ar: 'خصم مباشر 25%', style: 'offer-25-direct' },
+            { en: '30% off', ar: 'خصم مباشر 30%', style: 'offer-30-direct' },
+            { en: '35% off', ar: 'خصم مباشر 35%', style: 'offer-35-direct' },
+            { en: '40% off', ar: 'خصم مباشر 40%', style: 'offer-40-direct' },
+            { en: '70% off on 2nd', ar: 'خصم 70% على الحبة الثانية', style: 'offer-70-second' },
+            { en: 'BUY 1 GET 1 FREE', ar: 'اشتري 1 واحصل على 1 مجانا', style: 'offer-buy-get' },
+            { en: 'BUY 2 GET 1 FREE', ar: 'اشتري 2 واحصل على 1 مجانا', style: 'offer-buy-get' },
+            { en: 'Buy 1 @ SAR', ar: 'اشتري حبة بسعر مخفض', style: 'offer-custom' },
+            { en: 'Buy 1 Get 2nd @ SAR', ar: 'اشتري حبة واحصل على الثانية بسعر مخفض', style: 'offer-custom' },
+            { en: 'Special Offer', ar: 'عرض خاص', style: 'offer-custom' },
+            { en: 'Bundle Offer', ar: 'عرض مجمع', style: 'offer-custom' }
+        ];
+
+        function getArabicOfferTitle(text) {
+            if (!text) return '';
+            const trimmed = text.trim();
+            const found = PRESET_OFFER_TYPES.find(p => p.en.toLowerCase() === trimmed.toLowerCase());
+            if (found) return found.ar;
+            return typeof format_offer_ar === 'function' ? format_offer_ar(trimmed) : trimmed;
+        }
+
         const searchInModalInput = document.getElementById('searchInModalInput');
-        const searchMatchCount = document.getElementById('searchMatchCount');
+        const searchStatsBadge = document.getElementById('searchStatsBadge');
+        const searchResultsDetails = document.getElementById('searchResultsDetails');
+        const deleteFoundCodesBtn = document.getElementById('deleteFoundCodesBtn');
 
-        
         function executeFind() {
-            const term = searchInModalInput.value.trim();
-            if (!term) {
-                searchMatchCount.innerText = '';
+            const rawInput = searchInModalInput.value.trim();
+            if (!rawInput) {
+                if (searchStatsBadge) searchStatsBadge.classList.add('hidden');
+                if (searchResultsDetails) { searchResultsDetails.innerHTML = ''; searchResultsDetails.classList.add('hidden'); }
+                if (deleteFoundCodesBtn) deleteFoundCodesBtn.disabled = true;
+                lastFoundCodes = [];
                 return;
             }
-            const val = codesTextarea.value;
-            const index = val.indexOf(term);
-            if (index !== -1) {
-                searchMatchCount.innerText = 'Found';
-                searchMatchCount.classList.remove('text-red-500');
-                searchMatchCount.classList.add('text-green-600');
-                
-                codesTextarea.focus();
-                codesTextarea.setSelectionRange(index, index + term.length);
-                
-                const linesBeforeMatch = val.substring(0, index).split(/\r?\n/).length;
-                codesTextarea.scrollTop = Math.max(0, (linesBeforeMatch - 2) * 21);
-            } else {
-                searchMatchCount.innerText = 'Not found';
-                searchMatchCount.classList.remove('text-green-600');
-                searchMatchCount.classList.add('text-red-500');
+
+            // Extract all search codes (6-digit or any format separated by space, line, or comma)
+            const searchedCodes = [...new Set(rawInput.split(/[\s,]+/).map(c => c.trim()).filter(c => c.length > 0))];
+            if (searchedCodes.length === 0) return;
+
+            const currentCodesRaw = codesTextarea.value;
+            const currentCodesList = currentCodesRaw.split(/\s+/).map(c => c.trim()).filter(c => c.length > 0);
+            const currentCodesSet = new Set(currentCodesList);
+
+            const foundCodes = [];
+            const notFoundCodes = [];
+
+            searchedCodes.forEach(code => {
+                if (currentCodesSet.has(code)) {
+                    foundCodes.push(code);
+                } else {
+                    notFoundCodes.push(code);
+                }
+            });
+
+            lastFoundCodes = foundCodes;
+
+            // Render stats badge
+            if (searchStatsBadge) {
+                searchStatsBadge.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800', 'bg-amber-100', 'text-amber-800', 'border-green-300', 'border-amber-300', 'border-red-300');
+                if (foundCodes.length === searchedCodes.length) {
+                    searchStatsBadge.className = 'text-xs font-bold px-2 py-0.5 rounded bg-green-100 text-green-800 border border-green-300';
+                    searchStatsBadge.innerText = `All Found (${foundCodes.length}/${searchedCodes.length})`;
+                } else if (foundCodes.length > 0) {
+                    searchStatsBadge.className = 'text-xs font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300';
+                    searchStatsBadge.innerText = `Found ${foundCodes.length} | Not Found ${notFoundCodes.length}`;
+                } else {
+                    searchStatsBadge.className = 'text-xs font-bold px-2 py-0.5 rounded bg-red-100 text-red-800 border border-red-300';
+                    searchStatsBadge.innerText = `Not Found (0/${searchedCodes.length})`;
+                }
+            }
+
+            // Render details
+            if (searchResultsDetails) {
+                searchResultsDetails.classList.remove('hidden');
+                let html = '';
+                if (foundCodes.length > 0) {
+                    html += `<div class="text-green-700 bg-green-50 p-2 rounded-lg border border-green-200">
+                        <span class="font-bold">✓ Found in this offer (${foundCodes.length}):</span> 
+                        <div class="font-mono text-xs mt-1 max-h-20 overflow-y-auto select-all leading-relaxed">${foundCodes.join(' ')}</div>
+                    </div>`;
+                }
+                if (notFoundCodes.length > 0) {
+                    html += `<div class="text-red-600 bg-red-50 p-2 rounded-lg border border-red-200">
+                        <span class="font-bold">✗ Not found in this offer (${notFoundCodes.length}):</span> 
+                        <div class="font-mono text-xs mt-1 max-h-20 overflow-y-auto select-all leading-relaxed">${notFoundCodes.join(' ')}</div>
+                    </div>`;
+                }
+                searchResultsDetails.innerHTML = html;
+            }
+
+            // Enable or disable Delete button
+            if (deleteFoundCodesBtn) {
+                deleteFoundCodesBtn.disabled = foundCodes.length === 0;
+                if (foundCodes.length > 0) {
+                    deleteFoundCodesBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg><span>Delete (${foundCodes.length}) Found</span>`;
+                } else {
+                    deleteFoundCodesBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg><span>Delete Found</span>`;
+                }
+            }
+
+            // If single code searched and found, highlight and scroll to it
+            if (searchedCodes.length === 1 && foundCodes.length === 1) {
+                const term = searchedCodes[0];
+                const val = codesTextarea.value;
+                const index = val.indexOf(term);
+                if (index !== -1) {
+                    codesTextarea.focus();
+                    codesTextarea.setSelectionRange(index, index + term.length);
+                    const linesBeforeMatch = val.substring(0, index).split(/\r?\n/).length;
+                    codesTextarea.scrollTop = Math.max(0, (linesBeforeMatch - 2) * 21);
+                }
             }
         }
 
-        searchInModalInput.addEventListener('input', function() {
-            const term = this.value.trim();
-            if (!term) {
-                searchMatchCount.innerText = '';
-                return;
+        async function deleteFoundCodes() {
+            if (!lastFoundCodes || lastFoundCodes.length === 0) return;
+
+            const count = lastFoundCodes.length;
+            const ok = await customConfirm(
+                'Delete Codes from Offer',
+                `Are you sure you want to delete ${count} found code(s) from this offer? (هل أنت متأكد من حذف ${count} كود من هذا العرض؟)`,
+                `Delete ${count} Codes`,
+                'Cancel'
+            );
+            if (!ok) return;
+
+            const foundSet = new Set(lastFoundCodes);
+            const currentCodesRaw = codesTextarea.value;
+            const currentCodesList = currentCodesRaw.split(/\s+/).map(c => c.trim()).filter(c => c.length > 0);
+
+            // Filter out all found codes at once
+            const remainingCodes = currentCodesList.filter(c => !foundSet.has(c));
+            codesTextarea.value = remainingCodes.join('\n');
+
+            if (searchStatsBadge) {
+                searchStatsBadge.className = 'text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300';
+                searchStatsBadge.innerText = `Deleted ${count} code(s)`;
             }
-            const val = codesTextarea.value;
-            if (val.indexOf(term) !== -1) {
-                searchMatchCount.innerText = 'Press Enter';
-                searchMatchCount.classList.remove('text-red-500');
-                searchMatchCount.classList.add('text-green-600');
-            } else {
-                searchMatchCount.innerText = 'Not found';
-                searchMatchCount.classList.remove('text-green-600');
-                searchMatchCount.classList.add('text-red-500');
+
+            if (searchResultsDetails) {
+                searchResultsDetails.innerHTML = `<div class="text-blue-700 bg-blue-50 p-2.5 rounded-lg border border-blue-200">
+                    <span class="font-bold">✓ Successfully deleted ${count} code(s) from this offer!</span>
+                    <div class="text-[11px] text-gray-600 mt-1">Remaining codes in this offer: <strong class="text-blue-800">${remainingCodes.length}</strong>. Click "Save Changes" to save.</div>
+                </div>`;
             }
-        });
+
+            if (deleteFoundCodesBtn) {
+                deleteFoundCodesBtn.disabled = true;
+                deleteFoundCodesBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg><span>Delete Found</span>`;
+            }
+
+            lastFoundCodes = [];
+        }
 
         searchInModalInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 e.preventDefault();
                 executeFind();
             }
         });
 
         document.getElementById('findCodeBtn').addEventListener('click', executeFind);
+        if (deleteFoundCodesBtn) {
+            deleteFoundCodesBtn.addEventListener('click', deleteFoundCodes);
+        }
 
-        
         function openCodesModal(btn) {
             currentEditCell = btn.closest('td');
             let codesStr = currentEditCell.getAttribute('data-codes') || '';
-            codesTextarea.value = codesStr.split(' ').join('\n');
+            codesTextarea.value = codesStr.split(/\s+/).filter(c => c).join('\n');
+            
             searchInModalInput.value = '';
-            searchMatchCount.innerText = '';
+            if (searchStatsBadge) { searchStatsBadge.innerText = ''; searchStatsBadge.classList.add('hidden'); }
+            if (searchResultsDetails) { searchResultsDetails.innerHTML = ''; searchResultsDetails.classList.add('hidden'); }
+            if (deleteFoundCodesBtn) {
+                deleteFoundCodesBtn.disabled = true;
+                deleteFoundCodesBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg><span>Delete Found</span>`;
+            }
+            lastFoundCodes = [];
+
             codesModal.classList.remove('hidden');
             codesModal.classList.add('flex');
         }
@@ -570,7 +777,7 @@
             const codes = newCodesText.split(/\s+/).filter(c => c);
             const badgesHtml = codes.slice(0, 3).map(c => `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">${c}</span>`).join('');
             
-            const editBtn = codes.length > 3 ? `<button onclick="openCodesModal(this)" class="bg-blue-100 hover :bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">+${codes.length - 3} (Edit)</button>` 
+            const editBtn = codes.length > 3 ? `<button onclick="openCodesModal(this)" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">+${codes.length - 3} (Edit)</button>` 
                 : `<button onclick="openCodesModal(this)" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs cursor-pointer transition-colors">Edit</button>`;
             
             currentEditCell.querySelector('div').innerHTML = badgesHtml + editBtn;
@@ -909,30 +1116,47 @@
         // --- Event Listeners ---
 
         document.getElementById('searchCodeInput').addEventListener('input', function(e) {
-            const term = e.target.value.toLowerCase().trim();
+            const raw = e.target.value.toLowerCase().trim();
+            const terms = raw.split(/[\s,]+/).filter(t => t.length > 0);
             const rows = previewBody.querySelectorAll('tr');
+            if (terms.length === 0) {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
             rows.forEach(row => {
-                const codes = row.querySelector('.col-codes-container').getAttribute('data-codes') || '';
-                if (codes.includes(term)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                const codes = (row.querySelector('.col-codes-container').getAttribute('data-codes') || '').toLowerCase();
+                const match = terms.some(t => codes.includes(t));
+                row.style.display = match ? '' : 'none';
             });
         });
 
         document.getElementById('addNewOfferBtn').addEventListener('click', function() {
+            updateFinalDataFromTable();
             if (!finalJsonData) finalJsonData = [];
-            finalJsonData.push({
+
+            const quickSelect = document.getElementById('quickOfferTypeSelect');
+            const chosenType = quickSelect ? quickSelect.value : '1+1 free';
+            const arTitle = getArabicOfferTitle(chosenType) || 'عرض جديد';
+            const styleClass = (typeof get_style_class === 'function' ? get_style_class(chosenType) : 'offer-buy-get') || 'offer-buy-get';
+
+            // Add offer to the VERY TOP of the list
+            finalJsonData.unshift({
                 sheetName: 'New Sheet',
-                offerType: 'New Offer',
-                offerTypeAR: 'عرض جديد',
+                offerType: chosenType,
+                offerTypeAR: arTitle,
                 codes: [],
-                styleClass: 'offer-custom',
-                badgeClass: 'offer-custom',
+                styleClass: styleClass,
+                badgeClass: styleClass,
                 offerPrice: {}
             });
             renderPreview(finalJsonData);
+
+            // Focus the English input in the first row
+            const firstEnInput = previewBody.querySelector('tr:first-child .offer-en-input');
+            if (firstEnInput) {
+                firstEnInput.focus();
+                firstEnInput.select();
+            }
         });
     
         dropZone.addEventListener('click', () => fileInput.click());
@@ -980,7 +1204,8 @@
             rows.forEach(row => {
                 const sheetName = row.querySelector('.col-sheet').innerText.trim();
                 const offerTypeAR = row.querySelector('.col-ar').innerText.trim();
-                const offerType = row.querySelector('.col-en').innerText.trim();
+                const enInput = row.querySelector('.col-en .offer-en-input');
+                const offerType = enInput ? enInput.value.trim() : (row.querySelector('.col-en') ? row.querySelector('.col-en').innerText.trim() : '');
                 const codesText = row.querySelector('.col-codes-container').getAttribute('data-codes') || '';
                 const styleClass = row.querySelector('.col-style').innerText.trim();
 
@@ -1550,16 +1775,18 @@ else if (/^\d+$/.test(sheetName)) {
                     <td class="px-2 py-2 md:px-4 md:py-4">
                         <button onclick="confirmDeleteRow(this)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded">Delete</button>
                     </td>
-                    <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-500 col-sheet">${offer.sheetName || ''}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-4 font-bold text-slate-800 col-ar" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerTypeAR}</td>
-                    <td class="px-2 py-2 md:px-4 md:py-4 font-medium col-en" dir="ltr" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.offerType}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-400 col-sheet" contenteditable="true">${offer.sheetName || ''}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 font-bold text-white col-ar" dir="auto" contenteditable="true" style="outline: none; border-bottom: 1px dashed rgba(255,255,255,0.3);">${offer.offerTypeAR}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 font-medium col-en" dir="ltr">
+                        <input list="offerTypesList" class="offer-en-input w-full bg-slate-900/40 border border-slate-600 rounded px-2 py-1 text-white text-xs md:text-sm focus:border-blue-400 focus:outline-none" value="${offer.offerType || ''}" placeholder="Select or type offer...">
+                    </td>
                     <td class="px-2 py-2 md:px-4 md:py-4 col-codes-container" data-codes="${offer.codes.join(' ')}">
                         <div class="flex flex-wrap gap-1 items-center">
                             ${badgesHtml}
                             ${editBtn}
                         </div>
                     </td>
-                    <td class="px-2 py-2 md:px-4 md:py-4 col-style" contenteditable="true" style="outline: none; border-bottom: 1px dashed #cbd5e1;">${offer.styleClass}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 col-style" contenteditable="true" style="outline: none; border-bottom: 1px dashed rgba(255,255,255,0.3);">${offer.styleClass}</td>
                 `;
                 previewBody.appendChild(tr);
             });
@@ -1568,6 +1795,28 @@ else if (/^\d+$/.test(sheetName)) {
             const editableCells = previewBody.querySelectorAll('[contenteditable="true"]');
             editableCells.forEach(cell => {
                 cell.addEventListener('input', updateStats);
+            });
+
+            // ربط حقل نوع العرض الإنجليزي لتحديث العربي والستايل تلقائياً
+            const enInputs = previewBody.querySelectorAll('.offer-en-input');
+            enInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const row = this.closest('tr');
+                    const val = this.value.trim();
+                    if (val) {
+                        const arTitle = getArabicOfferTitle(val);
+                        const arCell = row.querySelector('.col-ar');
+                        if (arCell && arTitle) {
+                            arCell.innerText = arTitle;
+                        }
+                        const styleClass = (typeof get_style_class === 'function' ? get_style_class(val) : 'offer-buy-get') || 'offer-buy-get';
+                        const styleCell = row.querySelector('.col-style');
+                        if (styleCell && styleClass) {
+                            styleCell.innerText = styleClass;
+                        }
+                    }
+                    updateStats();
+                });
             });
         }
 
