@@ -1,3 +1,4 @@
+/* Responsive Stylesheet */
 :root {
     --dark-blue: #0f172a;
     --medium-blue: #1e3a8a;
@@ -28,7 +29,6 @@ body {
     transition: padding 0.3s ease;
 }
 
-/* Fullscreen Mode Overrides */
 body:has(.fullscreen-mode) {
     padding: 0;
     overflow: hidden;
@@ -56,7 +56,7 @@ header {
 }
 
 header h1 {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 800;
     background: linear-gradient(135deg, var(--white), var(--orange));
     -webkit-background-clip: text;
@@ -71,9 +71,9 @@ header p {
 
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
 }
 
 .card {
@@ -81,44 +81,55 @@ header p {
     border: 1px solid rgba(245, 158, 11, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 18px;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.2rem;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--white);
     text-align: right;
     box-shadow: 0 8px 35px rgba(0, 0, 0, 0.3);
     outline: none;
+    font-family: inherit;
 }
 
 .card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     border-color: var(--orange);
-    background: rgba(30, 58, 138, 0.4);
-    box-shadow: 0 15px 45px rgba(245, 158, 11, 0.3);
+    background: rgba(30, 58, 138, 0.45);
+    box-shadow: 0 15px 45px rgba(245, 158, 11, 0.35);
+}
+
+.card:active {
+    transform: scale(0.97);
 }
 
 .card-icon {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     background: linear-gradient(135deg, var(--orange), var(--dark-orange));
-    padding: 1rem;
+    padding: 0.8rem;
     border-radius: 50%;
-    border: 4px solid var(--dark-blue);
-    box-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+    border: 3px solid var(--dark-blue);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
     color: var(--white);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.08) rotate(3deg);
 }
 
 .card-content h2 {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .iframe-container {
@@ -140,6 +151,7 @@ header p {
     width: 100%;
     height: 100%;
     border: none;
+    background: white;
 }
 
 .loading {
@@ -164,7 +176,6 @@ header p {
     pointer-events: none;
 }
 
-/* Back Button */
 .back-btn {
     position: fixed;
     bottom: 2rem;
@@ -186,7 +197,7 @@ header p {
 }
 
 .back-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(1.05);
     box-shadow: 0 12px 35px rgba(245, 158, 11, 0.6);
 }
 
@@ -194,33 +205,61 @@ header p {
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 680px) {
+    body {
+        padding: 1rem 0.75rem;
+    }
     .container {
-        padding: 1rem;
+        padding: 0;
+        gap: 1rem;
         height: auto;
     }
+    header {
+        padding: 0.5rem 0;
+    }
+    header h1 {
+        font-size: 2.1rem;
+    }
+    header p {
+        font-size: 0.95rem;
+    }
     .cards-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+    .card {
+        padding: 1.1rem 0.6rem;
+        gap: 0.7rem;
+        flex-direction: column;
+        text-align: center;
+        border-radius: 16px;
+    }
+    .card-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 1.6rem;
+        border-width: 2px;
+    }
+    .card-content h2 {
+        font-size: 1.05rem;
+        word-break: break-word;
+    }
+    .back-btn {
+        bottom: 1.25rem;
+        right: 1.25rem;
+        width: 52px;
+        height: 52px;
+        font-size: 1.4rem;
+    }
+}
+
+@media (min-width: 681px) and (max-width: 992px) {
+    .cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
         gap: 1rem;
     }
     .card {
-        padding: 1rem;
-        gap: 1rem;
-        border-radius: 12px;
-    }
-    .card-icon {
-        width: 55px;
-        height: 55px;
-        font-size: 1.6rem;
-    }
-    .card-content h2 {
-        font-size: 1.2rem;
-    }
-    .back-btn {
-        bottom: 1.5rem;
-        right: 1.5rem;
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
+        padding: 1.25rem 1rem;
     }
 }
