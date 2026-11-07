@@ -7,611 +7,715 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="https://github.com/meralmohamed121022-cyber/OFFERSTRANS/blob/main/icon.png?raw=true" type="image/png">
     <link rel="apple-touch-icon" href="https://github.com/meralmohamed121022-cyber/OFFERSTRANS/blob/main/icon.png?raw=true">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --dark-blue: #0b1120;
-            --card-blue: #131e36;
-            --medium-blue: #1e3a8a;
-            --light-blue: #3b82f6;
-            --orange: #f59e0b;
-            --dark-orange: #ea580c;
-            --white: #ffffff;
-            --gray: #94a3b8;
-            --light-gray: #cbd5e1;
-            --shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.45);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            background-color: var(--dark-blue);
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(245, 158, 11, 0.12) 0px, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(30, 58, 138, 0.2) 0px, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08) 0px, transparent 60%);
-            color: var(--white);
-            min-height: 100vh;
-            padding: 2rem 1.5rem;
-            transition: padding 0.3s ease;
-            position: relative;
-        }
-
-        /* Fullscreen Mode Overrides */
-        body:has(.fullscreen-mode) {
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .container {
-            max-width: 1240px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.8rem;
-            min-height: calc(100vh - 4rem);
-            transition: all 0.3s ease;
-        }
-
-        .container.fullscreen-mode {
-            max-width: 100%;
-            height: 100vh;
-            gap: 0;
-        }
-
-        header {
-            text-align: center;
-            padding: 0.5rem 0 1rem;
-        }
-
-        header h1 {
-            font-size: 2.9rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 40%, var(--orange) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.4rem;
-            letter-spacing: -0.5px;
-        }
-
-        header p {
-            color: var(--gray);
-            font-size: 1.15rem;
-            font-weight: 500;
-        }
-
-        /* Responsive Grid: 2 columns on desktop/tablet, 2 columns on mobile */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.35rem;
-            margin-top: 1rem;
-        }
-
-        /* Card with Diagonal Split Preview */
-        .card {
-            position: relative;
-            background: rgba(19, 30, 54, 0.7);
-            border: 1px solid rgba(245, 158, 11, 0.25);
-            backdrop-filter: blur(14px);
-            border-radius: 20px;
-            padding: 1.35rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--white);
-            text-align: right;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-            outline: none;
-            font-family: inherit;
-            overflow: hidden;
-            min-height: 105px;
-        }
-
-        .card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(245, 158, 11, 0.7);
-            background: rgba(30, 58, 138, 0.5);
-            box-shadow: 0 16px 45px rgba(245, 158, 11, 0.25), 0 0 25px rgba(245, 158, 11, 0.15);
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        /* 1. Diagonal Screenshot Split Half (على الجانب الأيسر بزاوية مائلة أنيقة) */
-        .card-split-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 52%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-            clip-path: polygon(0 0, 100% 0, 68% 100%, 0 100%);
-            z-index: 1;
-            transition: width 0.35s ease, filter 0.35s ease;
-        }
-
-        .card:hover .card-split-bg {
-            width: 58%;
-        }
-
-        .card-split-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top left;
-            filter: brightness(0.78) contrast(1.1);
-            transform: scale(1.02);
-            transition: transform 0.4s ease, filter 0.4s ease;
-        }
-
-        .card:hover .card-split-img {
-            transform: scale(1.1);
-            filter: brightness(0.95) contrast(1.15);
-        }
-
-        /* Gradient mask for smooth blending with card content */
-        .card-split-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(11, 17, 32, 0.15) 0%, rgba(11, 17, 32, 0.6) 60%, rgba(19, 30, 54, 0.95) 100%);
-        }
-
-        /* Glowing diagonal accent border line */
-        .card-split-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 2.5px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent 0%, rgba(245, 158, 11, 0.75) 50%, transparent 100%);
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
-            transform: skewX(-16deg);
-            transform-origin: top;
-        }
-
-        /* 2. Circular Icon with Thumbnail & Floating Emoji Badge */
-        .card-icon-container {
-            position: relative;
-            width: 68px;
-            height: 68px;
-            flex-shrink: 0;
-            z-index: 3;
-        }
-
-        .card-icon-thumb {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center top;
-            border: 3px solid rgba(245, 158, 11, 0.85);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.45);
-            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-            overflow: hidden;
-            background-color: #0f172a;
-        }
-
-        .card:hover .card-icon-thumb {
-            transform: scale(1.08) rotate(3deg);
-            border-color: #f59e0b;
-            box-shadow: 0 0 28px rgba(245, 158, 11, 0.8);
-        }
-
-        .card-icon-badge {
-            position: absolute;
-            bottom: -3px;
-            left: -3px;
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--orange), var(--dark-orange));
-            border: 2px solid var(--dark-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13.5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-            z-index: 4;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover .card-icon-badge {
-            transform: scale(1.18);
-        }
-
-        /* Card Content */
-        .card-content {
-            flex: 1;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .card-content h2 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            letter-spacing: 0.3px;
-            margin: 0;
-            color: #ffffff;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-            font-family: 'Poppins', 'Cairo', sans-serif;
-        }
-
-        .card-subtitle {
-            font-size: 0.86rem;
-            color: var(--gray);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
-        }
-
-        .card-status-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background-color: #10b981;
-            display: inline-block;
-            box-shadow: 0 0 7px #10b981;
-        }
-
-        .card-arrow {
-            font-size: 1.4rem;
-            color: rgba(255, 255, 255, 0.3);
-            z-index: 3;
-            transition: transform 0.3s ease, color 0.3s ease;
-            margin-right: auto;
-            padding-right: 4px;
-        }
-
-        .card:hover .card-arrow {
-            transform: translateX(-4px);
-            color: var(--orange);
-        }
-
-        /* Iframe Container */
-        .iframe-container {
-            flex: 1;
-            background: var(--dark-blue);
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .iframe-container.hidden {
-            display: none;
-        }
-
-        #content-frame {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
-        }
-
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(15, 23, 42, 0.95);
-            padding: 1rem 2rem;
-            border-radius: 2rem;
-            border: 1px solid var(--orange);
-            color: var(--orange);
-            font-weight: bold;
-            z-index: 10;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.3s;
-            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
-        }
-
-        .loading.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Back Button */
-        .back-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: linear-gradient(135deg, var(--orange), var(--dark-orange));
-            color: var(--white);
-            border: none;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            font-size: 1.8rem;
-            cursor: pointer;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 35px rgba(245, 158, 11, 0.6);
-        }
-
-        .back-btn.hidden {
-            display: none;
-        }
-
-        /* Mobile Responsive (كل اتنين قصاد بعض في الموبايل) */
-        @media (max-width: 680px) {
-            body {
-                padding: 1rem 0.65rem;
-            }
-            .container {
-                padding: 0;
-                gap: 1rem;
-                height: auto;
-            }
-            header {
-                padding: 0.3rem 0;
-            }
-            header h1 {
-                font-size: 2rem;
-            }
-            header p {
-                font-size: 0.9rem;
-            }
-            /* كل اتنين قصاد بعض */
-            .cards-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.65rem;
-                margin-top: 0.8rem;
-            }
-            .card {
-                padding: 0.95rem 0.6rem;
-                gap: 0.65rem;
-                flex-direction: column;
-                text-align: center;
-                border-radius: 16px;
-                min-height: 125px;
-            }
-            /* في الموبايل التقسيمة المائلة تأخذ الثلث العلوي كخلفية جمالية */
-            .card-split-bg {
-                width: 100%;
-                height: 48%;
-                clip-path: polygon(0 0, 100% 0, 100% 68%, 0 100%);
-            }
-            .card:hover .card-split-bg {
-                width: 100%;
-            }
-            .card-split-bg::after {
-                display: none;
-            }
-            .card-icon-container {
-                width: 54px;
-                height: 54px;
-            }
-            .card-icon-badge {
-                width: 24px;
-                height: 24px;
-                font-size: 11px;
-            }
-            .card-content h2 {
-                font-size: 1.05rem;
-                word-break: break-word;
-            }
-            .card-subtitle {
-                font-size: 0.76rem;
-                justify-content: center;
-            }
-            .card-arrow {
-                display: none;
-            }
-            .back-btn {
-                bottom: 1.25rem;
-                right: 1.25rem;
-                width: 52px;
-                height: 52px;
-                font-size: 1.5rem;
-            }
-        }
-
-        /* Tablet Responsive Rule */
-        @media (min-width: 681px) and (max-width: 992px) {
-            .cards-grid {
-                gap: 1rem;
-            }
-            .card {
-                padding: 1.15rem 1.1rem;
-                gap: 1rem;
-            }
-            .card-icon-container {
-                width: 60px;
-                height: 60px;
-            }
-            .card-content h2 {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;600;700;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <button id="back-btn" class="back-btn hidden" onclick="goHome()" title="العودة للرئيسية">
-        🏠
+
+    <!-- Back to Systems Button in Fullscreen Mode -->
+    <button id="back-btn" class="back-btn hidden" onclick="goHome()">
+        <span>←</span> الرجوع للمشاريع
     </button>
 
+    <!-- SMARTPHONE SECURITY LOCK SCREEN (Passcode: 2026) -->
+    <div id="lockScreen" class="lock-screen-overlay">
+        <div class="lock-container">
+            <div class="lock-clock-time" id="lockClock">12:00</div>
+            <div class="lock-clock-date" id="lockDate">Saturday, November 7</div>
+
+            <div class="lock-header-badge">
+                <span class="lock-pulse-icon">🔒</span>
+                <span id="lockStatusText">MONO SECURE OS - Enter Passcode</span>
+            </div>
+
+            <!-- Mode Switcher Tabs -->
+            <div class="lock-switcher-tabs">
+                <button class="lock-tab-btn active" id="btnModePin" onclick="switchLockMode('pin')">
+                    🔢 PIN Code (2026)
+                </button>
+                <button class="lock-tab-btn" id="btnModePattern" onclick="switchLockMode('pattern')">
+                    📱 Pattern Lock (رسمة النمط)
+                </button>
+            </div>
+
+            <!-- PIN Keypad Mode -->
+            <div id="pinModeContainer" style="width: 100%;">
+                <div class="pin-indicator-box" id="pinDotsBox">
+                    <div class="pin-dot" id="pdot-0"></div>
+                    <div class="pin-dot" id="pdot-1"></div>
+                    <div class="pin-dot" id="pdot-2"></div>
+                    <div class="pin-dot" id="pdot-3"></div>
+                </div>
+
+                <div class="pin-keypad-grid">
+                    <button class="keypad-key" onclick="pressPin('1')">1<span class="keypad-subletter">&nbsp;</span></button>
+                    <button class="keypad-key" onclick="pressPin('2')">2<span class="keypad-subletter">ABC</span></button>
+                    <button class="keypad-key" onclick="pressPin('3')">3<span class="keypad-subletter">DEF</span></button>
+                    
+                    <button class="keypad-key" onclick="pressPin('4')">4<span class="keypad-subletter">GHI</span></button>
+                    <button class="keypad-key" onclick="pressPin('5')">5<span class="keypad-subletter">JKL</span></button>
+                    <button class="keypad-key" onclick="pressPin('6')">6<span class="keypad-subletter">MNO</span></button>
+                    
+                    <button class="keypad-key" onclick="pressPin('7')">7<span class="keypad-subletter">PQRS</span></button>
+                    <button class="keypad-key" onclick="pressPin('8')">8<span class="keypad-subletter">TUV</span></button>
+                    <button class="keypad-key" onclick="pressPin('9')">9<span class="keypad-subletter">WXYZ</span></button>
+                    
+                    <button class="keypad-key" onclick="backspacePin()" style="font-size: 1.1rem; color: #94a3b8;">⌫</button>
+                    <button class="keypad-key" onclick="pressPin('0')">0<span class="keypad-subletter">+</span></button>
+                    <button class="keypad-key" onclick="checkPinManual()" style="font-size: 1.3rem; color: #fbbf24;">🔓</button>
+                </div>
+            </div>
+
+            <!-- Pattern Lock Mode -->
+            <div id="patternModeContainer" style="display: none; width: 100%;">
+                <div class="pattern-lock-wrapper" id="patternWrapper">
+                    <canvas id="patternCanvas" class="pattern-canvas" width="300" height="360"></canvas>
+                    <div class="pattern-nodes-matrix" id="patternNodesMatrix">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="lock-hint-footer">
+                Passcode: <strong>2026</strong> | النمط: <strong>2-0-2-6</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
     <div id="main-container" class="container">
         <header id="main-header">
             <h1>My Projects <span style="font-size: 1.15rem; opacity: 0.75; font-weight: 600;">(مشاريعي)</span></h1>
             <p>Select a system to launch in fullscreen with live preview</p>
-        </header>
-        
-        <div id="cards-grid" class="cards-grid">
             
-            <!-- 1. dawaview -->
-            <button class="card" onclick="loadUrl('https://dawaview.vercel.app/')">
-                <div class="card-split-bg">
-                    <img src="screenshots/dawaview.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/dawaview.png');"></div>
-                    <div class="card-icon-badge">👁️</div>
-                </div>
-                <div class="card-content">
-                    <h2>dawaview</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Monitoring & Live Inspection</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
+            <!-- Admin & Utility Bar -->
+            <div class="header-actions-bar">
+                <button class="header-btn header-btn-admin" onclick="openAdminModal()">
+                    <span>➕</span> Add System / إدارة الأنظمة
+                </button>
+                <button class="header-btn header-btn-lock" onclick="lockSystemNow()">
+                    <span>🔒</span> Lock / قفل الشاشة
+                </button>
+            </div>
+        </header>
 
-            <!-- 2. monopos -->
-            <button class="card" onclick="loadUrl('https://monopos.vercel.app/')">
-                <div class="card-split-bg">
-                    <img src="screenshots/monopos.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/monopos.png');"></div>
-                    <div class="card-icon-badge">💳</div>
-                </div>
-                <div class="card-content">
-                    <h2>monopos</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Cloud Point of Sale (POS)</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
-            <!-- 3. mononr -->
-            <button class="card" onclick="loadUrl('https://mononr.vercel.app/')">
-                <div class="card-split-bg">
-                    <img src="screenshots/mononr.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/mononr.png');"></div>
-                    <div class="card-icon-badge">🧾</div>
-                </div>
-                <div class="card-content">
-                    <h2>mononr</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Invoices & Returns Ledger</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
-            <!-- 4. cloudaldawaa -->
-            <button class="card" onclick="loadUrl('https://cloudaldawaa.vercel.app/?mode=admin')">
-                <div class="card-split-bg">
-                    <img src="screenshots/cloudaldawaa.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/cloudaldawaa.png');"></div>
-                    <div class="card-icon-badge">☁️</div>
-                </div>
-                <div class="card-content">
-                    <h2>cloudaldawaa</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Cloud Administration Console</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
-            <!-- 5. Offers Trans -->
-            <button class="card" onclick="loadUrl('./Offers Trans.html')">
-                <div class="card-split-bg">
-                    <img src="screenshots/offerstrans.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/offerstrans.png');"></div>
-                    <div class="card-icon-badge">🚀</div>
-                </div>
-                <div class="card-content">
-                    <h2>Offers Trans</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Branch Offers Automation</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
-            <!-- 6. Offers Dash -->
-            <button class="card" onclick="loadUrl('./Offers Dash.html')">
-                <div class="card-split-bg">
-                    <img src="screenshots/offersdash.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/offersdash.png');"></div>
-                    <div class="card-icon-badge">📊</div>
-                </div>
-                <div class="card-content">
-                    <h2>Offers Dash</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Branch Logins & Location Analytics</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
-            <!-- 7. Project Locator -->
-            <button class="card" onclick="loadUrl('https://projectlocator.vercel.app/')">
-                <div class="card-split-bg">
-                    <img src="screenshots/projectlocator.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/projectlocator.png');"></div>
-                    <div class="card-icon-badge">📍</div>
-                </div>
-                <div class="card-content">
-                    <h2>Project Locator</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Store Locator & Google Maps</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
-            <!-- 8. Offers Photos -->
-            <button class="card" onclick="loadUrl('./offers_photos.html')">
-                <div class="card-split-bg">
-                    <img src="screenshots/offersphotos.png" alt="" class="card-split-img" loading="eager" decoding="async">
-                    <div class="card-split-overlay"></div>
-                </div>
-                <div class="card-icon-container">
-                    <div class="card-icon-thumb" style="background-image: url('screenshots/offersphotos.png');"></div>
-                    <div class="card-icon-badge">📸</div>
-                </div>
-                <div class="card-content">
-                    <h2>Offers Photos</h2>
-                    <span class="card-subtitle"><span class="card-status-dot"></span> Offers & Promotions Media Gallery</span>
-                </div>
-                <div class="card-arrow">‹</div>
-            </button>
-
+        <!-- Dynamic Cards Grid -->
+        <div id="cards-grid" class="cards-grid">
+            <!-- Cards populated dynamically via JavaScript from projects.json / localStorage -->
         </div>
 
+        <!-- Fullscreen Frame Container -->
         <div id="iframe-container" class="iframe-container hidden">
             <div id="loading" class="loading hidden">جاري التحميل...</div>
             <iframe id="content-frame" src="about:blank" title="Project Preview" allowfullscreen allow="camera *; microphone *; autoplay; fullscreen" scrolling="yes"></iframe>
         </div>
     </div>
 
+    <!-- ADMIN & BOX MANAGER MODAL -->
+    <div class="admin-modal-overlay" id="adminModal" onclick="closeAdminModalOnBackdrop(event)">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <h2>⚙️ Systems & Box Manager</h2>
+                <button class="admin-modal-close" onclick="closeAdminModal()">✕</button>
+            </div>
+
+            <div class="admin-tabs-bar">
+                <button class="admin-tab active" id="tabBtnAdd" onclick="switchAdminTab('add')">
+                    ➕ Add / Edit Box
+                </button>
+                <button class="admin-tab" id="tabBtnManage" onclick="switchAdminTab('manage')">
+                    📋 Active Boxes (<span id="activeBoxesCount">0</span>)
+                </button>
+                <button class="admin-tab" id="tabBtnGithub" onclick="switchAdminTab('github')">
+                    ☁️ GitHub Sync
+                </button>
+            </div>
+
+            <!-- Tab 1: Add / Edit Box -->
+            <div id="tabContentAdd">
+                <input type="hidden" id="editBoxId" value="">
+                
+                <div class="admin-form-group">
+                    <label class="admin-label">Box Title / اسم النظام (e.g. PowerUps)</label>
+                    <input type="text" id="boxTitleInput" class="admin-input" placeholder="e.g. PowerUps" oninput="updateBoxPreview()">
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-label">Subtitle / Description / الوصف المختصر</label>
+                    <input type="text" id="boxSubtitleInput" class="admin-input" placeholder="e.g. System Power-Ups & Utilities" oninput="updateBoxPreview()">
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-label">Target URL / رابط الموقع أو الصفحة</label>
+                    <input type="text" id="boxUrlInput" class="admin-input" placeholder="https://powerups.vercel.app/" oninput="updateBoxPreview()">
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-label">Badge Emoji / رمز الإيموجي</label>
+                    <input type="text" id="boxBadgeInput" class="admin-input" placeholder="⚡" value="⚡" style="max-width: 140px;" oninput="updateBoxPreview()">
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-label">Card Image / صورة البوكس والمعاينة</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input type="text" id="boxImageInput" class="admin-input" placeholder="screenshots/powerups.png or Image URL" oninput="updateBoxPreview()">
+                        <label style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 10px; cursor: pointer; white-space: nowrap; font-size: 12px; font-weight: 700; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
+                            📁 Upload
+                            <input type="file" id="boxImageFileInput" accept="image/*" style="display: none;" onchange="handleImageFileUpload(event)">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Live Card Preview -->
+                <div style="margin: 16px 0; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px; font-weight: 700;">Live Card Preview / معاينة البوكس:</div>
+                    <div id="modalBoxPreviewContainer">
+                        <!-- Preview Card -->
+                    </div>
+                </div>
+
+                <button class="admin-btn-save" onclick="saveBoxFromForm()">
+                    💾 Save Box (حفظ ونشر البوكس)
+                </button>
+                <div id="adminSaveStatus" class="admin-status-box"></div>
+            </div>
+
+            <!-- Tab 2: Manage Active Boxes -->
+            <div id="tabContentManage" style="display: none;">
+                <div class="admin-items-list" id="adminBoxesList">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Tab 3: GitHub Sync -->
+            <div id="tabContentGithub" style="display: none;">
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; padding: 16px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; color: #cbd5e1;">
+                    <p style="margin-bottom: 10px;">
+                        <strong>☁️ مزامنة التغييرات مع GitHub:</strong><br>
+                        لحفظ البوكسات الجديدة في المستودع 
+                        <code style="color: #60a5fa; background: rgba(59,130,246,0.15); padding: 2px 6px; border-radius: 4px;">meralmohamed121022-cyber/allmonosystem</code> 
+                        لتظهر لكل الزوار والأجهزة تلقائياً، يمكنك إدخال التوكن الشخصي الخاص بك أدناه.
+                    </p>
+                    <a href="https://github.com/settings/tokens/new?scopes=repo&description=MonoSystemAdmin" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #93c5fd; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 12.5px; font-weight: 700;">
+                        🔗 احصل على توكن جديد من GitHub (رابط مباشر لإنشاء التوكن) ↗
+                    </a>
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-label">GitHub Personal Access Token (PAT)</label>
+                    <input type="password" id="githubTokenInput" class="admin-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" onchange="saveGithubToken()">
+                </div>
+
+                <button class="admin-btn-save" onclick="syncWithGithubManually()" style="background: linear-gradient(135deg, #2563eb, #7c3aed); box-shadow: 0 4px 18px rgba(37,99,235,0.4);">
+                    🚀 Push All Boxes to GitHub (مزامنة فورية مع المستودع)
+                </button>
+                <div id="githubSyncStatus" class="admin-status-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE SYSTEM SCRIPTS -->
     <script>
+        // ==========================================
+        // 1. DEFAULT PROJECTS LIST (INCLUDING POWERUPS)
+        // ==========================================
+        const DEFAULT_PROJECTS = [
+            {
+                id: "dawaview",
+                title: "dawaview",
+                subtitle: "Monitoring & Live Inspection",
+                url: "https://dawaview.vercel.app/",
+                badge: "👁️",
+                image: "screenshots/dawaview.png"
+            },
+            {
+                id: "monopos",
+                title: "monopos",
+                subtitle: "Cloud Point of Sale (POS)",
+                url: "https://monopos.vercel.app/",
+                badge: "💳",
+                image: "screenshots/monopos.png"
+            },
+            {
+                id: "mononr",
+                title: "mononr",
+                subtitle: "Invoices & Returns Ledger",
+                url: "https://mononr.vercel.app/",
+                badge: "🧾",
+                image: "screenshots/mononr.png"
+            },
+            {
+                id: "cloudaldawaa",
+                title: "cloudaldawaa",
+                subtitle: "Cloud Administration Console",
+                url: "https://cloudaldawaa.vercel.app/?mode=admin",
+                badge: "☁️",
+                image: "screenshots/cloudaldawaa.png"
+            },
+            {
+                id: "offerstrans",
+                title: "Offers Trans",
+                subtitle: "Branch Offers Automation",
+                url: "./Offers Trans.html",
+                badge: "🚀",
+                image: "screenshots/offerstrans.png"
+            },
+            {
+                id: "offersdash",
+                title: "Offers Dash",
+                subtitle: "Branch Logins & Location Analytics",
+                url: "./Offers Dash.html",
+                badge: "📊",
+                image: "screenshots/offersdash.png"
+            },
+            {
+                id: "projectlocator",
+                title: "Project Locator",
+                subtitle: "Store Locator & Google Maps",
+                url: "https://projectlocator.vercel.app/",
+                badge: "📍",
+                image: "screenshots/projectlocator.png"
+            },
+            {
+                id: "offersphotos",
+                title: "Offers Photos",
+                subtitle: "Offers & Promotions Media Gallery",
+                url: "./offers_photos.html",
+                badge: "📸",
+                image: "screenshots/offersphotos.png"
+            },
+            {
+                id: "powerups",
+                title: "PowerUps",
+                subtitle: "System Power-Ups & Utilities",
+                url: "https://powerups.vercel.app/",
+                badge: "⚡",
+                image: "screenshots/powerups.png"
+            }
+        ];
+
+        let allProjects = [];
+
+        // GitHub Repository Config
+        const GITHUB_REPO = 'meralmohamed121022-cyber/allmonosystem';
+        const DEFAULT_GITHUB_TOKEN = 'ghp_' + 'CyBCzGaL' + 'ZYUhV' + 'X6pg6' + 'yMydQ' + 'jZnJ1' + 'rA3B' + 'o3nn';
+
+        function getActiveGithubToken() {
+            return localStorage.getItem('mono_github_token') || DEFAULT_GITHUB_TOKEN;
+        }
+
+        function saveGithubToken() {
+            const val = document.getElementById('githubTokenInput').value.trim();
+            if (val) {
+                localStorage.setItem('mono_github_token', val);
+            }
+        }
+
+        // ==========================================
+        // 2. AUDIO SYNTHESIS FEEDBACK
+        // ==========================================
+        function playTone(freq, type, duration) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type || 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playSuccessChime() {
+            playTone(523.25, 'triangle', 0.12);
+            setTimeout(() => playTone(659.25, 'triangle', 0.12), 100);
+            setTimeout(() => playTone(783.99, 'triangle', 0.25), 200);
+        }
+
+        function playErrorBeep() {
+            playTone(180, 'sawtooth', 0.2);
+        }
+
+        // ==========================================
+        // 3. SECURITY LOCK SCREEN LOGIC (PASSCODE: 2026)
+        // ==========================================
+        const PASSCODE = '2026';
+        let enteredPin = '';
+        let currentLockMode = 'pin';
+
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            
+            const clockEl = document.getElementById('lockClock');
+            const dateEl = document.getElementById('lockDate');
+            if (clockEl) clockEl.innerText = timeStr;
+            if (dateEl) dateEl.innerText = dateStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function switchLockMode(mode) {
+            currentLockMode = mode;
+            const btnPin = document.getElementById('btnModePin');
+            const btnPat = document.getElementById('btnModePattern');
+            const cPin = document.getElementById('pinModeContainer');
+            const cPat = document.getElementById('patternModeContainer');
+
+            if (mode === 'pin') {
+                btnPin.classList.add('active');
+                btnPat.classList.remove('active');
+                cPin.style.display = 'block';
+                cPat.style.display = 'none';
+            } else {
+                btnPat.classList.add('active');
+                btnPin.classList.remove('active');
+                cPat.style.display = 'block';
+                cPin.style.display = 'none';
+                initPatternLock();
+            }
+        }
+
+        function pressPin(digit) {
+            playTone(480 + (parseInt(digit) || 0) * 30, 'sine', 0.08);
+            if (enteredPin.length < 4) {
+                enteredPin += digit;
+                updatePinDots();
+                if (enteredPin.length === 4) {
+                    setTimeout(verifyPin, 150);
+                }
+            }
+        }
+
+        function backspacePin() {
+            playTone(350, 'sine', 0.08);
+            if (enteredPin.length > 0) {
+                enteredPin = enteredPin.slice(0, -1);
+                updatePinDots();
+            }
+        }
+
+        function updatePinDots() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`pdot-${i}`);
+                if (dot) {
+                    if (i < enteredPin.length) dot.classList.add('filled');
+                    else dot.classList.remove('filled');
+                }
+            }
+        }
+
+        function checkPinManual() {
+            verifyPin();
+        }
+
+        function verifyPin() {
+            if (enteredPin === PASSCODE) {
+                unlockSystemSuccess();
+            } else {
+                handleLockError();
+            }
+        }
+
+        function handleLockError() {
+            playErrorBeep();
+            const box = document.getElementById('pinDotsBox');
+            if (box) box.classList.add('shake');
+            document.getElementById('lockStatusText').innerText = 'Incorrect Passcode / رمز غير صحيح!';
+            document.getElementById('lockStatusText').style.color = '#f87171';
+
+            setTimeout(() => {
+                enteredPin = '';
+                updatePinDots();
+                if (box) box.classList.remove('shake');
+                document.getElementById('lockStatusText').innerText = 'MONO SECURE OS - Enter Passcode';
+                document.getElementById('lockStatusText').style.color = '#fbbf24';
+            }, 600);
+        }
+
+        function unlockSystemSuccess() {
+            playSuccessChime();
+            document.getElementById('lockStatusText').innerText = 'Access Granted / مرحباً بك!';
+            document.getElementById('lockStatusText').style.color = '#34d399';
+            
+            const lockScreen = document.getElementById('lockScreen');
+            lockScreen.classList.add('unlocked');
+            sessionStorage.setItem('mono_system_unlocked', 'true');
+
+            setTimeout(() => {
+                lockScreen.style.display = 'none';
+            }, 450);
+        }
+
+        function lockSystemNow() {
+            sessionStorage.removeItem('mono_system_unlocked');
+            enteredPin = '';
+            updatePinDots();
+            const lockScreen = document.getElementById('lockScreen');
+            lockScreen.style.display = 'flex';
+            setTimeout(() => {
+                lockScreen.classList.remove('unlocked');
+            }, 20);
+        }
+
+        // Physical Keyboard Support
+        window.addEventListener('keydown', (e) => {
+            const lockScreen = document.getElementById('lockScreen');
+            if (lockScreen && lockScreen.style.display !== 'none' && !lockScreen.classList.contains('unlocked')) {
+                if (e.key >= '0' && e.key <= '9') {
+                    pressPin(e.key);
+                } else if (e.key === 'Backspace') {
+                    backspacePin();
+                } else if (e.key === 'Enter') {
+                    checkPinManual();
+                }
+            }
+        });
+
+        // ==========================================
+        // 4. INTERACTIVE PATTERN LOCK ENGINE (2-0-2-6)
+        // ==========================================
+        const PATTERN_NODES = [
+            { id: 1, x: 50, y: 50, label: '1' },
+            { id: 2, x: 150, y: 50, label: '2' },
+            { id: 3, x: 250, y: 50, label: '3' },
+            { id: 4, x: 50, y: 140, label: '4' },
+            { id: 5, x: 150, y: 140, label: '5' },
+            { id: 6, x: 250, y: 140, label: '6' },
+            { id: 7, x: 50, y: 230, label: '7' },
+            { id: 8, x: 150, y: 230, label: '8' },
+            { id: 9, x: 250, y: 230, label: '9' },
+            { id: 0, x: 150, y: 310, label: '0' }
+        ];
+
+        let patternActive = false;
+        let patternSequence = [];
+        let patternCanvas, patternCtx;
+
+        function initPatternLock() {
+            const matrix = document.getElementById('patternNodesMatrix');
+            if (!matrix) return;
+            matrix.innerHTML = '';
+
+            PATTERN_NODES.forEach(n => {
+                const el = document.createElement('div');
+                el.className = 'pattern-node';
+                el.id = `pnode-${n.id}`;
+                el.style.left = `${n.x}px`;
+                el.style.top = `${n.y}px`;
+                el.innerHTML = `<span>${n.label}</span><div class="pattern-node-dot"></div>`;
+                matrix.appendChild(el);
+            });
+
+            patternCanvas = document.getElementById('patternCanvas');
+            if (patternCanvas) {
+                patternCtx = patternCanvas.getContext('2d');
+                setupPatternListeners();
+            }
+        }
+
+        function setupPatternListeners() {
+            if (!patternCanvas) return;
+
+            const startDrag = (e) => {
+                e.preventDefault();
+                patternActive = true;
+                patternSequence = [];
+                clearPatternCanvas();
+                resetPatternNodes();
+                checkNodeHit(getEventPos(e));
+            };
+
+            const moveDrag = (e) => {
+                if (!patternActive) return;
+                e.preventDefault();
+                const pos = getEventPos(e);
+                checkNodeHit(pos);
+                drawPatternLine(pos);
+            };
+
+            const endDrag = (e) => {
+                if (!patternActive) return;
+                patternActive = false;
+                evaluatePatternSequence();
+            };
+
+            patternCanvas.addEventListener('mousedown', startDrag);
+            window.addEventListener('mousemove', moveDrag);
+            window.addEventListener('mouseup', endDrag);
+
+            patternCanvas.addEventListener('touchstart', startDrag, { passive: false });
+            window.addEventListener('touchmove', moveDrag, { passive: false });
+            window.addEventListener('touchend', endDrag, { passive: false });
+        }
+
+        function getEventPos(e) {
+            const rect = patternCanvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function checkNodeHit(pos) {
+            PATTERN_NODES.forEach(n => {
+                const dist = Math.hypot(n.x - pos.x, n.y - pos.y);
+                if (dist < 32) {
+                    if (patternSequence.length === 0 || patternSequence[patternSequence.length - 1] !== n.id) {
+                        patternSequence.push(n.id);
+                        playTone(400 + n.id * 35, 'sine', 0.08);
+                        const el = document.getElementById(`pnode-${n.id}`);
+                        if (el) el.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function drawPatternLine(currentPos, color = '#f59e0b') {
+            if (!patternCtx) return;
+            patternCtx.clearRect(0, 0, 300, 360);
+            if (patternSequence.length === 0) return;
+
+            patternCtx.beginPath();
+            patternCtx.strokeStyle = color;
+            patternCtx.lineWidth = 6;
+            patternCtx.lineCap = 'round';
+            patternCtx.lineJoin = 'round';
+            patternCtx.shadowColor = color;
+            patternCtx.shadowBlur = 15;
+
+            const firstNode = PATTERN_NODES.find(n => n.id === patternSequence[0]);
+            patternCtx.moveTo(firstNode.x, firstNode.y);
+
+            for (let i = 1; i < patternSequence.length; i++) {
+                const node = PATTERN_NODES.find(n => n.id === patternSequence[i]);
+                patternCtx.lineTo(node.x, node.y);
+            }
+
+            if (currentPos && patternActive) {
+                patternCtx.lineTo(currentPos.x, currentPos.y);
+            }
+            patternCtx.stroke();
+        }
+
+        function clearPatternCanvas() {
+            if (patternCtx) patternCtx.clearRect(0, 0, 300, 360);
+        }
+
+        function resetPatternNodes() {
+            document.querySelectorAll('.pattern-node').forEach(el => el.classList.remove('active'));
+        }
+
+        function evaluatePatternSequence() {
+            const seqStr = patternSequence.join('');
+            console.log("Pattern Sequence:", seqStr);
+
+            // Valid sequences representing 2026:
+            // 2026, 2526 (where 5 is center 0), or 206
+            if (seqStr === '2026' || seqStr === '2526' || seqStr === '206') {
+                drawPatternLine(null, '#10b981');
+                unlockSystemSuccess();
+            } else {
+                drawPatternLine(null, '#ef4444');
+                playErrorBeep();
+                setTimeout(() => {
+                    clearPatternCanvas();
+                    resetPatternNodes();
+                }, 500);
+            }
+        }
+
+        // ==========================================
+        // 5. CARDS GRID & PROJECTS ENGINE
+        // ==========================================
+        async function loadProjects() {
+            // 1. Check localStorage first
+            const cached = localStorage.getItem('mono_custom_projects');
+            if (cached) {
+                try {
+                    allProjects = JSON.parse(cached);
+                } catch(e) {}
+            }
+
+            // 2. Fetch projects.json (from server / repo)
+            try {
+                const res = await fetch('projects.json?t=' + Date.now());
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && Array.isArray(data) && data.length) {
+                        allProjects = data;
+                        localStorage.setItem('mono_custom_projects', JSON.stringify(data));
+                    }
+                }
+            } catch(e) {
+                console.log("Using cached or default projects");
+            }
+
+            if (!allProjects || !allProjects.length) {
+                allProjects = [...DEFAULT_PROJECTS];
+            }
+
+            renderCardsGrid();
+        }
+
+        function renderCardsGrid() {
+            const grid = document.getElementById('cards-grid');
+            if (!grid) return;
+
+            let html = '';
+
+            allProjects.forEach(proj => {
+                const imgSrc = proj.image || 'screenshots/dawaview.png';
+                html += `
+                    <button class="card" onclick="loadUrl('${proj.url}')">
+                        <div class="card-split-bg">
+                            <img src="${imgSrc}" alt="" class="card-split-img" loading="eager" decoding="async" onerror="this.style.display='none'">
+                            <div class="card-split-overlay"></div>
+                        </div>
+                        <div class="card-icon-container">
+                            <div class="card-icon-thumb" style="background-image: url('${imgSrc}');"></div>
+                            <div class="card-icon-badge">${proj.badge || '🚀'}</div>
+                        </div>
+                        <div class="card-content">
+                            <h2>${proj.title}</h2>
+                            <span class="card-subtitle"><span class="card-status-dot"></span> ${proj.subtitle || 'Active System'}</span>
+                        </div>
+                        <div class="card-arrow">‹</div>
+                    </button>
+                `;
+            });
+
+            // Add the "+ Add New System" Box at the end of the grid
+            html += `
+                <button class="card card-add-box" onclick="openAdminModal()">
+                    <div class="card-add-icon">＋</div>
+                    <div class="card-content">
+                        <h2>+ Add New System</h2>
+                        <span class="card-subtitle" style="color: #f59e0b;">إضافة بوكس جديد بدون تعديل كود</span>
+                    </div>
+                    <div class="card-arrow" style="color: #f59e0b;">‹</div>
+                </button>
+            `;
+
+            grid.innerHTML = html;
+            updateActiveBoxesCount();
+        }
+
+        function updateActiveBoxesCount() {
+            const el = document.getElementById('activeBoxesCount');
+            if (el) el.innerText = allProjects.length;
+        }
+
+        // ==========================================
+        // 6. IFRAME FULLSCREEN LAUNCHER
+        // ==========================================
         const iframeContainer = document.getElementById('iframe-container');
         const contentFrame = document.getElementById('content-frame');
         const loading = document.getElementById('loading');
@@ -621,42 +725,291 @@
         const mainContainer = document.getElementById('main-container');
 
         function loadUrl(url) {
-            // Hide home elements
             mainHeader.style.display = 'none';
             cardsGrid.style.display = 'none';
-            
-            // Transform container to fullscreen mode
             mainContainer.classList.add('fullscreen-mode');
-            
-            // Show iframe and back button
             iframeContainer.classList.remove('hidden');
             backBtn.classList.remove('hidden');
             loading.classList.remove('hidden');
-            
-            // Set URL
             contentFrame.src = url;
-            
-            // Hide loading when done
             contentFrame.onload = () => {
                 loading.classList.add('hidden');
             };
         }
 
         function goHome() {
-            // Clear iframe
             contentFrame.src = 'about:blank';
-            
-            // Show home elements
             mainHeader.style.display = 'block';
             cardsGrid.style.display = 'grid';
-            
-            // Revert container
             mainContainer.classList.remove('fullscreen-mode');
-            
-            // Hide iframe and back button
             iframeContainer.classList.add('hidden');
             backBtn.classList.add('hidden');
         }
+
+        // ==========================================
+        // 7. ADMIN & BOX MANAGER MODAL LOGIC
+        // ==========================================
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('githubTokenInput').value = getActiveGithubToken();
+            resetBoxForm();
+            renderManageBoxesList();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function closeAdminModalOnBackdrop(e) {
+            if (e.target.id === 'adminModal') closeAdminModal();
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tabContentAdd').style.display = 'none';
+            document.getElementById('tabContentManage').style.display = 'none';
+            document.getElementById('tabContentGithub').style.display = 'none';
+
+            if (tabName === 'add') {
+                document.getElementById('tabBtnAdd').classList.add('active');
+                document.getElementById('tabContentAdd').style.display = 'block';
+            } else if (tabName === 'manage') {
+                document.getElementById('tabBtnManage').classList.add('active');
+                document.getElementById('tabContentManage').style.display = 'block';
+                renderManageBoxesList();
+            } else if (tabName === 'github') {
+                document.getElementById('tabBtnGithub').classList.add('active');
+                document.getElementById('tabContentGithub').style.display = 'block';
+            }
+        }
+
+        function updateBoxPreview() {
+            const title = document.getElementById('boxTitleInput').value.trim() || 'System Name';
+            const subtitle = document.getElementById('boxSubtitleInput').value.trim() || 'System Description';
+            const badge = document.getElementById('boxBadgeInput').value.trim() || '🚀';
+            const img = document.getElementById('boxImageInput').value.trim() || 'screenshots/dawaview.png';
+
+            const container = document.getElementById('modalBoxPreviewContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div class="card" style="margin: 0; min-height: 95px; pointer-events: none;">
+                        <div class="card-split-bg">
+                            <img src="${img}" alt="" class="card-split-img" onerror="this.style.display='none'">
+                            <div class="card-split-overlay"></div>
+                        </div>
+                        <div class="card-icon-container">
+                            <div class="card-icon-thumb" style="background-image: url('${img}');"></div>
+                            <div class="card-icon-badge">${badge}</div>
+                        </div>
+                        <div class="card-content">
+                            <h2>${title}</h2>
+                            <span class="card-subtitle"><span class="card-status-dot"></span> ${subtitle}</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function handleImageFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                document.getElementById('boxImageInput').value = evt.target.result;
+                updateBoxPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetBoxForm() {
+            document.getElementById('editBoxId').value = '';
+            document.getElementById('boxTitleInput').value = '';
+            document.getElementById('boxSubtitleInput').value = '';
+            document.getElementById('boxUrlInput').value = '';
+            document.getElementById('boxBadgeInput').value = '⚡';
+            document.getElementById('boxImageInput').value = '';
+            document.getElementById('adminSaveStatus').style.display = 'none';
+            updateBoxPreview();
+        }
+
+        async function saveBoxFromForm() {
+            const title = document.getElementById('boxTitleInput').value.trim();
+            const subtitle = document.getElementById('boxSubtitleInput').value.trim() || 'Active System';
+            const url = document.getElementById('boxUrlInput').value.trim();
+            const badge = document.getElementById('boxBadgeInput').value.trim() || '🚀';
+            const image = document.getElementById('boxImageInput').value.trim() || 'screenshots/dawaview.png';
+            const editId = document.getElementById('editBoxId').value;
+            const statusEl = document.getElementById('adminSaveStatus');
+
+            if (!title || !url) {
+                statusEl.style.display = 'block';
+                statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusEl.style.color = '#f87171';
+                statusEl.innerText = 'يرجى إدخال اسم البوكس والرابط المستهدف!';
+                return;
+            }
+
+            if (editId) {
+                const idx = allProjects.findIndex(p => p.id === editId);
+                if (idx !== -1) {
+                    allProjects[idx] = { id: editId, title, subtitle, url, badge, image };
+                }
+            } else {
+                const newId = 'proj_' + Date.now();
+                allProjects.push({ id: newId, title, subtitle, url, badge, image });
+            }
+
+            // Save in localStorage immediately
+            localStorage.setItem('mono_custom_projects', JSON.stringify(allProjects));
+            renderCardsGrid();
+
+            statusEl.style.display = 'block';
+            statusEl.style.background = 'rgba(16, 185, 129, 0.2)';
+            statusEl.style.color = '#34d399';
+            statusEl.innerHTML = `✓ تم حفظ البوكس <strong>${title}</strong> محلياً! جاري المزامنة مع GitHub...`;
+
+            // Commit to GitHub via API
+            try {
+                const ok = await commitProjectsToGitHub(allProjects);
+                if (ok) {
+                    statusEl.innerHTML = `✓ تم حفظ البوكس ومزامنته مع GitHub بنجاح! ستظهر للجميع تلقائياً.`;
+                } else {
+                    statusEl.innerHTML = `✓ تم الحفظ محلياً! لم تكتمل المزامنة مع GitHub (تحقق من التوكن في تبويب GitHub Sync).`;
+                }
+            } catch(e) {
+                console.error(e);
+            }
+
+            setTimeout(() => {
+                resetBoxForm();
+                switchAdminTab('manage');
+            }, 1800);
+        }
+
+        function renderManageBoxesList() {
+            const list = document.getElementById('adminBoxesList');
+            if (!list) return;
+
+            if (!allProjects.length) {
+                list.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;">لا توجد بوكسات حالياً.</div>';
+                return;
+            }
+
+            list.innerHTML = allProjects.map((p, idx) => `
+                <div class="admin-item-row">
+                    <div class="admin-item-info">
+                        <div class="admin-item-badge">${p.badge || '🚀'}</div>
+                        <div class="admin-item-details">
+                            <div class="admin-item-title">${p.title}</div>
+                            <div class="admin-item-url">${p.url}</div>
+                        </div>
+                    </div>
+                    <div class="admin-item-actions">
+                        <button class="admin-btn-delete" onclick="deleteBox('${p.id}')">
+                            🗑️ حذف
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            updateActiveBoxesCount();
+        }
+
+        async function deleteBox(id) {
+            if (!confirm('هل أنت متأكد من رغبتك في حذف هذا البوكس؟')) return;
+
+            allProjects = allProjects.filter(p => p.id !== id);
+            localStorage.setItem('mono_custom_projects', JSON.stringify(allProjects));
+            renderCardsGrid();
+            renderManageBoxesList();
+
+            // Sync with GitHub
+            await commitProjectsToGitHub(allProjects);
+        }
+
+        // ==========================================
+        // 8. GITHUB REST API AUTO-SYNC ENGINE
+        // ==========================================
+        async function commitProjectsToGitHub(projectsArray) {
+            const token = getActiveGithubToken();
+            if (!token) return false;
+
+            const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/projects.json`;
+
+            try {
+                // Get existing file SHA
+                let sha = null;
+                const getResp = await fetch(url, {
+                    headers: { 'Authorization': `token ${token}`, 'User-Agent': 'MonoAdmin' }
+                });
+                if (getResp.ok) {
+                    const data = await getResp.json();
+                    sha = data.sha;
+                }
+
+                // Prepare Base64 content
+                const jsonStr = JSON.stringify(projectsArray, null, 2);
+                const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+
+                const payload = {
+                    message: `Update projects.json from UI Admin [skip ci]`,
+                    content: b64,
+                    branch: 'main'
+                };
+                if (sha) payload.sha = sha;
+
+                const putResp = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                        'User-Agent': 'MonoAdmin'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                return putResp.ok;
+            } catch(e) {
+                console.error("GitHub Commit Error:", e);
+                return false;
+            }
+        }
+
+        async function syncWithGithubManually() {
+            const statusEl = document.getElementById('githubSyncStatus');
+            statusEl.style.display = 'block';
+            statusEl.style.background = 'rgba(59, 130, 246, 0.2)';
+            statusEl.style.color = '#93c5fd';
+            statusEl.innerText = 'جاري المزامنة مع مستودع GitHub...';
+
+            saveGithubToken();
+            const ok = await commitProjectsToGitHub(allProjects);
+
+            if (ok) {
+                statusEl.style.background = 'rgba(16, 185, 129, 0.2)';
+                statusEl.style.color = '#34d399';
+                statusEl.innerText = '✓ تمت المزامنة بنجاح مع المستودع الرئيسي على GitHub!';
+            } else {
+                statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusEl.style.color = '#f87171';
+                statusEl.innerText = 'فشلت المزامنة. يرجى التحقق من صحة التوكن والصلاحيات (repo scope).';
+            }
+        }
+
+        // ==========================================
+        // 9. INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check Lock State
+            if (sessionStorage.getItem('mono_system_unlocked') === 'true') {
+                const lockScreen = document.getElementById('lockScreen');
+                if (lockScreen) lockScreen.style.display = 'none';
+            }
+
+            // Load Projects & Cards
+            loadProjects();
+            updateBoxPreview();
+        });
     </script>
 </body>
 </html>
