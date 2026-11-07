@@ -1,0 +1,74 @@
+[
+  {
+    "id": "dawaview",
+    "title": "dawaview",
+    "subtitle": "Monitoring & Live Inspection",
+    "url": "https://dawaview.vercel.app/",
+    "badge": "👁️",
+    "image": "screenshots/dawaview.png"
+  },
+  {
+    "id": "monopos",
+    "title": "monopos",
+    "subtitle": "Cloud Point of Sale (POS)",
+    "url": "https://monopos.vercel.app/",
+    "badge": "💳",
+    "image": "screenshots/monopos.png"
+  },
+  {
+    "id": "mononr",
+    "title": "mononr",
+    "subtitle": "Invoices & Returns Ledger",
+    "url": "https://mononr.vercel.app/",
+    "badge": "🧾",
+    "image": "screenshots/mononr.png"
+  },
+  {
+    "id": "cloudaldawaa",
+    "title": "cloudaldawaa",
+    "subtitle": "Cloud Administration Console",
+    "url": "https://cloudaldawaa.vercel.app/?mode=admin",
+    "badge": "☁️",
+    "image": "screenshots/cloudaldawaa.png"
+  },
+  {
+    "id": "offerstrans",
+    "title": "Offers Trans",
+    "subtitle": "Branch Offers Automation",
+    "url": "./Offers Trans.html",
+    "badge": "🚀",
+    "image": "screenshots/offerstrans.png"
+  },
+  {
+    "id": "offersdash",
+    "title": "Offers Dash",
+    "subtitle": "Branch Logins & Location Analytics",
+    "url": "./Offers Dash.html",
+    "badge": "📊",
+    "image": "screenshots/offersdash.png"
+  },
+  {
+    "id": "projectlocator",
+    "title": "Project Locator",
+    "subtitle": "Store Locator & Google Maps",
+    "url": "https://projectlocator.vercel.app/",
+    "badge": "📍",
+    "image": "screenshots/projectlocator.png"
+  },
+  {
+    "id": "offersphotos",
+    "title": "Offers Photos",
+    "subtitle": "Offers & Promotions Media Gallery",
+    "url": "./offers_photos.html",
+    "badge": "📸",
+    "image": "screenshots/offersphotos.png"
+  },
+  {
+    "id": "powerups",
+    "title": "PowerUps",
+    "subtitle": "System Power-Ups & Utilities",
+    "url": "https://powerups.vercel.app/",
+    "badge": "⚡",
+    "image": "screenshots/powerups.png"
+  }
+]
