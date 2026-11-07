@@ -919,3 +919,151 @@ header p {
     background: #ef4444;
     color: #ffffff;
 }
+
+
+/* =========================================
+   FULLSCREEN IFRAME & FLOATING HOME BUTTON
+   ========================================= */
+.iframe-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0b1120;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.iframe-container.hidden {
+    display: none !important;
+}
+
+#content-frame {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    background: #0b1120;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 23, 42, 0.95);
+    padding: 1rem 2.2rem;
+    border-radius: 2rem;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    font-weight: 800;
+    font-size: 1.1rem;
+    z-index: 1010;
+    backdrop-filter: blur(10px);
+    transition: opacity 0.3s;
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+    letter-spacing: 0.5px;
+}
+
+.loading.hidden {
+    display: none !important;
+}
+
+/* Floating Bottom Home Button (🏠) */
+.back-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, var(--orange), var(--dark-orange));
+    color: var(--white);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    font-size: 1.85rem;
+    cursor: pointer;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+.back-btn:hover {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 15px 40px rgba(245, 158, 11, 0.7);
+    border-color: #ffffff;
+}
+
+.back-btn:active {
+    transform: scale(0.95);
+}
+
+.back-btn.hidden {
+    display: none !important;
+}
+
+@media (max-width: 680px) {
+    .back-btn {
+        bottom: 1.25rem;
+        right: 1.25rem;
+        width: 52px;
+        height: 52px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Refined Pattern Lock: Pure geometric shapes, NO numbers */
+.pattern-node-shape {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.pattern-node.active .pattern-node-shape {
+    background: #f59e0b;
+    box-shadow: 0 0 18px #f59e0b;
+    transform: scale(1.5);
+}
+
+.pattern-attempts-badge {
+    margin-top: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.attempt-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    transition: all 0.2s ease;
+}
+
+.attempt-dot.lost {
+    background: #ef4444;
+    transform: scale(0.7);
+    opacity: 0.5;
+}

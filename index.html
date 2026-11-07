@@ -12,12 +12,12 @@
 </head>
 <body>
 
-    <!-- Back to Systems Button in Fullscreen Mode -->
-    <button id="back-btn" class="back-btn hidden" onclick="goHome()">
-        <span>←</span> الرجوع للمشاريع
+    <!-- FLOATING BOTTOM HOME BUTTON (العودة للرئيسية) -->
+    <button id="back-btn" class="back-btn hidden" onclick="goHome()" title="العودة للمشاريع">
+        🏠
     </button>
 
-    <!-- SMARTPHONE SECURITY LOCK SCREEN (Passcode: 2026) -->
+    <!-- SMARTPHONE SECURITY LOCK SCREEN (Pattern Default, Shapes only, 3 Attempts) -->
     <div id="lockScreen" class="lock-screen-overlay">
         <div class="lock-container">
             <div class="lock-clock-time" id="lockClock">12:00</div>
@@ -25,21 +25,38 @@
 
             <div class="lock-header-badge">
                 <span class="lock-pulse-icon">🔒</span>
-                <span id="lockStatusText">MONO SECURE OS - Enter Passcode</span>
+                <span id="lockStatusText">MONO SECURE OS</span>
             </div>
 
             <!-- Mode Switcher Tabs -->
-            <div class="lock-switcher-tabs">
-                <button class="lock-tab-btn active" id="btnModePin" onclick="switchLockMode('pin')">
-                    🔢 PIN Code (2026)
+            <div class="lock-switcher-tabs" id="lockModeTabs">
+                <button class="lock-tab-btn active" id="btnModePattern" onclick="switchLockMode('pattern')">
+                    📱 رسمة النمط (Pattern)
                 </button>
-                <button class="lock-tab-btn" id="btnModePattern" onclick="switchLockMode('pattern')">
-                    📱 Pattern Lock (رسمة النمط)
+                <button class="lock-tab-btn" id="btnModePin" onclick="switchLockMode('pin')">
+                    🔢 رمز الدخول (PIN)
                 </button>
             </div>
 
-            <!-- PIN Keypad Mode -->
-            <div id="pinModeContainer" style="width: 100%;">
+            <!-- Mode 1: Interactive Pattern Lock (DEFAULT) -->
+            <div id="patternModeContainer" style="display: block; width: 100%;">
+                <div class="pattern-lock-wrapper" id="patternWrapper">
+                    <canvas id="patternCanvas" class="pattern-canvas" width="300" height="360"></canvas>
+                    <div class="pattern-nodes-matrix" id="patternNodesMatrix">
+                        <!-- Populated by JavaScript with pure geometric shapes (no numbers) -->
+                    </div>
+                </div>
+                <!-- Attempts Counter -->
+                <div class="pattern-attempts-badge" id="patternAttemptsBox">
+                    <span>المحاولات المتبقية:</span>
+                    <span class="attempt-dot" id="att-1"></span>
+                    <span class="attempt-dot" id="att-2"></span>
+                    <span class="attempt-dot" id="att-3"></span>
+                </div>
+            </div>
+
+            <!-- Mode 2: PIN Keypad Mode (Fallback / Secondary) -->
+            <div id="pinModeContainer" style="display: none; width: 100%;">
                 <div class="pin-indicator-box" id="pinDotsBox">
                     <div class="pin-dot" id="pdot-0"></div>
                     <div class="pin-dot" id="pdot-1"></div>
@@ -65,20 +82,6 @@
                     <button class="keypad-key" onclick="checkPinManual()" style="font-size: 1.3rem; color: #fbbf24;">🔓</button>
                 </div>
             </div>
-
-            <!-- Pattern Lock Mode -->
-            <div id="patternModeContainer" style="display: none; width: 100%;">
-                <div class="pattern-lock-wrapper" id="patternWrapper">
-                    <canvas id="patternCanvas" class="pattern-canvas" width="300" height="360"></canvas>
-                    <div class="pattern-nodes-matrix" id="patternNodesMatrix">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="lock-hint-footer">
-                Passcode: <strong>2026</strong> | النمط: <strong>2-0-2-6</strong>
-            </div>
         </div>
     </div>
 
@@ -94,7 +97,7 @@
                     <span>➕</span> Add System / إدارة الأنظمة
                 </button>
                 <button class="header-btn header-btn-lock" onclick="lockSystemNow()">
-                    <span>🔒</span> Lock / قفل الشاشة
+                    <span>🔒</span> Lock / قفل
                 </button>
             </div>
         </header>
@@ -217,7 +220,7 @@
     <!-- CORE SYSTEM SCRIPTS -->
     <script>
         // ==========================================
-        // 1. DEFAULT PROJECTS LIST (INCLUDING POWERUPS)
+        // 1. DEFAULT PROJECTS LIST
         // ==========================================
         const DEFAULT_PROJECTS = [
             {
@@ -345,7 +348,8 @@
         // ==========================================
         const PASSCODE = '2026';
         let enteredPin = '';
-        let currentLockMode = 'pin';
+        let currentLockMode = 'pattern'; // DEFAULT IS PATTERN
+        let remainingPatternAttempts = 3;
 
         function updateClock() {
             const now = new Date();
@@ -418,22 +422,22 @@
             if (enteredPin === PASSCODE) {
                 unlockSystemSuccess();
             } else {
-                handleLockError();
+                handlePinError();
             }
         }
 
-        function handleLockError() {
+        function handlePinError() {
             playErrorBeep();
             const box = document.getElementById('pinDotsBox');
             if (box) box.classList.add('shake');
-            document.getElementById('lockStatusText').innerText = 'Incorrect Passcode / رمز غير صحيح!';
+            document.getElementById('lockStatusText').innerText = 'رمز غير صحيح / Incorrect PIN';
             document.getElementById('lockStatusText').style.color = '#f87171';
 
             setTimeout(() => {
                 enteredPin = '';
                 updatePinDots();
                 if (box) box.classList.remove('shake');
-                document.getElementById('lockStatusText').innerText = 'MONO SECURE OS - Enter Passcode';
+                document.getElementById('lockStatusText').innerText = 'MONO SECURE OS';
                 document.getElementById('lockStatusText').style.color = '#fbbf24';
             }, 600);
         }
@@ -449,6 +453,8 @@
 
             setTimeout(() => {
                 lockScreen.style.display = 'none';
+                // Check if URL has a hash to auto-open project
+                checkHashRouting();
             }, 450);
         }
 
@@ -456,6 +462,10 @@
             sessionStorage.removeItem('mono_system_unlocked');
             enteredPin = '';
             updatePinDots();
+            remainingPatternAttempts = 3;
+            updateAttemptsIndicator();
+            switchLockMode('pattern');
+            
             const lockScreen = document.getElementById('lockScreen');
             lockScreen.style.display = 'flex';
             setTimeout(() => {
@@ -463,34 +473,41 @@
             }, 20);
         }
 
-        // Physical Keyboard Support
+        // Keyboard listener for PIN entry
         window.addEventListener('keydown', (e) => {
             const lockScreen = document.getElementById('lockScreen');
             if (lockScreen && lockScreen.style.display !== 'none' && !lockScreen.classList.contains('unlocked')) {
-                if (e.key >= '0' && e.key <= '9') {
-                    pressPin(e.key);
-                } else if (e.key === 'Backspace') {
-                    backspacePin();
-                } else if (e.key === 'Enter') {
-                    checkPinManual();
+                if (currentLockMode === 'pin') {
+                    if (e.key >= '0' && e.key <= '9') {
+                        pressPin(e.key);
+                    } else if (e.key === 'Backspace') {
+                        backspacePin();
+                    } else if (e.key === 'Enter') {
+                        checkPinManual();
+                    }
                 }
             }
         });
 
         // ==========================================
-        // 4. INTERACTIVE PATTERN LOCK ENGINE (2-0-2-6)
+        // 4. PURE GEOMETRIC PATTERN LOCK ENGINE (NO NUMBERS)
         // ==========================================
+        // Nodes matrix positions corresponding to phone layout:
+        // 1, 2, 3
+        // 4, 5, 6
+        // 7, 8, 9
+        //    0
         const PATTERN_NODES = [
-            { id: 1, x: 50, y: 50, label: '1' },
-            { id: 2, x: 150, y: 50, label: '2' },
-            { id: 3, x: 250, y: 50, label: '3' },
-            { id: 4, x: 50, y: 140, label: '4' },
-            { id: 5, x: 150, y: 140, label: '5' },
-            { id: 6, x: 250, y: 140, label: '6' },
-            { id: 7, x: 50, y: 230, label: '7' },
-            { id: 8, x: 150, y: 230, label: '8' },
-            { id: 9, x: 250, y: 230, label: '9' },
-            { id: 0, x: 150, y: 310, label: '0' }
+            { id: 1, x: 50, y: 50 },
+            { id: 2, x: 150, y: 50 },  // 2
+            { id: 3, x: 250, y: 50 },
+            { id: 4, x: 50, y: 140 },
+            { id: 5, x: 150, y: 140 }, // Center
+            { id: 6, x: 250, y: 140 }, // 6
+            { id: 7, x: 50, y: 230 },
+            { id: 8, x: 150, y: 230 },
+            { id: 9, x: 250, y: 230 },
+            { id: 0, x: 150, y: 310 }  // 0 (Bottom Center)
         ];
 
         let patternActive = false;
@@ -502,13 +519,14 @@
             if (!matrix) return;
             matrix.innerHTML = '';
 
+            // Clean geometric shapes WITHOUT numbers
             PATTERN_NODES.forEach(n => {
                 const el = document.createElement('div');
                 el.className = 'pattern-node';
                 el.id = `pnode-${n.id}`;
                 el.style.left = `${n.x}px`;
                 el.style.top = `${n.y}px`;
-                el.innerHTML = `<span>${n.label}</span><div class="pattern-node-dot"></div>`;
+                el.innerHTML = `<div class="pattern-node-shape"></div>`;
                 matrix.appendChild(el);
             });
 
@@ -516,6 +534,20 @@
             if (patternCanvas) {
                 patternCtx = patternCanvas.getContext('2d');
                 setupPatternListeners();
+            }
+            updateAttemptsIndicator();
+        }
+
+        function updateAttemptsIndicator() {
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById(`att-${i}`);
+                if (dot) {
+                    if (i <= remainingPatternAttempts) {
+                        dot.classList.remove('lost');
+                    } else {
+                        dot.classList.add('lost');
+                    }
+                }
             }
         }
 
@@ -618,22 +650,43 @@
             console.log("Pattern Sequence:", seqStr);
 
             // Valid sequences representing 2026:
-            // 2026, 2526 (where 5 is center 0), or 206
-            if (seqStr === '2026' || seqStr === '2526' || seqStr === '206') {
+            // 2026 (Top-Center -> Bottom-Center -> Top-Center -> Middle-Right)
+            // or 2526 (center dot 5 as 0) or 2826
+            if (seqStr === '2026' || seqStr === '2526' || seqStr === '2826' || seqStr === '206') {
                 drawPatternLine(null, '#10b981');
                 unlockSystemSuccess();
             } else {
                 drawPatternLine(null, '#ef4444');
                 playErrorBeep();
-                setTimeout(() => {
-                    clearPatternCanvas();
-                    resetPatternNodes();
-                }, 500);
+                remainingPatternAttempts--;
+                updateAttemptsIndicator();
+
+                if (remainingPatternAttempts <= 0) {
+                    // 3 Failed Attempts -> Automatically switch to PIN Keypad!
+                    document.getElementById('lockStatusText').innerText = 'تم استنفاد محاولات النمط! أدخل رمز PIN';
+                    document.getElementById('lockStatusText').style.color = '#f87171';
+                    
+                    setTimeout(() => {
+                        clearPatternCanvas();
+                        resetPatternNodes();
+                        switchLockMode('pin');
+                    }, 650);
+                } else {
+                    document.getElementById('lockStatusText').innerText = `نمط غير صحيح! متبقي ${remainingPatternAttempts} محاولات`;
+                    document.getElementById('lockStatusText').style.color = '#f87171';
+
+                    setTimeout(() => {
+                        clearPatternCanvas();
+                        resetPatternNodes();
+                        document.getElementById('lockStatusText').innerText = 'MONO SECURE OS';
+                        document.getElementById('lockStatusText').style.color = '#fbbf24';
+                    }, 600);
+                }
             }
         }
 
         // ==========================================
-        // 5. CARDS GRID & PROJECTS ENGINE
+        // 5. CARDS GRID & URL INDEXING ENGINE
         // ==========================================
         async function loadProjects() {
             // 1. Check localStorage first
@@ -674,7 +727,7 @@
             allProjects.forEach(proj => {
                 const imgSrc = proj.image || 'screenshots/dawaview.png';
                 html += `
-                    <button class="card" onclick="loadUrl('${proj.url}')">
+                    <button class="card" onclick="loadUrl('${proj.url}', '${proj.id}')">
                         <div class="card-split-bg">
                             <img src="${imgSrc}" alt="" class="card-split-img" loading="eager" decoding="async" onerror="this.style.display='none'">
                             <div class="card-split-overlay"></div>
@@ -714,7 +767,7 @@
         }
 
         // ==========================================
-        // 6. IFRAME FULLSCREEN LAUNCHER
+        // 6. IFRAME FULLSCREEN LAUNCHER & ROUTING
         // ==========================================
         const iframeContainer = document.getElementById('iframe-container');
         const contentFrame = document.getElementById('content-frame');
@@ -724,27 +777,69 @@
         const backBtn = document.getElementById('back-btn');
         const mainContainer = document.getElementById('main-container');
 
-        function loadUrl(url) {
+        function loadUrl(url, projectId) {
+            if (!projectId) {
+                const found = allProjects.find(p => p.url === url);
+                projectId = found ? found.id : 'app';
+            }
+
+            // URL Hash Indexing: Updates address bar without full page reload
+            window.location.hash = projectId;
+            const proj = allProjects.find(p => p.id === projectId);
+            document.title = proj ? `Mono System - ${proj.title}` : `Mono System - ${projectId}`;
+
+            // Transform container to fullscreen mode
             mainHeader.style.display = 'none';
             cardsGrid.style.display = 'none';
             mainContainer.classList.add('fullscreen-mode');
+
+            // Show iframe and floating home button
             iframeContainer.classList.remove('hidden');
             backBtn.classList.remove('hidden');
             loading.classList.remove('hidden');
+
+            // Load Target URL into fullscreen iframe
             contentFrame.src = url;
             contentFrame.onload = () => {
                 loading.classList.add('hidden');
             };
         }
 
-        function goHome() {
+        function goHome(pushState = true) {
             contentFrame.src = 'about:blank';
+
+            // Clean URL hash and reset title
+            if (pushState) {
+                history.pushState(null, 'لوحة المشاريع - Mono System', window.location.pathname + window.location.search);
+                document.title = 'لوحة المشاريع - Mono System';
+            }
+
+            // Revert layout
             mainHeader.style.display = 'block';
             cardsGrid.style.display = 'grid';
             mainContainer.classList.remove('fullscreen-mode');
+
+            // Hide iframe and floating home button
             iframeContainer.classList.add('hidden');
             backBtn.classList.add('hidden');
+            loading.classList.add('hidden');
         }
+
+        // URL Hash Routing Listeners (Supports Browser Back & Direct Deep-Linking)
+        function checkHashRouting() {
+            const hash = window.location.hash.replace('#', '').trim();
+            if (hash) {
+                const proj = allProjects.find(p => p.id === hash);
+                if (proj) {
+                    loadUrl(proj.url, proj.id);
+                }
+            } else {
+                goHome(false);
+            }
+        }
+
+        window.addEventListener('popstate', checkHashRouting);
+        window.addEventListener('hashchange', checkHashRouting);
 
         // ==========================================
         // 7. ADMIN & BOX MANAGER MODAL LOGIC
@@ -850,14 +945,15 @@
                 return;
             }
 
+            const cleanId = title.toLowerCase().replace(/[^a-z0-9]/g, '') || ('box_' + Date.now());
+
             if (editId) {
                 const idx = allProjects.findIndex(p => p.id === editId);
                 if (idx !== -1) {
                     allProjects[idx] = { id: editId, title, subtitle, url, badge, image };
                 }
             } else {
-                const newId = 'proj_' + Date.now();
-                allProjects.push({ id: newId, title, subtitle, url, badge, image });
+                allProjects.push({ id: cleanId, title, subtitle, url, badge, image });
             }
 
             // Save in localStorage immediately
@@ -999,16 +1095,23 @@
         // ==========================================
         // 9. INITIALIZATION
         // ==========================================
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             // Check Lock State
             if (sessionStorage.getItem('mono_system_unlocked') === 'true') {
                 const lockScreen = document.getElementById('lockScreen');
                 if (lockScreen) lockScreen.style.display = 'none';
+            } else {
+                initPatternLock();
             }
 
             // Load Projects & Cards
-            loadProjects();
+            await loadProjects();
             updateBoxPreview();
+
+            // If already unlocked, check routing
+            if (sessionStorage.getItem('mono_system_unlocked') === 'true') {
+                checkHashRouting();
+            }
         });
     </script>
 </body>
