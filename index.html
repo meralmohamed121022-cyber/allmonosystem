@@ -17,7 +17,7 @@
         🏠
     </button>
 
-    <!-- SMARTPHONE SECURITY LOCK SCREEN (Pattern Default, Shapes only, 3 Attempts) -->
+    <!-- SMARTPHONE SECURITY PIN LOCK SCREEN (Passcode: 2026) -->
     <div id="lockScreen" class="lock-screen-overlay">
         <div class="lock-container">
             <div class="lock-clock-time" id="lockClock">12:00</div>
@@ -28,61 +28,34 @@
                 <span id="lockStatusText">MONO SECURE OS</span>
             </div>
 
-            <!-- Mode Switcher Tabs -->
-            <div class="lock-switcher-tabs" id="lockModeTabs">
-                <button class="lock-tab-btn active" id="btnModePattern" onclick="switchLockMode('pattern')">
-                    📱 رسمة النمط (Pattern)
-                </button>
-                <button class="lock-tab-btn" id="btnModePin" onclick="switchLockMode('pin')">
-                    🔢 رمز الدخول (PIN)
-                </button>
+            <!-- PIN Indicator Dots -->
+            <div class="pin-indicator-box" id="pinDotsBox" style="margin: 16px 0 24px;">
+                <div class="pin-dot" id="pdot-0"></div>
+                <div class="pin-dot" id="pdot-1"></div>
+                <div class="pin-dot" id="pdot-2"></div>
+                <div class="pin-dot" id="pdot-3"></div>
             </div>
 
-            <!-- Mode 1: Interactive Pattern Lock (DEFAULT) -->
-            <div id="patternModeContainer" style="display: block; width: 100%;">
-                <div class="pattern-lock-wrapper" id="patternWrapper">
-                    <canvas id="patternCanvas" class="pattern-canvas" width="300" height="360"></canvas>
-                    <div class="pattern-nodes-matrix" id="patternNodesMatrix">
-                        <!-- Populated by JavaScript with pure geometric shapes (no numbers) -->
-                    </div>
-                </div>
-                <!-- Attempts Counter -->
-                <div class="pattern-attempts-badge" id="patternAttemptsBox">
-                    <span>المحاولات المتبقية:</span>
-                    <span class="attempt-dot" id="att-1"></span>
-                    <span class="attempt-dot" id="att-2"></span>
-                    <span class="attempt-dot" id="att-3"></span>
-                </div>
-            </div>
-
-            <!-- Mode 2: PIN Keypad Mode (Fallback / Secondary) -->
-            <div id="pinModeContainer" style="display: none; width: 100%;">
-                <div class="pin-indicator-box" id="pinDotsBox">
-                    <div class="pin-dot" id="pdot-0"></div>
-                    <div class="pin-dot" id="pdot-1"></div>
-                    <div class="pin-dot" id="pdot-2"></div>
-                    <div class="pin-dot" id="pdot-3"></div>
-                </div>
-
-                <div class="pin-keypad-grid">
-                    <button class="keypad-key" onclick="pressPin('1')">1<span class="keypad-subletter">&nbsp;</span></button>
-                    <button class="keypad-key" onclick="pressPin('2')">2<span class="keypad-subletter">ABC</span></button>
-                    <button class="keypad-key" onclick="pressPin('3')">3<span class="keypad-subletter">DEF</span></button>
-                    
-                    <button class="keypad-key" onclick="pressPin('4')">4<span class="keypad-subletter">GHI</span></button>
-                    <button class="keypad-key" onclick="pressPin('5')">5<span class="keypad-subletter">JKL</span></button>
-                    <button class="keypad-key" onclick="pressPin('6')">6<span class="keypad-subletter">MNO</span></button>
-                    
-                    <button class="keypad-key" onclick="pressPin('7')">7<span class="keypad-subletter">PQRS</span></button>
-                    <button class="keypad-key" onclick="pressPin('8')">8<span class="keypad-subletter">TUV</span></button>
-                    <button class="keypad-key" onclick="pressPin('9')">9<span class="keypad-subletter">WXYZ</span></button>
-                    
-                    <button class="keypad-key" onclick="backspacePin()" style="font-size: 1.1rem; color: #94a3b8;">⌫</button>
-                    <button class="keypad-key" onclick="pressPin('0')">0<span class="keypad-subletter">+</span></button>
-                    <button class="keypad-key" onclick="checkPinManual()" style="font-size: 1.3rem; color: #fbbf24;">🔓</button>
-                </div>
+            <!-- Phone PIN Keypad Grid -->
+            <div class="pin-keypad-grid">
+                <button class="keypad-key" onclick="pressPin('1')">1<span class="keypad-subletter">&nbsp;</span></button>
+                <button class="keypad-key" onclick="pressPin('2')">2<span class="keypad-subletter">ABC</span></button>
+                <button class="keypad-key" onclick="pressPin('3')">3<span class="keypad-subletter">DEF</span></button>
+                
+                <button class="keypad-key" onclick="pressPin('4')">4<span class="keypad-subletter">GHI</span></button>
+                <button class="keypad-key" onclick="pressPin('5')">5<span class="keypad-subletter">JKL</span></button>
+                <button class="keypad-key" onclick="pressPin('6')">6<span class="keypad-subletter">MNO</span></button>
+                
+                <button class="keypad-key" onclick="pressPin('7')">7<span class="keypad-subletter">PQRS</span></button>
+                <button class="keypad-key" onclick="pressPin('8')">8<span class="keypad-subletter">TUV</span></button>
+                <button class="keypad-key" onclick="pressPin('9')">9<span class="keypad-subletter">WXYZ</span></button>
+                
+                <button class="keypad-key" onclick="backspacePin()" style="font-size: 1.1rem; color: #94a3b8;">⌫</button>
+                <button class="keypad-key" onclick="pressPin('0')">0<span class="keypad-subletter">+</span></button>
+                <button class="keypad-key" onclick="checkPinManual()" style="font-size: 1.3rem; color: #fbbf24;">🔓</button>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- MAIN DASHBOARD CONTAINER -->
@@ -344,12 +317,10 @@
         }
 
         // ==========================================
-        // 3. SECURITY LOCK SCREEN LOGIC (PASSCODE: 2026)
+        // 3. SECURITY PIN KEYPAD LOGIC (PASSCODE: 2026)
         // ==========================================
         const PASSCODE = '2026';
         let enteredPin = '';
-        let currentLockMode = 'pattern'; // DEFAULT IS PATTERN
-        let remainingPatternAttempts = 3;
 
         function updateClock() {
             const now = new Date();
@@ -363,27 +334,6 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
-
-        function switchLockMode(mode) {
-            currentLockMode = mode;
-            const btnPin = document.getElementById('btnModePin');
-            const btnPat = document.getElementById('btnModePattern');
-            const cPin = document.getElementById('pinModeContainer');
-            const cPat = document.getElementById('patternModeContainer');
-
-            if (mode === 'pin') {
-                btnPin.classList.add('active');
-                btnPat.classList.remove('active');
-                cPin.style.display = 'block';
-                cPat.style.display = 'none';
-            } else {
-                btnPat.classList.add('active');
-                btnPin.classList.remove('active');
-                cPat.style.display = 'block';
-                cPin.style.display = 'none';
-                initPatternLock();
-            }
-        }
 
         function pressPin(digit) {
             playTone(480 + (parseInt(digit) || 0) * 30, 'sine', 0.08);
@@ -453,7 +403,6 @@
 
             setTimeout(() => {
                 lockScreen.style.display = 'none';
-                // Check if URL has a hash to auto-open project
                 checkHashRouting();
             }, 450);
         }
@@ -462,9 +411,6 @@
             sessionStorage.removeItem('mono_system_unlocked');
             enteredPin = '';
             updatePinDots();
-            remainingPatternAttempts = 3;
-            updateAttemptsIndicator();
-            switchLockMode('pattern');
             
             const lockScreen = document.getElementById('lockScreen');
             lockScreen.style.display = 'flex';
@@ -477,213 +423,15 @@
         window.addEventListener('keydown', (e) => {
             const lockScreen = document.getElementById('lockScreen');
             if (lockScreen && lockScreen.style.display !== 'none' && !lockScreen.classList.contains('unlocked')) {
-                if (currentLockMode === 'pin') {
-                    if (e.key >= '0' && e.key <= '9') {
-                        pressPin(e.key);
-                    } else if (e.key === 'Backspace') {
-                        backspacePin();
-                    } else if (e.key === 'Enter') {
-                        checkPinManual();
-                    }
+                if (e.key >= '0' && e.key <= '9') {
+                    pressPin(e.key);
+                } else if (e.key === 'Backspace') {
+                    backspacePin();
+                } else if (e.key === 'Enter') {
+                    checkPinManual();
                 }
             }
         });
-
-        // ==========================================
-        // 4. PURE GEOMETRIC PATTERN LOCK ENGINE (NO NUMBERS)
-        // ==========================================
-        // Nodes matrix positions corresponding to phone layout:
-        // 1, 2, 3
-        // 4, 5, 6
-        // 7, 8, 9
-        //    0
-        const PATTERN_NODES = [
-            { id: 1, x: 50, y: 50 },
-            { id: 2, x: 150, y: 50 },  // 2
-            { id: 3, x: 250, y: 50 },
-            { id: 4, x: 50, y: 140 },
-            { id: 5, x: 150, y: 140 }, // Center
-            { id: 6, x: 250, y: 140 }, // 6
-            { id: 7, x: 50, y: 230 },
-            { id: 8, x: 150, y: 230 },
-            { id: 9, x: 250, y: 230 },
-            { id: 0, x: 150, y: 310 }  // 0 (Bottom Center)
-        ];
-
-        let patternActive = false;
-        let patternSequence = [];
-        let patternCanvas, patternCtx;
-
-        function initPatternLock() {
-            const matrix = document.getElementById('patternNodesMatrix');
-            if (!matrix) return;
-            matrix.innerHTML = '';
-
-            // Clean geometric shapes WITHOUT numbers
-            PATTERN_NODES.forEach(n => {
-                const el = document.createElement('div');
-                el.className = 'pattern-node';
-                el.id = `pnode-${n.id}`;
-                el.style.left = `${n.x}px`;
-                el.style.top = `${n.y}px`;
-                el.innerHTML = `<div class="pattern-node-shape"></div>`;
-                matrix.appendChild(el);
-            });
-
-            patternCanvas = document.getElementById('patternCanvas');
-            if (patternCanvas) {
-                patternCtx = patternCanvas.getContext('2d');
-                setupPatternListeners();
-            }
-            updateAttemptsIndicator();
-        }
-
-        function updateAttemptsIndicator() {
-            for (let i = 1; i <= 3; i++) {
-                const dot = document.getElementById(`att-${i}`);
-                if (dot) {
-                    if (i <= remainingPatternAttempts) {
-                        dot.classList.remove('lost');
-                    } else {
-                        dot.classList.add('lost');
-                    }
-                }
-            }
-        }
-
-        function setupPatternListeners() {
-            if (!patternCanvas) return;
-
-            const startDrag = (e) => {
-                e.preventDefault();
-                patternActive = true;
-                patternSequence = [];
-                clearPatternCanvas();
-                resetPatternNodes();
-                checkNodeHit(getEventPos(e));
-            };
-
-            const moveDrag = (e) => {
-                if (!patternActive) return;
-                e.preventDefault();
-                const pos = getEventPos(e);
-                checkNodeHit(pos);
-                drawPatternLine(pos);
-            };
-
-            const endDrag = (e) => {
-                if (!patternActive) return;
-                patternActive = false;
-                evaluatePatternSequence();
-            };
-
-            patternCanvas.addEventListener('mousedown', startDrag);
-            window.addEventListener('mousemove', moveDrag);
-            window.addEventListener('mouseup', endDrag);
-
-            patternCanvas.addEventListener('touchstart', startDrag, { passive: false });
-            window.addEventListener('touchmove', moveDrag, { passive: false });
-            window.addEventListener('touchend', endDrag, { passive: false });
-        }
-
-        function getEventPos(e) {
-            const rect = patternCanvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
-        }
-
-        function checkNodeHit(pos) {
-            PATTERN_NODES.forEach(n => {
-                const dist = Math.hypot(n.x - pos.x, n.y - pos.y);
-                if (dist < 32) {
-                    if (patternSequence.length === 0 || patternSequence[patternSequence.length - 1] !== n.id) {
-                        patternSequence.push(n.id);
-                        playTone(400 + n.id * 35, 'sine', 0.08);
-                        const el = document.getElementById(`pnode-${n.id}`);
-                        if (el) el.classList.add('active');
-                    }
-                }
-            });
-        }
-
-        function drawPatternLine(currentPos, color = '#f59e0b') {
-            if (!patternCtx) return;
-            patternCtx.clearRect(0, 0, 300, 360);
-            if (patternSequence.length === 0) return;
-
-            patternCtx.beginPath();
-            patternCtx.strokeStyle = color;
-            patternCtx.lineWidth = 6;
-            patternCtx.lineCap = 'round';
-            patternCtx.lineJoin = 'round';
-            patternCtx.shadowColor = color;
-            patternCtx.shadowBlur = 15;
-
-            const firstNode = PATTERN_NODES.find(n => n.id === patternSequence[0]);
-            patternCtx.moveTo(firstNode.x, firstNode.y);
-
-            for (let i = 1; i < patternSequence.length; i++) {
-                const node = PATTERN_NODES.find(n => n.id === patternSequence[i]);
-                patternCtx.lineTo(node.x, node.y);
-            }
-
-            if (currentPos && patternActive) {
-                patternCtx.lineTo(currentPos.x, currentPos.y);
-            }
-            patternCtx.stroke();
-        }
-
-        function clearPatternCanvas() {
-            if (patternCtx) patternCtx.clearRect(0, 0, 300, 360);
-        }
-
-        function resetPatternNodes() {
-            document.querySelectorAll('.pattern-node').forEach(el => el.classList.remove('active'));
-        }
-
-        function evaluatePatternSequence() {
-            const seqStr = patternSequence.join('');
-            console.log("Pattern Sequence:", seqStr);
-
-            // Valid sequences representing 2026:
-            // 2026 (Top-Center -> Bottom-Center -> Top-Center -> Middle-Right)
-            // or 2526 (center dot 5 as 0) or 2826
-            if (seqStr === '2026' || seqStr === '2526' || seqStr === '2826' || seqStr === '206') {
-                drawPatternLine(null, '#10b981');
-                unlockSystemSuccess();
-            } else {
-                drawPatternLine(null, '#ef4444');
-                playErrorBeep();
-                remainingPatternAttempts--;
-                updateAttemptsIndicator();
-
-                if (remainingPatternAttempts <= 0) {
-                    // 3 Failed Attempts -> Automatically switch to PIN Keypad!
-                    document.getElementById('lockStatusText').innerText = 'تم استنفاد محاولات النمط! أدخل رمز PIN';
-                    document.getElementById('lockStatusText').style.color = '#f87171';
-                    
-                    setTimeout(() => {
-                        clearPatternCanvas();
-                        resetPatternNodes();
-                        switchLockMode('pin');
-                    }, 650);
-                } else {
-                    document.getElementById('lockStatusText').innerText = `نمط غير صحيح! متبقي ${remainingPatternAttempts} محاولات`;
-                    document.getElementById('lockStatusText').style.color = '#f87171';
-
-                    setTimeout(() => {
-                        clearPatternCanvas();
-                        resetPatternNodes();
-                        document.getElementById('lockStatusText').innerText = 'MONO SECURE OS';
-                        document.getElementById('lockStatusText').style.color = '#fbbf24';
-                    }, 600);
-                }
-            }
-        }
 
         // ==========================================
         // 5. CARDS GRID & URL INDEXING ENGINE
@@ -1100,8 +848,6 @@
             if (sessionStorage.getItem('mono_system_unlocked') === 'true') {
                 const lockScreen = document.getElementById('lockScreen');
                 if (lockScreen) lockScreen.style.display = 'none';
-            } else {
-                initPatternLock();
             }
 
             // Load Projects & Cards
