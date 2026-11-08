@@ -419,6 +419,94 @@
             letter-spacing: -0.5px;
         }
 
+        .donut-center-sub {
+            font-size: 11px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-top: 4px;
+            background: rgba(56, 189, 248, 0.12);
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.2px;
+        }
+
+        /* Kingdom Overall Coverage Banner */
+        .kingdom-coverage-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.85));
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            gap: 12px;
+        }
+
+        .kcov-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .kcov-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .kcov-text {
+            min-width: 0;
+        }
+
+        .kcov-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kcov-desc {
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin-top: 1px;
+        }
+
+        .kcov-desc strong {
+            color: #38bdf8;
+            font-family: 'Inter', monospace;
+        }
+
+        .kcov-badge-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        .kcov-pct-val {
+            font-size: 20px;
+            font-weight: 900;
+            color: #38bdf8;
+            font-family: 'Inter', monospace;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .kcov-pct-lbl {
+            font-size: 9.5px;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
         .regional-stats-list {
             flex: 1.1;
             display: flex;
@@ -432,10 +520,10 @@
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            padding: 9px 12px;
+            padding: 10px 13px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
             transition: all 0.2s ease;
             cursor: pointer;
             min-width: 0;
@@ -486,9 +574,43 @@
             color: #ffffff;
         }
 
+        .region-coverage-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: -1px;
+        }
+
+        .coverage-label-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .coverage-label-group strong {
+            color: #e2e8f0;
+            font-family: 'Inter', monospace;
+        }
+
+        .coverage-percent-badge {
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: 999px;
+            font-family: 'Inter', monospace;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
         .region-bar-bg {
             width: 100%;
-            height: 5px;
+            height: 6px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 10px;
             overflow: hidden;
@@ -906,8 +1028,15 @@
             .kpi-value { font-size: 1.55rem; }
             .kpi-label { font-size: 11px; }
             .kpi-icon-box { width: 38px; height: 38px; font-size: 18px; margin-left: 6px; }
-            .donut-center-val { font-size: 30px; }
-            .donut-center-label { font-size: 10px; }
+            .donut-center-val { font-size: 28px; }
+            .donut-center-label { font-size: 9.5px; }
+            .donut-center-sub { font-size: 9.5px; padding: 2px 6px; }
+            .kingdom-coverage-banner { padding: 9px 11px; gap: 8px; }
+            .kcov-icon { font-size: 19px; }
+            .kcov-title { font-size: 11.5px; }
+            .kcov-desc { font-size: 10.5px; }
+            .kcov-pct-val { font-size: 17px; }
+            .kcov-pct-lbl { font-size: 8.5px; }
             .filter-pills-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; }
             .filter-pill { flex-shrink: 0; padding: 6px 12px; font-size: 11.5px; }
             .mobile-swipe-hint { display: flex; }
@@ -959,9 +1088,12 @@
 
             <div class="kpi-card" style="--card-accent: linear-gradient(90deg, #8b5cf6, #c084fc);">
                 <div class="kpi-info">
-                    <div class="kpi-label">Unique Pharmacies</div>
-                    <div class="kpi-value" id="kpi-unique-pharmacies">0</div>
-                    <span class="kpi-badge">🏪 Out of 951 Branches</span>
+                    <div class="kpi-label">Active Branches</div>
+                    <div class="kpi-value" style="display: flex; align-items: baseline; gap: 4px;">
+                        <span id="kpi-unique-pharmacies">0</span>
+                        <span style="font-size: 15px; color: #94a3b8; font-weight: 600;">/ 951</span>
+                    </div>
+                    <span class="kpi-badge" id="kpi-kingdom-coverage-badge">🏪 0.0% Kingdom Coverage</span>
                 </div>
                 <div class="kpi-icon-box" style="--icon-bg: rgba(139, 92, 246, 0.15); --icon-border: rgba(139, 92, 246, 0.3);">
                     🏬
@@ -997,20 +1129,37 @@
             <div class="card">
                 <div class="card-header-flex">
                     <div>
-                        <div class="card-title">🍩 Regional Distribution</div>
+                        <div class="card-title">🍩 Regional Distribution & Branch Coverage</div>
                         <div class="card-subtitle">Pharmacy logins proportion and branch density per geographical zone</div>
                     </div>
                     <span id="donutFilterReset" style="display: none; cursor: pointer; font-size: 11px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); padding: 3px 8px; border-radius: 6px;" onclick="resetRegionFilter()">
                         Filtered ✕ Reset
                     </span>
                 </div>
+
+                <!-- Kingdom Coverage Summary Banner -->
+                <div class="kingdom-coverage-banner">
+                    <div class="kcov-left">
+                        <span class="kcov-icon">🇸🇦</span>
+                        <div class="kcov-text">
+                            <div class="kcov-title">Kingdom Branch Coverage (إجمالي تغطية فروع المملكة)</div>
+                            <div class="kcov-desc"><strong id="kcov-active-count">0</strong> active branches logged in out of <strong id="kcov-total-count">951</strong> registered branches</div>
+                        </div>
+                    </div>
+                    <div class="kcov-badge-box">
+                        <div class="kcov-pct-val" id="kcov-pct-val">0.0%</div>
+                        <div class="kcov-pct-lbl">Penetration Rate</div>
+                    </div>
+                </div>
+
                 <div class="donut-container-wrapper">
                     <div class="donut-chart-box">
                         <div id="regionalDonutChart" style="width: 100%;"></div>
                         <!-- Animated Center Badge with Big Odometer Number -->
                         <div class="donut-center-badge">
-                            <span class="donut-center-label">Total Logins</span>
+                            <span class="donut-center-label">Active Branches</span>
                             <span class="donut-center-val" id="donutCenterVal">0</span>
+                            <span class="donut-center-sub" id="donutCenterSub">0% of 951</span>
                         </div>
                     </div>
                     <div class="regional-stats-list" id="regionalStatsList">
@@ -1246,6 +1395,21 @@
             'المنطقة الجنوبية': 'Southern Region (الجنوبية)',
             'أخرى': 'Other / Custom (أخرى)'
         };
+
+        // Total registered branches lookup (Kingdom: 951 total branches)
+        const REGION_TOTAL_BRANCHES = {
+            'المنطقة الشرقية': 371,
+            'المنطقة الوسطى': 227,
+            'المنطقة الشمالية': 146,
+            'المنطقة الجنوبية': 106,
+            'المنطقة الغربية': 99,
+            'مملكة البحرين': 2
+        };
+        const TOTAL_KINGDOM_BRANCHES = 951;
+
+        function getRegionTotalBranches(regionName) {
+            return REGION_TOTAL_BRANCHES[regionName] || 0;
+        }
 
         // State variables
         let allLoginRecords = [];
@@ -1489,7 +1653,7 @@
             }
         }
 
-        // Compute KPIs
+        // Compute KPIs and Kingdom Coverage
         function computeAnalytics(data) {
             const totalLogins = data.length;
             const uniquePharmacies = new Set();
@@ -1509,32 +1673,89 @@
             animateCounter(document.getElementById('kpi-active-regions'), 0, regionsSet.size || 5, 800);
             animateCounter(document.getElementById('kpi-active-cities'), 0, citiesSet.size || 11, 800);
 
+            // Compute Kingdom Coverage Percentage
+            const kingdomCoveragePct = ((uniquePharmacies.size / TOTAL_KINGDOM_BRANCHES) * 100).toFixed(1);
+            const kpiBadge = document.getElementById('kpi-kingdom-coverage-badge');
+            if (kpiBadge) {
+                kpiBadge.innerHTML = `🏪 <strong>${kingdomCoveragePct}%</strong> Kingdom Coverage (${uniquePharmacies.size}/${TOTAL_KINGDOM_BRANCHES})`;
+            }
+
+            // Update Kingdom Overview Banner
+            const kcovActive = document.getElementById('kcov-active-count');
+            const kcovTotal = document.getElementById('kcov-total-count');
+            const kcovPct = document.getElementById('kcov-pct-val');
+            if (kcovActive) kcovActive.innerText = uniquePharmacies.size;
+            if (kcovTotal) kcovTotal.innerText = TOTAL_KINGDOM_BRANCHES;
+            if (kcovPct) kcovPct.innerText = `${kingdomCoveragePct}%`;
+
             updatePillCounts(data);
         }
 
         function updatePillCounts(data) {
             const counts = { ALL: data.length };
+            const uniqueInRegion = {};
             data.forEach(log => {
-                const info = getBranchDetails(log.pharmacy_number);
-                const reg = info.region;
+                const clean = normalizePharmacyNumber(log.pharmacy_number);
+                const info = getBranchDetails(clean);
+                const reg = info.region || 'أخرى';
                 counts[reg] = (counts[reg] || 0) + 1;
+                if (!uniqueInRegion[reg]) uniqueInRegion[reg] = new Set();
+                uniqueInRegion[reg].add(clean);
             });
 
             document.getElementById('pill-count-all').innerText = counts.ALL || 0;
-            document.getElementById('pill-count-east').innerText = counts['المنطقة الشرقية'] || 0;
-            document.getElementById('pill-count-central').innerText = counts['المنطقة الوسطى'] || 0;
-            document.getElementById('pill-count-west').innerText = counts['المنطقة الغربية'] || 0;
-            document.getElementById('pill-count-north').innerText = counts['المنطقة الشمالية'] || 0;
-            document.getElementById('pill-count-south').innerText = counts['المنطقة الجنوبية'] || 0;
+
+            const pillEast = document.getElementById('pill-count-east');
+            if (pillEast) {
+                const eastU = uniqueInRegion['المنطقة الشرقية'] ? uniqueInRegion['المنطقة الشرقية'].size : (counts['المنطقة الشرقية'] || 0);
+                pillEast.innerText = counts['المنطقة الشرقية'] || 0;
+                pillEast.parentElement.title = `Eastern: ${counts['المنطقة الشرقية'] || 0} logins, ${eastU}/371 branches (${((eastU/371)*100).toFixed(1)}% coverage)`;
+            }
+
+            const pillCentral = document.getElementById('pill-count-central');
+            if (pillCentral) {
+                const centralU = uniqueInRegion['المنطقة الوسطى'] ? uniqueInRegion['المنطقة الوسطى'].size : (counts['المنطقة الوسطى'] || 0);
+                pillCentral.innerText = counts['المنطقة الوسطى'] || 0;
+                pillCentral.parentElement.title = `Central: ${counts['المنطقة الوسطى'] || 0} logins, ${centralU}/227 branches (${((centralU/227)*100).toFixed(1)}% coverage)`;
+            }
+
+            const pillWest = document.getElementById('pill-count-west');
+            if (pillWest) {
+                const westU = uniqueInRegion['المنطقة الغربية'] ? uniqueInRegion['المنطقة الغربية'].size : (counts['المنطقة الغربية'] || 0);
+                pillWest.innerText = counts['المنطقة الغربية'] || 0;
+                pillWest.parentElement.title = `Western: ${counts['المنطقة الغربية'] || 0} logins, ${westU}/99 branches (${((westU/99)*100).toFixed(1)}% coverage)`;
+            }
+
+            const pillNorth = document.getElementById('pill-count-north');
+            if (pillNorth) {
+                const northU = uniqueInRegion['المنطقة الشمالية'] ? uniqueInRegion['المنطقة الشمالية'].size : (counts['المنطقة الشمالية'] || 0);
+                pillNorth.innerText = counts['المنطقة الشمالية'] || 0;
+                pillNorth.parentElement.title = `Northern: ${counts['المنطقة الشمالية'] || 0} logins, ${northU}/146 branches (${((northU/146)*100).toFixed(1)}% coverage)`;
+            }
+
+            const pillSouth = document.getElementById('pill-count-south');
+            if (pillSouth) {
+                const southU = uniqueInRegion['المنطقة الجنوبية'] ? uniqueInRegion['المنطقة الجنوبية'].size : (counts['المنطقة الجنوبية'] || 0);
+                pillSouth.innerText = counts['المنطقة الجنوبية'] || 0;
+                pillSouth.parentElement.title = `Southern: ${counts['المنطقة الجنوبية'] || 0} logins, ${southU}/106 branches (${((southU/106)*100).toFixed(1)}% coverage)`;
+            }
         }
 
-        // Render Regional Donut Chart
+        // Render Regional Donut Chart & Regional Branch Coverage
         function renderDonutChart(data) {
             const regionCounts = {};
+            const regionUniquePharmacies = {};
+            const allUniquePharmacies = new Set();
+
             data.forEach(log => {
-                const info = getBranchDetails(log.pharmacy_number);
+                const clean = normalizePharmacyNumber(log.pharmacy_number);
+                allUniquePharmacies.add(clean);
+                const info = getBranchDetails(clean);
                 const reg = info.region || 'أخرى';
+                
                 regionCounts[reg] = (regionCounts[reg] || 0) + 1;
+                if (!regionUniquePharmacies[reg]) regionUniquePharmacies[reg] = new Set();
+                regionUniquePharmacies[reg].add(clean);
             });
 
             const sortedRegions = Object.entries(regionCounts).sort((a, b) => b[1] - a[1]);
@@ -1546,19 +1767,36 @@
             const statsContainer = document.getElementById('regionalStatsList');
             statsContainer.innerHTML = '';
 
-            const total = data.length || 1;
+            const totalLogins = data.length || 1;
+            const totalActiveUnique = allUniquePharmacies.size;
+
             sortedRegions.forEach(([regionName, count]) => {
-                const pct = ((count / total) * 100).toFixed(1);
+                const trafficPct = ((count / totalLogins) * 100).toFixed(1);
                 const color = REGION_COLORS[regionName] || '#64748b';
                 const displayName = REGION_TRANSLATIONS[regionName] || regionName;
                 const isActive = currentSelectedRegion === regionName;
 
+                // Total registered branches in this region
+                const totalBranchesInRegion = getRegionTotalBranches(regionName);
+                const uniqueBranchesInRegion = regionUniquePharmacies[regionName] ? regionUniquePharmacies[regionName].size : count;
+                
+                // Regional Coverage % = (active unique branches in region / total branches in region) * 100
+                const coveragePct = totalBranchesInRegion > 0 
+                    ? ((uniqueBranchesInRegion / totalBranchesInRegion) * 100).toFixed(1) 
+                    : trafficPct;
+
                 const itemDiv = document.createElement('div');
                 itemDiv.className = `region-item ${isActive ? 'active' : ''}`;
+                itemDiv.title = `Click to filter: ${displayName} (${coveragePct}% regional coverage)`;
                 itemDiv.onclick = () => {
                     const pill = Array.from(document.querySelectorAll('.filter-pill')).find(p => p.innerText.includes(regionName) || p.getAttribute('onclick').includes(regionName));
                     setRegionFilter(regionName, pill);
                 };
+
+                const branchCoverageText = totalBranchesInRegion > 0 
+                    ? `Coverage: <strong>${uniqueBranchesInRegion}</strong> of <strong>${totalBranchesInRegion}</strong> branches`
+                    : `Active branches: <strong>${uniqueBranchesInRegion}</strong>`;
+
                 itemDiv.innerHTML = `
                     <div class="region-header-row">
                         <span class="region-name-tag">
@@ -1566,18 +1804,32 @@
                             <span>${displayName}</span>
                         </span>
                         <span class="region-count-badge">
-                            <strong>${count}</strong> (${pct}%)
+                            <strong>${count}</strong> logins <span style="color: #64748b; font-weight: normal;">(${trafficPct}% traffic)</span>
+                        </span>
+                    </div>
+                    <div class="region-coverage-row">
+                        <div class="coverage-label-group">
+                            <span style="font-size: 11.5px;">🏪</span>
+                            <span>${branchCoverageText}</span>
+                        </div>
+                        <span class="coverage-percent-badge" style="color: ${color}; background: ${color}18; border: 1px solid ${color}35;">
+                            ${coveragePct}% coverage
                         </span>
                     </div>
                     <div class="region-bar-bg">
-                        <div class="region-bar-fill" style="width: ${pct}%; background: ${color};"></div>
+                        <div class="region-bar-fill" style="width: ${coveragePct}%; background: ${color}; box-shadow: 0 0 10px ${color}60;"></div>
                     </div>
                 `;
                 statsContainer.appendChild(itemDiv);
             });
 
-            // Animate Big Number inside Center Badge
-            animateCounter(document.getElementById('donutCenterVal'), 0, data.length, 900);
+            // Animate Center Badge with Active Unique Branches & Kingdom Coverage
+            animateCounter(document.getElementById('donutCenterVal'), 0, totalActiveUnique || totalLogins, 900);
+            const kingdomCoveragePct = ((totalActiveUnique / TOTAL_KINGDOM_BRANCHES) * 100).toFixed(1);
+            const centerSub = document.getElementById('donutCenterSub');
+            if (centerSub) {
+                centerSub.innerText = `${kingdomCoveragePct}% of 951 branches (${totalActiveUnique}/${TOTAL_KINGDOM_BRANCHES})`;
+            }
 
             // ApexCharts Options for Donut
             const options = {
@@ -1625,9 +1877,16 @@
                 tooltip: {
                     theme: 'dark',
                     y: {
-                        formatter: function(val) {
-                            const pct = ((val / total) * 100).toFixed(1);
-                            return `${val} logins (${pct}%)`;
+                        formatter: function(val, { dataPointIndex }) {
+                            const regName = labels[dataPointIndex];
+                            const trafficPct = ((val / totalLogins) * 100).toFixed(1);
+                            const totalBranches = getRegionTotalBranches(regName);
+                            const uniqueBranches = regionUniquePharmacies[regName] ? regionUniquePharmacies[regName].size : val;
+                            if (totalBranches > 0) {
+                                const covPct = ((uniqueBranches / totalBranches) * 100).toFixed(1);
+                                return `${val} logins (${trafficPct}% traffic) — Coverage: ${uniqueBranches}/${totalBranches} branches (${covPct}%)`;
+                            }
+                            return `${val} logins (${trafficPct}% traffic)`;
                         }
                     }
                 },
