@@ -70,13 +70,5 @@
     "url": "https://powerups.vercel.app/",
     "badge": "⚡",
     "image": "screenshots/powerups.png"
-  },
-  {
-    "id": "proj_1794063864070",
-    "title": "TEST",
-    "subtitle": "TEST",
-    "url": "https://powerups.vercel.app/",
-    "badge": "2",
-    "image": "screenshots/dawaview.png"
   }
 ]
