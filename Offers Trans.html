@@ -1671,70 +1671,153 @@ else if (/^\d+$/.test(sheetName)) {
         }
 
         // --- Formatting Functions (Python Logic Translation) ---
+        function cleanPrice(val) {
+            if (!val) return '';
+            let s = String(val).trim().replace(/\.+$/, '');
+            s = s.replace(/\.00$/, '');
+            return s;
+        }
+
         function format_offer_ar(text) {
-            text = text.replace(/-?\s*custom\s*/ig, ' '); // إزالة كلمة custom
-            const text_lower = text.toLowerCase();
-            const nums = (text.match(/\d+\.?\d*/g) || []).map(n => n.replace(/\.00$/, ''));
+            if (!text) return '';
+            const orig = String(text).trim();
+            // إزالة كلمة custom لتنظيف النص
+            const text_clean = orig.replace(/-?\s*custom\s*/ig, ' ').trim();
+            const text_lower = text_clean.toLowerCase();
 
-            if (text_lower.includes('sar')) {
-                if (text_lower.includes('2nd') || text_lower.includes('second')) {
-                    const price = nums.length > 0 ? nums[nums.length - 1]  : "";
-                    return `اشتري حبة واحصل على الثانية بسعر ${price} ريال`;
-                } else {
-                    const price = nums.length > 0 ? nums[nums.length - 1]  : "";
-                    return `اشتري حبة بسعر ${price} ريال`;
-                }
+            // 1. عروض الأصناف المجانية المحددة برقم كود (5 إلى 7 أرقام): Buy X Get [ItemCode] Free
+            // مثل: 'Buy 1 get 511411 FREE', 'buy 1 get 106321 free', '1+511411 free'
+            const codeMatch = text_lower.match(/(?:buy\s*)?(\d+)?\s*(?:x)?\s*(?:get|\+)\s*(\d{5,7})\s*(?:y)?\s*(?:free|مجانا)?/i);
+            if (codeMatch && (text_lower.includes('free') || text_lower.includes('مجانا') || text_lower.includes('+'))) {
+                const buyQty = codeMatch[1] || '1';
+                const itemCode = codeMatch[2];
+                const hBuy = buyQty === '1' ? 'حبة' : `${buyQty} حبات`;
+                return `عرض ${hBuy} + كود ${itemCode} مجاناً`;
             }
 
-            if (text.includes('+') || text_lower.includes('free') || text.includes('مجانا')) {
+            // 2. الحبة الثانية بسعر مخفض: Buy 1 Get 2nd @ [Price] / 2nd pc @ [Price]
+            // مثل: 'BUY 1 GET sec pc @1 SR', 'Buy 1 Get sec @ SR 10', 'Buy 1 Get 2nd @ 10 SAR', 'Buy 1X Get 1Y SR 1.00'
+            const hasSec = /(?:2nd|second|sec|ثانية|الثانية)/i.test(text_lower) || /buy\s*1\s*x\s*get\s*1\s*y\s*sr/i.test(text_lower);
+            const priceSecMatch = text_lower.match(/(?:@|sr|sar|ريال|بسعر|بـ)\s*(\d+\.?\d*)/i) || text_lower.match(/(\d+\.?\d*)\s*(?:sr|sar|ريال)/i);
+            if (hasSec && priceSecMatch) {
+                const price = cleanPrice(priceSecMatch[1]);
+                return `اشتري حبة واحصل على الثانية بـ ${price} ريال`;
+            }
+
+            // 3. عروض البكجات والقطع المتعددة بسعر محدد: Brand - X PCs @ Price
+            // مثل: 'BABY JOY - Custom 2PCs @ 129.', 'EVY BABY - Custom 2PCs @ 99.9', 'FINE BABY - Custom 2PCs @ 99.', '3 PCs @ 99 SAR'
+            const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|قطع|حبات|حبة)?\s*@\s*(\d+\.?\d*)/i);
+            if (pcsMatch) {
+                const qty = pcsMatch[1];
+                const price = cleanPrice(pcsMatch[2]);
+                let brand = '';
+                if (orig.includes('-')) {
+                    brand = orig.split('-')[0].trim();
+                }
+                let desc = '';
+                if (qty === '1') desc = `حبة بسعر ${price} ريال`;
+                else if (qty === '2') desc = `حبتين بسعر ${price} ريال`;
+                else desc = `${qty} حبات بسعر ${price} ريال`;
+                return brand ? `${brand} - ${desc}` : desc;
+            }
+
+            // 4. الحبة الواحدة بسعر ثابت: 'Buy 1 @ SAR 49.95', '1 Piece @ Fixed Price 10 SAR', 'Buy 1 @ 10 SAR'
+            const fixedMatch = text_lower.match(/(?:buy\s*1\s*@|1\s*piece\s*@|بسعر)\s*(?:sar|sr|ريال)?\s*(\d+\.?\d*)/i) || text_lower.match(/(?:sar|sr|ريال)\s*(\d+\.?\d*)/i);
+            if (fixedMatch && (text_lower.includes('buy') || text_lower.includes('piece') || text_lower.includes('sar') || text_lower.includes('sr') || text_lower.includes('ريال'))) {
+                const price = cleanPrice(fixedMatch[1]);
+                if (price) return `اشتري حبة بسعر ${price} ريال`;
+            }
+
+            // 5. عروض الشراء والحصول على قطع مجانية كلاسيكية: '1+1', '2+1', '3+1', '2+2', '3+3'
+            if (text_clean.includes('+') || text_lower.includes('free') || text_clean.includes('مجانا')) {
+                const nums = (text_clean.match(/\b\d+\b/g) || []);
                 if (nums.length >= 2) {
-                    const h_buy = nums[0] === '1' ? "حبه" : `${nums[0]} حبات`;
-                    const h_get = nums[1] === '1' ? "حبه" : `${nums[1]} حبات`;
-                    if (nums[0] === '1' && nums[1] === '1') {
-                        return "اشتري حبه واحصل على الثانية مجانا";
+                    const n1 = nums[0], n2 = nums[1];
+                    if (n2.length < 5) { // التأكد أنه عدد قطع وليس كود صنف
+                        if (n1 === '1' && n2 === '1') return 'اشتري حبة واحصل على الثانية مجانا';
+                        const h1 = n1 === '1' ? 'حبة' : `${n1} حبات`;
+                        const h2 = n2 === '1' ? 'حبة' : `${n2} حبات`;
+                        return `عرض ${h1} + ${h2} مجانا`;
                     }
-                    return `عرض ${h_buy} + ${h_get} مجانا`;
                 }
-                return "اشتري حبه واحصل على حبه مجانا";
+                return 'اشتري حبة واحصل على حبة مجانا';
             }
 
-            if (text.includes('%')) {
-                const p = nums.length > 0 ? nums[0]  : "";
-                if (["second", "2nd", "ثانية", "الحبه"].some(x => text_lower.includes(x))) {
-                    return `خصم ${p}% على الحبة الثانية`;
+            // 6. عروض الخصومات المئوية: '50% 2nd PCS', '25% 2nd PCS', '18% off'
+            if (text_clean.includes('%')) {
+                const nums = text_clean.match(/\d+/g) || [];
+                const pct = nums[0] || '';
+                if (['second', '2nd', 'sec', 'ثانية', 'الحبة', 'الحبه'].some(x => text_lower.includes(x))) {
+                    return `خصم ${pct}% على الحبة الثانية`;
                 }
-                return `خصم مباشر ${p}%`;
+                return `خصم مباشر ${pct}%`;
             }
 
-            return text.trim();
+            return orig;
         }
 
         function format_offer_en(text) {
-            text = text.replace(/-?\s*custom\s*/ig, ' '); // إزالة كلمة custom
-            const text_lower = text.toLowerCase();
-            const nums = (text.match(/\d+\.?\d*/g) || []).map(n => n.replace(/\.00$/, ''));
+            if (!text) return '';
+            const orig = String(text).trim();
+            const text_clean = orig.replace(/-?\s*custom\s*/ig, ' ').trim();
+            const text_lower = text_clean.toLowerCase();
 
-            if (text_lower.includes('sar')) {
-                if (text_lower.includes('2nd') || text_lower.includes('second')) {
-                    return `Buy 1 Get 2nd @ ${nums[nums.length - 1] || ''} SAR`;
+            // 1. Buy X Get [ItemCode] Free
+            const codeMatch = text_lower.match(/(?:buy\s*)?(\d+)?\s*(?:x)?\s*(?:get|\+)\s*(\d{5,7})\s*(?:y)?\s*(?:free|مجانا)?/i);
+            if (codeMatch && (text_lower.includes('free') || text_lower.includes('مجانا') || text_lower.includes('+'))) {
+                const buyQty = codeMatch[1] || '1';
+                const itemCode = codeMatch[2];
+                return `Buy ${buyQty} Get ${itemCode} Free`;
+            }
+
+            // 2. Buy 1 Get 2nd @ [Price]
+            const hasSec = /(?:2nd|second|sec|ثانية|الثانية)/i.test(text_lower) || /buy\s*1\s*x\s*get\s*1\s*y\s*sr/i.test(text_lower);
+            const priceSecMatch = text_lower.match(/(?:@|sr|sar|ريال|بسعر|بـ)\s*(\d+\.?\d*)/i) || text_lower.match(/(\d+\.?\d*)\s*(?:sr|sar|ريال)/i);
+            if (hasSec && priceSecMatch) {
+                const price = cleanPrice(priceSecMatch[1]);
+                return `Buy 1 Get 2nd @ ${price} SAR`;
+            }
+
+            // 3. Multi-pack PCs @ Price
+            const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|قطع|حبات|حبة)?\s*@\s*(\d+\.?\d*)/i);
+            if (pcsMatch) {
+                const qty = pcsMatch[1];
+                const price = cleanPrice(pcsMatch[2]);
+                let brand = '';
+                if (orig.includes('-')) {
+                    brand = orig.split('-')[0].trim();
                 }
-                return `Buy 1 @ ${nums[nums.length - 1] || ''} SAR`;
+                const desc = `${qty} PCs @ ${price} SAR`;
+                return brand ? `${brand} - ${desc}` : desc;
             }
 
-            if (text.includes('+') || text_lower.includes('free')) {
-                if (nums.length >= 2) return `${nums[0]}+${nums[1]} free`;
-                return "1+1 free";
+            // 4. Fixed Price 1 Piece
+            const fixedMatch = text_lower.match(/(?:buy\s*1\s*@|1\s*piece\s*@|بسعر)\s*(?:sar|sr|ريال)?\s*(\d+\.?\d*)/i) || text_lower.match(/(?:sar|sr|ريال)\s*(\d+\.?\d*)/i);
+            if (fixedMatch && (text_lower.includes('buy') || text_lower.includes('piece') || text_lower.includes('sar') || text_lower.includes('sr') || text_lower.includes('ريال'))) {
+                const price = cleanPrice(fixedMatch[1]);
+                if (price) return `Buy 1 @ ${price} SAR`;
             }
 
-            if (text.includes('%')) {
-                const p = nums.length > 0 ? nums[0]  : "";
-                if (["second", "2nd", "ثانية"].some(x => text_lower.includes(x))) {
-                    return `${p}% off on 2nd`;
+            // 5. Classic Buy X + Y Free
+            if (text_clean.includes('+') || text_lower.includes('free')) {
+                const nums = (text_clean.match(/\b\d+\b/g) || []);
+                if (nums.length >= 2 && nums[1].length < 5) {
+                    return `${nums[0]}+${nums[1]} free`;
                 }
-                return `${p}% off`;
+                return '1+1 free';
             }
 
-            return text.trim();
+            // 6. Percentage
+            if (text_clean.includes('%')) {
+                const nums = text_clean.match(/\d+/g) || [];
+                const pct = nums[0] || '';
+                if (['second', '2nd', 'sec', 'ثانية'].some(x => text_lower.includes(x))) {
+                    return `${pct}% off on 2nd`;
+                }
+                return `${pct}% off`;
+            }
+
+            return orig;
         }
 
         function get_style_class(text) {
@@ -1742,12 +1825,12 @@ else if (/^\d+$/.test(sheetName)) {
             if (text.includes('%')) {
                 const nums = text.match(/\d+/g) || [];
                 const p = nums.length > 0 ? nums[0]  : "0";
-                if (["second", "2nd", "ثانية"].some(x => text_lower.includes(x))) {
+                if (["second", "2nd", "sec", "ثانية"].some(x => text_lower.includes(x))) {
                     return `offer-${p}-second`;
                 }
                 return `offer-${p}-direct`;
             }
-            if (["free", "مجانا", "+", "sar"].some(x => text_lower.includes(x))) {
+            if (["free", "مجانا", "+", "sar", "sr", "ريال"].some(x => text_lower.includes(x))) {
                 return "offer-buy-get";
             }
             return "offer-custom";
