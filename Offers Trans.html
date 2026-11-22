@@ -404,6 +404,8 @@
                 <option value="Buy 1 Get 2nd @ SAR">اشتري حبة واحصل على الثانية بسعر مخفض</option>
                 <option value="Buy 1 Get 2nd @ Fixed Price">اشتري حبة واحصل على الثانية بسعر مخفض</option>
                 <option value="2nd PC @ Fixed Price">اشتري حبة واحصل على الثانية بسعر مخفض</option>
+                <option value="2 PCs @ Fixed Price">حبتين بسعر مخفض</option>
+                <option value="3 PCs @ Fixed Price">3 حبات بسعر مخفض</option>
                 <option value="Buy 1 @ Fixed Price">اشتري حبة بسعر مخفض</option>
                 <option value="Special Offer">عرض خاص</option>
                 <option value="Bundle Offer">عرض مجمع</option>
@@ -658,6 +660,8 @@
             { en: 'Buy 1 Get 2nd @ SAR', ar: 'اشتري حبة واحصل على الثانية بـ سعر مخفض', style: 'offer-buy-get' },
             { en: 'Buy 1 Get 2nd @ Fixed Price', ar: 'اشتري حبة واحصل على الثانية بسعر مخفض', style: 'offer-buy-get' },
             { en: '2nd PC @ Fixed Price', ar: 'اشتري حبة واحصل على الثانية بسعر مخفض', style: 'offer-buy-get' },
+            { en: '2 PCs @ Fixed Price', ar: 'حبتين بسعر مخفض', style: 'offer-buy-get' },
+            { en: '3 PCs @ Fixed Price', ar: '3 حبات بسعر مخفض', style: 'offer-buy-get' },
             { en: 'Buy 1 @ Fixed Price', ar: 'اشتري حبة بسعر مخفض', style: 'offer-buy-get' },
             { en: 'Special Offer', ar: 'عرض خاص', style: 'offer-custom' },
             { en: 'Bundle Offer', ar: 'عرض مجمع', style: 'offer-custom' }
@@ -1862,13 +1866,22 @@
                                     }
                                 }
                                 else if (snLower.includes("fixed price") || snLower.includes("fixed_price") || snLower.includes("fixed")) {
-                                    const isSecond = snLower.includes("2nd") || snLower.includes("second") || snLower.includes("sec") || snLower.includes("ثانية") || snLower.includes("الثانية");
-                                    const isThird = snLower.includes("3rd") || snLower.includes("third") || snLower.includes("ثالثة") || snLower.includes("الثالثة");
+                                    const isSecond = /\b2nd\b/i.test(snLower) || /\bsecond\b/i.test(snLower) || /\bsec\b/i.test(snLower) || /(?:ثانية|الثانية)/i.test(snLower);
+                                    const isThird = /\b3rd\b/i.test(snLower) || /\bthird\b/i.test(snLower) || /(?:ثالثة|الثالثة)/i.test(snLower);
+                                    const pcsMatch = snLower.match(/(?:^|[\s\-_])(\d+)\s*(?:pcs|pc|pieces|قطع|حبات|حبة)(?!\w)/i);
                                     const effPrice = priceVal || srPrice || "";
+
                                     if (isSecond) {
                                         finalPromo = effPrice ? `Buy 1 Get 2nd @ SAR ${effPrice}` : `Buy 1 Get 2nd @ Fixed Price`;
                                     } else if (isThird) {
                                         finalPromo = effPrice ? `Buy 2 Get 3rd @ SAR ${effPrice}` : `Buy 2 Get 3rd @ Fixed Price`;
+                                    } else if (pcsMatch) {
+                                        const qty = pcsMatch[1];
+                                        if (qty === '1') {
+                                            finalPromo = effPrice ? `Buy 1 @ SAR ${effPrice}` : `Buy 1 @ Fixed Price`;
+                                        } else {
+                                            finalPromo = effPrice ? `${qty} PCs @ ${effPrice} SAR` : `${qty} PCs @ Fixed Price`;
+                                        }
                                     } else {
                                         finalPromo = effPrice ? `Buy 1 @ SAR ${effPrice}` : `Buy 1 @ Fixed Price`;
                                     }
@@ -2018,8 +2031,8 @@ else if (/^\d+$/.test(sheetName)) {
             }
 
             // 3. عروض البكجات والقطع المتعددة بسعر محدد: Brand - X PCs @ Price
-            // مثل: 'BABY JOY - Custom 2PCs @ 129.', 'EVY BABY - Custom 2PCs @ 99.9', 'FINE BABY - Custom 2PCs @ 99.', '3 PCs @ 99 SAR'
-            const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|قطع|حبات|حبة)?\s*@\s*(\d+\.?\d*)/i);
+            // مثل: '2 PCs @ 45.95 SAR', 'BABY JOY - Custom 2PCs @ 129.', 'EVY BABY - Custom 2PCs @ 99.9', '3 PCs @ 99 SAR'
+            const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|pieces|قطع|حبات|حبة)?\s*@\s*(?:sar|sr|ريال|بسعر)?\s*(\d+\.?\d*)/i);
             if (pcsMatch) {
                 const qty = pcsMatch[1];
                 const price = cleanPrice(pcsMatch[2]);
@@ -2028,9 +2041,16 @@ else if (/^\d+$/.test(sheetName)) {
                     brand = orig.split('-')[0].trim();
                 }
                 let desc = '';
-                if (qty === '1') desc = `حبة بسعر ${price} ريال`;
+                if (qty === '1') desc = `اشتري حبة بسعر ${price} ريال`;
                 else if (qty === '2') desc = `حبتين بسعر ${price} ريال`;
                 else desc = `${qty} حبات بسعر ${price} ريال`;
+                return brand ? `${brand} - ${desc}` : desc;
+            }
+            const pcsFixedMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|pieces|قطع|حبات|حبة)\s*@?\s*(?:fixed price|fixed_price|fixed)/i);
+            if (pcsFixedMatch) {
+                const qty = pcsFixedMatch[1];
+                let brand = orig.includes('-') ? orig.split('-')[0].trim() : '';
+                let desc = qty === '1' ? 'اشتري حبة بسعر مخفض' : (qty === '2' ? 'حبتين بسعر مخفض' : `${qty} حبات بسعر مخفض`);
                 return brand ? `${brand} - ${desc}` : desc;
             }
 
@@ -2098,7 +2118,7 @@ else if (/^\d+$/.test(sheetName)) {
             }
 
             // 3. Multi-pack PCs @ Price
-            const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|قطع|حبات|حبة)?\s*@\s*(\d+\.?\d*)/i);
+            const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|pieces|قطع|حبات|حبة)?\s*@\s*(?:sar|sr|ريال|بسعر)?\s*(\d+\.?\d*)/i);
             if (pcsMatch) {
                 const qty = pcsMatch[1];
                 const price = cleanPrice(pcsMatch[2]);
@@ -2106,7 +2126,14 @@ else if (/^\d+$/.test(sheetName)) {
                 if (orig.includes('-')) {
                     brand = orig.split('-')[0].trim();
                 }
-                const desc = `${qty} PCs @ ${price} SAR`;
+                const desc = qty === '1' ? `Buy 1 @ ${price} SAR` : `${qty} PCs @ ${price} SAR`;
+                return brand ? `${brand} - ${desc}` : desc;
+            }
+            const pcsFixedMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|pieces|قطع|حبات|حبة)\s*@?\s*(?:fixed price|fixed_price|fixed)/i);
+            if (pcsFixedMatch) {
+                const qty = pcsFixedMatch[1];
+                let brand = orig.includes('-') ? orig.split('-')[0].trim() : '';
+                const desc = qty === '1' ? 'Buy 1 @ Fixed Price' : `${qty} PCs @ Fixed Price`;
                 return brand ? `${brand} - ${desc}` : desc;
             }
 
@@ -2152,7 +2179,7 @@ else if (/^\d+$/.test(sheetName)) {
                 }
                 return `offer-${p}-direct`;
             }
-            if (["free", "مجانا", "+", "sar", "sr", "ريال"].some(x => text_lower.includes(x))) {
+            if (["free", "مجانا", "+", "sar", "sr", "ريال", "pcs", "pc", "حبتين"].some(x => text_lower.includes(x))) {
                 return "offer-buy-get";
             }
             return "offer-custom";
