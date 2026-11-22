@@ -283,6 +283,70 @@
             </div>
 
             
+                        <!-- Batch Edit by Sheet Panel -->
+            <div id="batchEditContainer" class="bg-slate-800/90 border border-slate-700/80 rounded-xl p-3 md:p-4 mb-4 shadow-xl transition-all">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl md:text-2xl">⚡</span>
+                        <div>
+                            <h3 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
+                                <span>تعديل جماعي حسب اسم الشيت (Batch Edit by Sheet)</span>
+                                <span class="bg-blue-900/60 text-blue-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-blue-700">تطبيق على كل أكواد الشيت</span>
+                            </h3>
+                            <p class="text-xs text-slate-400">اختر اسم الشيت لتعديل صيغة العرض وتطبيقها بضغطة زر واحدة على جميع الأكواد التابعة له</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <button id="filterBySelectedSheetBtn" type="button" class="text-xs bg-slate-700 hover:bg-slate-600 text-blue-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-600 transition-colors flex items-center gap-1 cursor-pointer">
+                            <span>🔍 تصفية الجدول حسب الشيت</span>
+                        </button>
+                        <button id="resetFilterBtn" type="button" style="display:none;" class="text-xs bg-rose-900/70 hover:bg-rose-800 text-rose-200 px-2.5 py-1.5 rounded-lg border border-rose-700 transition-colors cursor-pointer">
+                            ✕ عرض كل الشيتات
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
+                    <div class="lg:col-span-4">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">1. اختر اسم الشيت (Sheet Name):</label>
+                        <select id="batchSheetSelect" class="w-full bg-slate-900 border border-slate-600 rounded-lg py-2 px-3 text-xs md:text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="">-- اختر الشيت للتعديل --</option>
+                        </select>
+                    </div>
+
+                    <div class="lg:col-span-3">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">2. صيغة العرض بالإنجليزي (Offer Type EN):</label>
+                        <input type="text" id="batchOfferEnInput" list="offerTypesList" placeholder="e.g. Buy 1 Get 2nd @ 24.95 SAR" class="w-full bg-slate-900 border border-slate-600 rounded-lg py-2 px-3 text-xs md:text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <div class="lg:col-span-3">
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">3. صيغة العرض بالعربي (Offer Type AR):</label>
+                        <input type="text" id="batchOfferArInput" dir="auto" placeholder="تلقائي حسب الإنجليزي أو اكتب مخصص" class="w-full bg-slate-900 border border-slate-600 rounded-lg py-2 px-3 text-xs md:text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <div class="lg:col-span-2">
+                        <button id="applyBatchSheetBtn" type="button" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg shadow-md transition-all text-xs md:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>⚡ تطبيق على الشيت</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 mt-3 pt-2.5 border-t border-slate-700/60 text-xs">
+                    <div class="flex items-center gap-3 text-slate-300">
+                        <label class="inline-flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" id="batchMergeCodesCheck" class="rounded bg-slate-900 border-slate-600 text-blue-500 focus:ring-blue-500">
+                            <span class="text-slate-300">دمج كل أكواد هذا الشيت في صف عرض واحد</span>
+                        </label>
+                        <span class="text-slate-600">|</span>
+                        <span id="batchSheetStatsText" class="text-blue-300 font-medium">لم يتم اختيار شيت</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400">الستايل المكتشف:</span>
+                        <span id="batchStylePreviewBadge" class="bg-slate-700 text-slate-200 px-2 py-0.5 rounded text-xs font-mono font-bold">offer-buy-get</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
                 <input type="text" id="searchCodeInput" placeholder="Search by Code (one or multiple)..." class="border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 w-full md:w-1/3">
                 <div class="flex items-center gap-2 w-full md:w-auto justify-end">
@@ -338,6 +402,9 @@
                 <option value="BUY 2 GET 1 FREE">اشتري 2 واحصل على 1 مجانا</option>
                 <option value="Buy 1 @ SAR">اشتري حبة بسعر مخفض</option>
                 <option value="Buy 1 Get 2nd @ SAR">اشتري حبة واحصل على الثانية بسعر مخفض</option>
+                <option value="Buy 1 Get 2nd @ Fixed Price">اشتري حبة واحصل على الثانية بسعر مخفض</option>
+                <option value="2nd PC @ Fixed Price">اشتري حبة واحصل على الثانية بسعر مخفض</option>
+                <option value="Buy 1 @ Fixed Price">اشتري حبة بسعر مخفض</option>
                 <option value="Special Offer">عرض خاص</option>
                 <option value="Bundle Offer">عرض مجمع</option>
             </datalist>
@@ -588,7 +655,10 @@
             { en: 'BUY 1 GET 1 FREE', ar: 'اشتري 1 واحصل على 1 مجانا', style: 'offer-buy-get' },
             { en: 'BUY 2 GET 1 FREE', ar: 'اشتري 2 واحصل على 1 مجانا', style: 'offer-buy-get' },
             { en: 'Buy 1 @ SAR', ar: 'اشتري حبة بسعر مخفض', style: 'offer-custom' },
-            { en: 'Buy 1 Get 2nd @ SAR', ar: 'اشتري حبة واحصل على الثانية بسعر مخفض', style: 'offer-custom' },
+            { en: 'Buy 1 Get 2nd @ SAR', ar: 'اشتري حبة واحصل على الثانية بـ سعر مخفض', style: 'offer-buy-get' },
+            { en: 'Buy 1 Get 2nd @ Fixed Price', ar: 'اشتري حبة واحصل على الثانية بسعر مخفض', style: 'offer-buy-get' },
+            { en: '2nd PC @ Fixed Price', ar: 'اشتري حبة واحصل على الثانية بسعر مخفض', style: 'offer-buy-get' },
+            { en: 'Buy 1 @ Fixed Price', ar: 'اشتري حبة بسعر مخفض', style: 'offer-buy-get' },
             { en: 'Special Offer', ar: 'عرض خاص', style: 'offer-custom' },
             { en: 'Bundle Offer', ar: 'عرض مجمع', style: 'offer-custom' }
         ];
@@ -1121,14 +1191,244 @@
             const rows = previewBody.querySelectorAll('tr');
             if (terms.length === 0) {
                 rows.forEach(row => row.style.display = '');
+                const resetBtn = document.getElementById('resetFilterBtn');
+                if (resetBtn) resetBtn.style.display = 'none';
                 return;
             }
             rows.forEach(row => {
-                const codes = (row.querySelector('.col-codes-container').getAttribute('data-codes') || '').toLowerCase();
-                const match = terms.some(t => codes.includes(t));
+                const codes = (row.querySelector('.col-codes-container')?.getAttribute('data-codes') || '').toLowerCase();
+                const sheet = (row.querySelector('.col-sheet-text') || row.querySelector('.col-sheet'))?.innerText.toLowerCase() || '';
+                const ar = (row.querySelector('.col-ar')?.innerText || '').toLowerCase();
+                const en = (row.querySelector('.col-en input')?.value || row.querySelector('.col-en')?.innerText || '').toLowerCase();
+                const match = terms.some(t => codes.includes(t) || sheet.includes(t) || ar.includes(t) || en.includes(t));
                 row.style.display = match ? '' : 'none';
             });
+            const resetBtn = document.getElementById('resetFilterBtn');
+            if (resetBtn) resetBtn.style.display = 'inline-flex';
         });
+
+        // --- Batch Edit by Sheet Logic ---
+        function updateBatchSheetOptions() {
+            const batchSheetSelect = document.getElementById('batchSheetSelect');
+            if (!batchSheetSelect) return;
+            const currentSelected = batchSheetSelect.value;
+
+            const sheetStats = {};
+            (finalJsonData || []).forEach(offer => {
+                const s = offer.sheetName || 'Unknown Sheet';
+                if (!sheetStats[s]) {
+                    sheetStats[s] = { count: 0, rows: 0, offers: [] };
+                }
+                sheetStats[s].count += (offer.codes || []).length;
+                sheetStats[s].rows += 1;
+                sheetStats[s].offers.push(offer);
+            });
+
+            batchSheetSelect.innerHTML = '<option value="">-- اختر الشيت للتعديل الجماعي --</option>';
+            const sortedSheets = Object.keys(sheetStats).sort((a, b) => a.localeCompare(b));
+            sortedSheets.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = `${s} (${sheetStats[s].count} كود - ${sheetStats[s].rows} عرض)`;
+                batchSheetSelect.appendChild(opt);
+            });
+
+            if (currentSelected && sheetStats[currentSelected]) {
+                batchSheetSelect.value = currentSelected;
+                updateBatchStatsDisplay(currentSelected, sheetStats[currentSelected]);
+            } else {
+                updateBatchStatsDisplay('', null);
+            }
+        }
+
+        function updateBatchStatsDisplay(sheetName, stats) {
+            const statsText = document.getElementById('batchSheetStatsText');
+            if (!statsText) return;
+            if (!sheetName || !stats) {
+                statsText.innerText = 'لم يتم اختيار شيت';
+                return;
+            }
+            statsText.innerText = `الشيت المختار [${sheetName}]: ${stats.count} كود في ${stats.rows} صف عرض`;
+        }
+
+        window.quickSelectSheetForBatch = function(sheetName) {
+            const sheetSelect = document.getElementById('batchSheetSelect');
+            if (!sheetSelect) return;
+            sheetSelect.value = sheetName;
+            sheetSelect.dispatchEvent(new Event('change'));
+
+            const batchContainer = document.getElementById('batchEditContainer');
+            if (batchContainer) {
+                batchContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                batchContainer.classList.add('ring-2', 'ring-blue-400');
+                setTimeout(() => batchContainer.classList.remove('ring-2', 'ring-blue-400'), 1500);
+            }
+            const enInput = document.getElementById('batchOfferEnInput');
+            if (enInput) {
+                enInput.focus();
+                enInput.select();
+            }
+        };
+
+        const batchSheetSelectEl = document.getElementById('batchSheetSelect');
+        if (batchSheetSelectEl) {
+            batchSheetSelectEl.addEventListener('change', function() {
+                const sheet = this.value;
+                if (!sheet || !finalJsonData) {
+                    updateBatchStatsDisplay('', null);
+                    return;
+                }
+                const matchingOffers = finalJsonData.filter(o => o.sheetName === sheet);
+                const totalCodes = matchingOffers.reduce((acc, o) => acc + (o.codes || []).length, 0);
+                updateBatchStatsDisplay(sheet, { count: totalCodes, rows: matchingOffers.length });
+
+                if (matchingOffers.length > 0) {
+                    const first = matchingOffers[0];
+                    const enInput = document.getElementById('batchOfferEnInput');
+                    const arInput = document.getElementById('batchOfferArInput');
+                    const styleBadge = document.getElementById('batchStylePreviewBadge');
+                    if (enInput) enInput.value = first.offerType || '';
+                    if (arInput) arInput.value = first.offerTypeAR || (first.offerType ? getArabicOfferTitle(first.offerType) : '');
+                    if (styleBadge) {
+                        const st = first.styleClass || get_style_class(first.offerType || '');
+                        styleBadge.innerText = st;
+                        styleBadge.className = `px-2 py-0.5 rounded text-xs font-mono font-bold ${st === 'offer-buy-get' ? 'bg-amber-900/60 text-amber-300' : 'bg-slate-700 text-slate-200'}`;
+                    }
+                }
+            });
+        }
+
+        const batchOfferEnInputEl = document.getElementById('batchOfferEnInput');
+        if (batchOfferEnInputEl) {
+            batchOfferEnInputEl.addEventListener('input', function() {
+                const val = this.value.trim();
+                const arInput = document.getElementById('batchOfferArInput');
+                const styleBadge = document.getElementById('batchStylePreviewBadge');
+                if (val) {
+                    if (arInput) {
+                        arInput.value = getArabicOfferTitle(val);
+                    }
+                    const st = (typeof get_style_class === 'function' ? get_style_class(val) : 'offer-buy-get') || 'offer-buy-get';
+                    if (styleBadge) {
+                        styleBadge.innerText = st;
+                        styleBadge.className = `px-2 py-0.5 rounded text-xs font-mono font-bold ${st === 'offer-buy-get' ? 'bg-amber-900/60 text-amber-300' : 'bg-slate-700 text-slate-200'}`;
+                    }
+                }
+            });
+        }
+
+        const applyBatchSheetBtnEl = document.getElementById('applyBatchSheetBtn');
+        if (applyBatchSheetBtnEl) {
+            applyBatchSheetBtnEl.addEventListener('click', function() {
+                updateFinalDataFromTable();
+                const sheetSelect = document.getElementById('batchSheetSelect');
+                const selectedSheet = sheetSelect ? sheetSelect.value : '';
+                if (!selectedSheet) {
+                    customAlert('يرجى اختيار اسم الشيت أولاً من القائمة!');
+                    return;
+                }
+
+                const enInput = document.getElementById('batchOfferEnInput');
+                const arInput = document.getElementById('batchOfferArInput');
+                const newEn = (enInput ? enInput.value.trim() : '');
+                const newAr = (arInput ? arInput.value.trim() : '') || getArabicOfferTitle(newEn);
+                const newStyle = get_style_class(newEn || newAr);
+                const mergeAll = document.getElementById('batchMergeCodesCheck')?.checked || false;
+
+                if (!newEn && !newAr) {
+                    customAlert('يرجى إدخال صيغة العرض (بالإنجليزي أو العربي) لتطبيقها على الشيت!');
+                    return;
+                }
+
+                if (!finalJsonData || finalJsonData.length === 0) return;
+
+                if (mergeAll) {
+                    let mergedCodes = [];
+                    let mergedPrices = {};
+                    let nonMatchingOffers = [];
+
+                    finalJsonData.forEach(offer => {
+                        if (offer.sheetName === selectedSheet) {
+                            (offer.codes || []).forEach(c => {
+                                if (!mergedCodes.includes(c)) mergedCodes.push(c);
+                            });
+                            if (offer.offerPrice) {
+                                Object.assign(mergedPrices, offer.offerPrice);
+                            }
+                        } else {
+                            nonMatchingOffers.push(offer);
+                        }
+                    });
+
+                    const combinedOffer = {
+                        sheetName: selectedSheet,
+                        offerType: newEn,
+                        offerTypeAR: newAr,
+                        codes: mergedCodes,
+                        styleClass: newStyle,
+                        badgeClass: newStyle,
+                        offerPrice: mergedPrices
+                    };
+
+                    finalJsonData = [combinedOffer, ...nonMatchingOffers];
+                } else {
+                    finalJsonData.forEach(offer => {
+                        if (offer.sheetName === selectedSheet) {
+                            if (newEn.includes('{price}')) {
+                                const pMatch = offer.offerType.match(/(\d+\.?\d*)/);
+                                const p = pMatch ? pMatch[1] : '';
+                                offer.offerType = newEn.replace(/\{price\}/g, p);
+                                offer.offerTypeAR = newAr.replace(/\{price\}/g, p).replace(/\{سعر\}/g, p);
+                            } else {
+                                offer.offerType = newEn;
+                                offer.offerTypeAR = newAr;
+                            }
+                            offer.styleClass = newStyle;
+                            offer.badgeClass = newStyle;
+                        }
+                    });
+                }
+
+                renderPreview(finalJsonData);
+                if (sheetSelect) {
+                    sheetSelect.value = selectedSheet;
+                    sheetSelect.dispatchEvent(new Event('change'));
+                }
+                customAlert(`تم تطبيق العرض بنجاح على جميع أكواد شيت: "${selectedSheet}"!`);
+            });
+        }
+
+        const filterBySelectedSheetBtnEl = document.getElementById('filterBySelectedSheetBtn');
+        if (filterBySelectedSheetBtnEl) {
+            filterBySelectedSheetBtnEl.addEventListener('click', function() {
+                const sheetSelect = document.getElementById('batchSheetSelect');
+                const sheet = sheetSelect ? sheetSelect.value : '';
+                if (!sheet) {
+                    customAlert('يرجى اختيار اسم الشيت أولاً من القائمة لتصفية الجدول!');
+                    return;
+                }
+                const rows = previewBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const sheetText = (row.querySelector('.col-sheet-text') || row.querySelector('.col-sheet'))?.innerText.trim() || '';
+                    const match = sheetText === sheet || sheetText.toLowerCase().includes(sheet.toLowerCase());
+                    row.style.display = match ? '' : 'none';
+                });
+                const resetBtn = document.getElementById('resetFilterBtn');
+                if (resetBtn) resetBtn.style.display = 'inline-flex';
+            });
+        }
+
+        const resetFilterBtnEl = document.getElementById('resetFilterBtn');
+        if (resetFilterBtnEl) {
+            resetFilterBtnEl.addEventListener('click', function() {
+                const rows = previewBody.querySelectorAll('tr');
+                rows.forEach(row => row.style.display = '');
+                this.style.display = 'none';
+                const searchInput = document.getElementById('searchCodeInput');
+                if (searchInput) searchInput.value = '';
+            });
+        }
+
 
         document.getElementById('addNewOfferBtn').addEventListener('click', function() {
             updateFinalDataFromTable();
@@ -1202,7 +1502,8 @@
             finalJsonData = [];
             const rows = previewBody.querySelectorAll('tr');
             rows.forEach(row => {
-                const sheetName = row.querySelector('.col-sheet').innerText.trim();
+                const sheetEl = row.querySelector('.col-sheet-text') || row.querySelector('.col-sheet');
+                const sheetName = sheetEl ? sheetEl.innerText.trim() : '';
                 const offerTypeAR = row.querySelector('.col-ar').innerText.trim();
                 const enInput = row.querySelector('.col-en .offer-en-input');
                 const offerType = enInput ? enInput.value.trim() : (row.querySelector('.col-en') ? row.querySelector('.col-en').innerText.trim() : '');
@@ -1560,8 +1861,17 @@
                                         }
                                     }
                                 }
-                                else if (snLower.includes("fixed price")) {
-                                    finalPromo = `Buy 1 @ SAR ${priceVal}`;
+                                else if (snLower.includes("fixed price") || snLower.includes("fixed_price") || snLower.includes("fixed")) {
+                                    const isSecond = snLower.includes("2nd") || snLower.includes("second") || snLower.includes("sec") || snLower.includes("ثانية") || snLower.includes("الثانية");
+                                    const isThird = snLower.includes("3rd") || snLower.includes("third") || snLower.includes("ثالثة") || snLower.includes("الثالثة");
+                                    const effPrice = priceVal || srPrice || "";
+                                    if (isSecond) {
+                                        finalPromo = effPrice ? `Buy 1 Get 2nd @ SAR ${effPrice}` : `Buy 1 Get 2nd @ Fixed Price`;
+                                    } else if (isThird) {
+                                        finalPromo = effPrice ? `Buy 2 Get 3rd @ SAR ${effPrice}` : `Buy 2 Get 3rd @ Fixed Price`;
+                                    } else {
+                                        finalPromo = effPrice ? `Buy 1 @ SAR ${effPrice}` : `Buy 1 @ Fixed Price`;
+                                    }
                                 } 
 //}
 else if (/^\d+$/.test(sheetName)) {
@@ -1703,6 +2013,9 @@ else if (/^\d+$/.test(sheetName)) {
                 const price = cleanPrice(priceSecMatch[1]);
                 return `اشتري حبة واحصل على الثانية بـ ${price} ريال`;
             }
+            if (hasSec && (text_lower.includes('fixed') || text_lower.includes('price') || text_lower.includes('سعر'))) {
+                return `اشتري حبة واحصل على الثانية بسعر مخفض`;
+            }
 
             // 3. عروض البكجات والقطع المتعددة بسعر محدد: Brand - X PCs @ Price
             // مثل: 'BABY JOY - Custom 2PCs @ 129.', 'EVY BABY - Custom 2PCs @ 99.9', 'FINE BABY - Custom 2PCs @ 99.', '3 PCs @ 99 SAR'
@@ -1726,6 +2039,9 @@ else if (/^\d+$/.test(sheetName)) {
             if (fixedMatch && (text_lower.includes('buy') || text_lower.includes('piece') || text_lower.includes('sar') || text_lower.includes('sr') || text_lower.includes('ريال'))) {
                 const price = cleanPrice(fixedMatch[1]);
                 if (price) return `اشتري حبة بسعر ${price} ريال`;
+            }
+            if (text_lower.includes('fixed price') || text_lower.includes('fixed_price')) {
+                return `اشتري حبة بسعر مخفض`;
             }
 
             // 5. عروض الشراء والحصول على قطع مجانية كلاسيكية: '1+1', '2+1', '3+1', '2+2', '3+3'
@@ -1777,6 +2093,9 @@ else if (/^\d+$/.test(sheetName)) {
                 const price = cleanPrice(priceSecMatch[1]);
                 return `Buy 1 Get 2nd @ ${price} SAR`;
             }
+            if (hasSec && (text_lower.includes('fixed') || text_lower.includes('price'))) {
+                return `Buy 1 Get 2nd @ Fixed Price`;
+            }
 
             // 3. Multi-pack PCs @ Price
             const pcsMatch = text_clean.match(/(?:^|[\-\s])(\d+)\s*(?:pcs|pc|قطع|حبات|حبة)?\s*@\s*(\d+\.?\d*)/i);
@@ -1796,6 +2115,9 @@ else if (/^\d+$/.test(sheetName)) {
             if (fixedMatch && (text_lower.includes('buy') || text_lower.includes('piece') || text_lower.includes('sar') || text_lower.includes('sr') || text_lower.includes('ريال'))) {
                 const price = cleanPrice(fixedMatch[1]);
                 if (price) return `Buy 1 @ ${price} SAR`;
+            }
+            if (text_lower.includes('fixed price') || text_lower.includes('fixed_price')) {
+                return `Buy 1 @ Fixed Price`;
             }
 
             // 5. Classic Buy X + Y Free
@@ -1858,7 +2180,14 @@ else if (/^\d+$/.test(sheetName)) {
                     <td class="px-2 py-2 md:px-4 md:py-4">
                         <button onclick="confirmDeleteRow(this)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded">Delete</button>
                     </td>
-                    <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-400 col-sheet" contenteditable="true">${offer.sheetName || ''}</td>
+                    <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-300 col-sheet">
+                        <div class="flex items-center gap-1.5 justify-between">
+                            <span contenteditable="true" class="col-sheet-text outline-none border-b border-dashed border-slate-600 focus:border-blue-400">${offer.sheetName || ''}</span>
+                            <button type="button" onclick="quickSelectSheetForBatch('${(offer.sheetName || '').replace(/['"\\]/g, '')}')" title="تعديل صيغة كل أكواد هذا الشيت دفعة واحدة" class="text-blue-400 hover:text-blue-200 bg-slate-800 hover:bg-blue-600/40 border border-slate-700 px-1.5 py-0.5 rounded text-[10px] md:text-[11px] transition-all shrink-0 cursor-pointer">
+                                ⚡ تعديل الشيت
+                            </button>
+                        </div>
+                    </td>
                     <td class="px-2 py-2 md:px-4 md:py-4 font-bold text-white col-ar" dir="auto" contenteditable="true" style="outline: none; border-bottom: 1px dashed rgba(255,255,255,0.3);">${offer.offerTypeAR}</td>
                     <td class="px-2 py-2 md:px-4 md:py-4 font-medium col-en" dir="ltr">
                         <input list="offerTypesList" class="offer-en-input w-full bg-slate-900/40 border border-slate-600 rounded px-2 py-1 text-white text-xs md:text-sm focus:border-blue-400 focus:outline-none" value="${offer.offerType || ''}" placeholder="Select or type offer...">
@@ -1873,6 +2202,8 @@ else if (/^\d+$/.test(sheetName)) {
                 `;
                 previewBody.appendChild(tr);
             });
+
+            updateBatchSheetOptions();
 
             // إضافة مستمعين لحدث الEdit لتحديث العدادات
             const editableCells = previewBody.querySelectorAll('[contenteditable="true"]');
