@@ -2,101 +2,330 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offers Photos - Mono System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إعدادات صور فترات العروض - MONO SYSTEM</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         :root {
-            --bg-body: #0f172a;
-            --bg-surface: #1e293b;
+            --bg-body: #070d19;
+            --bg-surface: #0e172a;
+            --bg-card: rgba(17, 28, 51, 0.85);
+            --border-color: rgba(255, 107, 53, 0.25);
+            --border-glow: rgba(255, 107, 53, 0.45);
+            --accent-orange: #ff6b35;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #f5d76e;
             --success: #10b981;
             --danger: #ef4444;
+            --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
         }
 
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
             background-color: var(--bg-body);
-            color: #f8fafc;
+            color: var(--text-primary);
             font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 30px 15px;
+            position: relative;
+            overflow-x: hidden;
         }
 
+        /* 🌌 Animated Cyber Ambient Background */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 15% 15%, rgba(255, 107, 53, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+                        linear-gradient(135deg, #070d19 0%, #0d1527 50%, #060a14 100%);
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            animation: gridGlide 30s linear infinite;
+        }
+
+        @keyframes gridGlide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        /* 📦 Main Glass Container */
         .mono-wrapper {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            max-width: 680px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .mono-container {
-            background: var(--bg-surface);
-            padding: 40px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .mono-container h1 {
+        .mono-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--border-color);
+            border-radius: 26px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
+                        0 0 30px rgba(255, 107, 53, 0.12),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mono-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-orange), var(--accent-gold), transparent);
+        }
+
+        /* 👑 Header Section */
+        .mono-header {
             text-align: center;
-            margin-top: 0;
-            color: #d4af37;
-            font-weight: 800;
-            margin-bottom: 30px;
-            font-size: 2rem;
+            margin-bottom: 28px;
+            position: relative;
         }
 
-        .mono-form-group {
+        .header-icon-badge {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(212, 175, 55, 0.2));
+            border: 1px solid rgba(255, 107, 53, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--accent-orange);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.25);
+            margin-bottom: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .header-icon-badge:hover {
+            transform: scale(1.08) rotate(4deg);
+        }
+
+        .mono-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .mono-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* 🎯 Form Groups & Inputs */
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             margin-bottom: 25px;
         }
 
-        .mono-form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 700;
-            font-size: 1.1rem;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .mono-input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .mono-input:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-        }
-
-        .toggle-container {
+        .form-label {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #e2e8f0;
         }
-        
+
+        .form-label i {
+            color: var(--accent-orange);
+            margin-left: 6px;
+        }
+
+        .label-action-btn {
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            text-decoration: none;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.25s ease;
+        }
+
+        .label-action-btn:hover {
+            background: rgba(212, 175, 55, 0.25);
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i.input-icon {
+            position: absolute;
+            right: 14px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .mono-input, .mono-select {
+            width: 100%;
+            padding: 13px 44px 13px 14px;
+            background: rgba(10, 18, 36, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .mono-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6b35' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
+            background-size: 16px;
+        }
+
+        .mono-select option {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 10px;
+        }
+
+        .mono-input:focus, .mono-select:focus {
+            border-color: var(--accent-orange);
+            background: rgba(15, 26, 50, 0.85);
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.3),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .mono-input:focus ~ .input-icon {
+            color: var(--accent-orange);
+        }
+
+        /* 🔘 Custom Period Input (Animated Appearance) */
+        #customPeriodWrap {
+            display: none;
+            margin-top: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ⚡ Toggle & Status Section */
+        .toggle-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 26, 50, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px 16px;
+            transition: all 0.25s ease;
+        }
+
+        .toggle-box:hover {
+            border-color: rgba(255, 107, 53, 0.3);
+            background: rgba(15, 26, 50, 0.8);
+        }
+
+        .toggle-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--danger);
+            box-shadow: 0 0 10px var(--danger);
+            transition: all 0.3s ease;
+        }
+
+        .status-dot.active {
+            background: var(--success);
+            box-shadow: 0 0 12px var(--success);
+        }
+
+        .toggle-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .toggle-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Switch Switcher */
         .switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 34px;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
         }
 
         .switch input {
@@ -112,268 +341,804 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #334155;
-            transition: .4s;
+            background-color: #27354f;
+            transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
+            height: 20px;
+            width: 20px;
             left: 4px;
-            bottom: 4px;
+            bottom: 3px;
             background-color: white;
-            transition: .4s;
+            transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .switch input:checked + .slider {
-            background-color: var(--success);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
         }
 
         .switch input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
-        .mono-btn-save {
-            background: linear-gradient(135deg, #d4af37, #f5d76e);
-            color: #000;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            font-family: inherit;
-            width: 100%;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            transform: translateX(23px);
         }
 
-        .mono-btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
-        }
-
-        .mono-btn-save:disabled {
-            background: #475569;
-            color: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .mono-btn-link {
-            display: block;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-top: 15px;
-            transition: 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .mono-btn-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .preview-box {
-            margin-top: 25px;
-            width: 100%;
-            height: 250px;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.3);
-            border: 1px dashed rgba(255,255,255,0.2);
+        /* 👁️ Live Interactive Preview Window */
+        .preview-section-header {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .preview-badge {
+            font-size: 0.75rem;
+            background: rgba(255, 107, 53, 0.15);
+            color: var(--accent-orange);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .preview-window {
+            width: 100%;
+            height: 230px;
+            border-radius: 16px;
+            background: #090f1e;
+            border: 1px dashed rgba(255, 107, 53, 0.35);
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            color: var(--text-secondary);
+            position: relative;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
-        .preview-box img {
+        .preview-window:hover {
+            border-color: var(--accent-orange);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+        }
+
+        .preview-window img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            border-radius: 14px;
+            transition: transform 0.4s ease;
         }
 
-        .mono-status-msg {
-            margin-top: 15px;
-            padding: 12px;
+        .preview-window:hover img {
+            transform: scale(1.02);
+        }
+
+        .preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .preview-placeholder i {
+            font-size: 40px;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .preview-period-tag {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(8, 20, 38, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 107, 53, 0.4);
             border-radius: 8px;
-            text-align: center;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            color: #ffffff;
             font-weight: 700;
             display: none;
-            font-size: 1.1rem;
         }
 
-        .mono-status-success {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
+        /* 🔘 Action Buttons */
+        .actions-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
         }
 
-        .mono-status-error {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
+        .mono-btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #d97706 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        /* Responsive Mobile Styles */
-        @media (max-width: 768px) {
-            .mono-wrapper {
-                padding: 10px;
+        .mono-btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 12px 28px rgba(255, 107, 53, 0.5);
+        }
+
+        .mono-btn-primary:disabled {
+            background: #27354f;
+            color: #64748b;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .mono-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .mono-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* 📋 Configured Periods Registry */
+        .periods-registry {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .registry-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .registry-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-left: 4px;
+        }
+
+        .registry-item {
+            background: rgba(15, 26, 50, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .registry-item:hover {
+            background: rgba(15, 26, 50, 0.8);
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .reg-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reg-thumb {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .reg-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .reg-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .reg-tag {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+        }
+
+        .reg-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reg-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .reg-btn:hover {
+            color: var(--accent-orange);
+            background: rgba(255, 107, 53, 0.15);
+        }
+
+        /* 🔔 Status Toast */
+        .mono-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: rgba(14, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .mono-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        .mono-toast.success {
+            border-color: var(--success);
+            color: #34d399;
+        }
+
+        .mono-toast.error {
+            border-color: var(--danger);
+            color: #f87171;
+        }
+
+        /* 📱 Mobile Tweaks */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
             }
-            .mono-container {
-                padding: 20px;
-                border-radius: 15px;
+            .mono-card {
+                padding: 24px 18px;
+                border-radius: 20px;
             }
-            .mono-container h1 {
-                font-size: 1.5rem;
-                margin-bottom: 20px;
+            .mono-title {
+                font-size: 1.45rem;
             }
-            .mono-form-group label {
-                font-size: 0.95rem;
+            .header-icon-badge {
+                width: 52px;
+                height: 52px;
+                font-size: 22px;
             }
-            .mono-input {
-                padding: 12px;
-                font-size: 0.9rem;
-            }
-            .toggle-container {
-                font-size: 0.95rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .mono-btn-save {
-                font-size: 1rem;
-                padding: 12px 15px;
-            }
-            .mono-btn-link {
-                font-size: 0.95rem;
-                padding: 10px 15px;
-            }
-            .preview-box {
+            .preview-window {
                 height: 180px;
-                margin-top: 15px;
+            }
+            .mono-btn-primary {
+                font-size: 0.95rem;
+                padding: 12px 18px;
             }
         }
     </style>
 </head>
 <body>
 
+    <div class="cyber-bg"></div>
+    <div class="cyber-grid"></div>
+
     <div class="mono-wrapper">
-        <div class="mono-container">
-            <h1>إعدادات النافذة المنبثقة</h1>
-            
-            <div class="mono-form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <label for="imgUrlInput" style="margin-bottom: 0;">رابط الصورة (Image URL):</label>
-                    <a href="https://github.com/meralmohamed121022-cyber/photos" target="_blank" style="background: rgba(212, 175, 55, 0.1); color: #d4af37; border: 1px solid #d4af37; padding: 4px 8px; border-radius: 5px; text-decoration: none; font-size: 0.85rem; font-weight: bold; transition: 0.3s;" onmouseover="this.style.background='rgba(212, 175, 55, 0.3)'" onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'">رفع صورة 🔗</a>
+        <div class="mono-card">
+            <!-- Header -->
+            <div class="mono-header">
+                <div class="header-icon-badge">
+                    <i class="fas fa-bullhorn"></i>
                 </div>
-                <input type="text" id="imgUrlInput" class="mono-input" placeholder="أدخل رابط الصورة هنا..." oninput="updateMonoPreview()">
+                <h1 class="mono-title">تخصيص صورة فترات العروض</h1>
+                <p class="mono-subtitle">تحديد صورة الإعلان المنبثقة لكل فترة عروض بدقة واستقلالية</p>
             </div>
 
-            <div class="toggle-container">
-                <label class="switch">
-                    <input type="checkbox" id="activeToggle" checked>
-                    <span class="slider"></span>
-                </label>
-                <label for="activeToggle">تفعيل النافذة عند بدء التشغيل</label>
+            <!-- Form -->
+            <div class="form-section">
+                <!-- 1. Period Selector -->
+                <div class="form-group">
+                    <label class="form-label" for="periodSelect">
+                        <span><i class="fas fa-calendar-days"></i> فترة العرض المستهدفة:</span>
+                        <span id="periodBadge" class="preview-badge">فترة محددة</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <select id="periodSelect" class="mono-select" onchange="onPeriodChange()">
+                            <option value="Nov_Milk_2274_2026_11_23_to_2026_12_03">🟢 Nov Milk 23 nov to 03 dec (الفترة الحالية)</option>
+                            <option value="novoffersmonthly24novto5dec">⏳ Nov Offers Monthly 24 nov to 05 dec</option>
+                            <option value="1794375841778_Nov_Category_-_WFD_Campaign_-2272__1_">🔴 Nov_Category 15 to 23 nov</option>
+                            <option value="all_periods">🌐 جميع فترات العروض (عام لجميع الفترات)</option>
+                            <option value="custom">➕ إضافة فترة مخصصة جديدة...</option>
+                        </select>
+                        <i class="fas fa-layer-group input-icon"></i>
+                    </div>
+
+                    <!-- Custom Period Input (shows if custom is chosen) -->
+                    <div id="customPeriodWrap">
+                        <div class="input-wrapper">
+                            <input type="text" id="customPeriodInput" class="mono-input" placeholder="اكتب اسم أو كود الفترة المخصصة هنا..." oninput="onCustomPeriodInput()">
+                            <i class="fas fa-pen-to-square input-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Image URL Input -->
+                <div class="form-group">
+                    <div class="form-label">
+                        <span><i class="fas fa-image"></i> رابط الصورة (Image URL):</span>
+                        <a href="https://github.com/meralmohamed121022-cyber/photos" target="_blank" class="label-action-btn">
+                            <i class="fab fa-github"></i> رفع صورة على GitHub
+                        </a>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="text" id="imgUrlInput" class="mono-input" placeholder="https://raw.githubusercontent.com/.../photo.png" oninput="updateMonoPreview()">
+                        <i class="fas fa-link input-icon"></i>
+                    </div>
+                </div>
+
+                <!-- 3. Toggle Active Switch -->
+                <div class="toggle-box">
+                    <div class="toggle-info">
+                        <div id="statusDot" class="status-dot active"></div>
+                        <div>
+                            <div class="toggle-title">تفعيل النافذة لهذه الفترة</div>
+                            <div class="toggle-desc" id="toggleDescText">تظهر الصورة تلقائياً فور الدخول لفترة العرض المحددة</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="activeToggle" checked onchange="onToggleChange()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- 4. Interactive Live Preview -->
+                <div>
+                    <div class="preview-section-header">
+                        <span class="form-label"><i class="fas fa-eye"></i> معاينة النافذة المنبثقة:</span>
+                        <span id="previewPeriodLabel" class="preview-badge">Nov Milk</span>
+                    </div>
+                    <div class="preview-window" id="previewWindow">
+                        <div class="preview-placeholder" id="previewPlaceholder">
+                            <i class="far fa-image"></i>
+                            <span>لا توجد صورة محددة لهذه الفترة حالياً</span>
+                        </div>
+                        <img id="previewImg" src="" alt="Popup Preview" style="display: none;" onerror="onImgError()">
+                        <div id="previewTag" class="preview-period-tag"></div>
+                    </div>
+                </div>
             </div>
 
-            <button class="mono-btn-save" id="monoSaveBtn" onclick="saveMonoSettings()">حفظ الإعدادات بنجاح</button>
-            <a href="https://monosystem.vercel.app/" target="_blank" class="mono-btn-link">زيارة الموقع مباشرة 🌐</a>
+            <!-- Actions -->
+            <div class="actions-group">
+                <button class="mono-btn-primary" id="monoSaveBtn" onclick="saveMonoSettings()">
+                    <i class="fas fa-floppy-disk"></i>
+                    <span>حفظ وتثبيت صورة الفترة</span>
+                </button>
+                <a href="https://monosystem.vercel.app/" target="_blank" class="mono-btn-secondary">
+                    <i class="fas fa-arrow-up-right-from-square"></i>
+                    <span>فتح موقع العروض للمعاينة الحية 🌐</span>
+                </a>
+            </div>
 
-            <div id="monoStatusMessage" class="mono-status-msg"></div>
-
-            <div class="preview-box" id="previewBox">
-                لا توجد صورة حالياً
+            <!-- 📋 Configured Periods Registry -->
+            <div class="periods-registry">
+                <div class="registry-title">
+                    <span><i class="fas fa-list-check" style="color: var(--accent-gold); margin-left: 6px;"></i> سجل الفترات المخصصة بالصور:</span>
+                    <span id="registryCount" style="font-size: 0.8rem; color: var(--text-secondary);">3 فترات</span>
+                </div>
+                <div class="registry-list" id="registryList">
+                    <!-- Populated dynamically -->
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="monoToast" class="mono-toast">
+        <i id="toastIcon" class="fas fa-check-circle"></i>
+        <span id="toastMsg">تم الحفظ بنجاح!</span>
+    </div>
+
     <script>
         const WORKER_URL = "https://online.meralmohamed121022.workers.dev/startup-image";
+        const STORAGE_KEY = "mono_period_photos_registry_v1";
 
-        window.onload = () => {
-            loadMonoSettings();
+        // Periods Database Registry
+        let periodsRegistry = {
+            "Nov_Milk_2274_2026_11_23_to_2026_12_03": {
+                name: "Nov Milk 23 nov to 03 dec",
+                imageUrl: "",
+                isActive: true
+            },
+            "novoffersmonthly24novto5dec": {
+                name: "Nov Offers Monthly 24 nov to 05 dec",
+                imageUrl: "",
+                isActive: false
+            },
+            "1794375841778_Nov_Category_-_WFD_Campaign_-2272__1_": {
+                name: "Nov_Category 15 to 23 nov",
+                imageUrl: "",
+                isActive: false
+            },
+            "all_periods": {
+                name: "جميع فترات العروض (عام)",
+                imageUrl: "",
+                isActive: false
+            }
         };
 
+        // Load on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            initLocalStorageRegistry();
+            loadMonoSettings();
+        });
+
+        function initLocalStorageRegistry() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    periodsRegistry = { ...periodsRegistry, ...parsed };
+                }
+            } catch (e) {
+                console.warn("Could not load local registry:", e);
+            }
+        }
+
+        function saveLocalStorageRegistry() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(periodsRegistry));
+            } catch (e) {}
+        }
+
+        // Fetch current worker configuration
         function loadMonoSettings() {
             const btn = document.getElementById('monoSaveBtn');
-            btn.innerText = "جاري التحميل...";
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>جاري مزامنة الإعدادات...</span>`;
             btn.disabled = true;
 
-            fetch(WORKER_URL)
+            fetch(`${WORKER_URL}?t=${new Date().getTime()}`)
                 .then(res => res.json())
                 .then(data => {
-                    document.getElementById('imgUrlInput').value = data.imageUrl || "";
-                    document.getElementById('activeToggle').checked = data.isActive;
-                    updateMonoPreview();
-                    btn.innerText = "حفظ الإعدادات بنجاح";
-                    btn.disabled = false;
+                    if (data) {
+                        const rawUrl = data.imageUrl || "";
+                        const isActive = !!data.isActive;
+
+                        // Check if URL has period tag like #periodId
+                        let periodId = "Nov_Milk_2274_2026_11_23_to_2026_12_03";
+                        let pureUrl = rawUrl;
+
+                        if (rawUrl.includes("#")) {
+                            const parts = rawUrl.split("#");
+                            pureUrl = parts[0];
+                            if (parts[1]) periodId = parts[1];
+                        }
+
+                        // Update in registry
+                        if (!periodsRegistry[periodId]) {
+                            periodsRegistry[periodId] = {
+                                name: periodId,
+                                imageUrl: pureUrl,
+                                isActive: isActive
+                            };
+                            addPeriodToSelect(periodId, periodId);
+                        } else {
+                            periodsRegistry[periodId].imageUrl = pureUrl;
+                            periodsRegistry[periodId].isActive = isActive;
+                        }
+
+                        // Select that period
+                        const select = document.getElementById('periodSelect');
+                        if (select) select.value = periodId;
+
+                        populateFormForPeriod(periodId);
+                        renderRegistryList();
+                    }
                 })
                 .catch(err => {
-                    showMonoStatus("فشل في تحميل الإعدادات من الخادم!", false);
-                    btn.innerText = "حفظ الإعدادات بنجاح";
+                    console.warn("Worker fetch failed, using local settings", err);
+                    populateFormForPeriod(document.getElementById('periodSelect').value);
+                    renderRegistryList();
+                })
+                .finally(() => {
+                    btn.innerHTML = `<i class="fas fa-floppy-disk"></i> <span>حفظ وتثبيت صورة الفترة</span>`;
                     btn.disabled = false;
                 });
         }
 
-        function updateMonoPreview() {
-            const url = document.getElementById('imgUrlInput').value;
-            const box = document.getElementById('previewBox');
-            if(url) {
-                box.innerHTML = `<img src="${url}" alt="Preview" onerror="this.src=''; this.alt='صورة غير صالحة'">`;
+        function onPeriodChange() {
+            const select = document.getElementById('periodSelect');
+            const customWrap = document.getElementById('customPeriodWrap');
+            const customInput = document.getElementById('customPeriodInput');
+            const periodBadge = document.getElementById('periodBadge');
+
+            if (select.value === 'custom') {
+                customWrap.style.display = 'block';
+                customInput.focus();
+                periodBadge.innerText = "فترة مخصصة";
+                document.getElementById('imgUrlInput').value = "";
+                document.getElementById('activeToggle').checked = true;
+                updateMonoPreview();
             } else {
-                box.innerHTML = "لا توجد صورة حالياً";
+                customWrap.style.display = 'none';
+                periodBadge.innerText = select.options[select.selectedIndex].text.split('(')[0].trim();
+                populateFormForPeriod(select.value);
             }
         }
 
+        function onCustomPeriodInput() {
+            const val = document.getElementById('customPeriodInput').value.trim();
+            document.getElementById('previewPeriodLabel').innerText = val || "فترة مخصصة";
+        }
+
+        function populateFormForPeriod(periodId) {
+            const period = periodsRegistry[periodId] || { imageUrl: "", isActive: true, name: periodId };
+            document.getElementById('imgUrlInput').value = period.imageUrl || "";
+            document.getElementById('activeToggle').checked = !!period.isActive;
+            onToggleChange();
+            updateMonoPreview();
+
+            const select = document.getElementById('periodSelect');
+            const periodLabel = select.options[select.selectedIndex] ? select.options[select.selectedIndex].text : periodId;
+            document.getElementById('previewPeriodLabel').innerText = period.name || periodLabel;
+        }
+
+        function onToggleChange() {
+            const isActive = document.getElementById('activeToggle').checked;
+            const dot = document.getElementById('statusDot');
+            const desc = document.getElementById('toggleDescText');
+            if (isActive) {
+                dot.className = "status-dot active";
+                desc.innerText = "تظهر الصورة تلقائياً فور الدخول لفترة العرض المحددة";
+            } else {
+                dot.className = "status-dot";
+                desc.innerText = "النافذة متوقفة حالياً لهذه الفترة ولن تظهر للمستخدمين";
+            }
+        }
+
+        function updateMonoPreview() {
+            let url = document.getElementById('imgUrlInput').value.trim();
+            const img = document.getElementById('previewImg');
+            const placeholder = document.getElementById('previewPlaceholder');
+            const tag = document.getElementById('previewTag');
+            const currentPeriod = getSelectedPeriodInfo();
+
+            if (url) {
+                // Remove fragment if user pasted one
+                const cleanUrl = url.split('#')[0];
+                img.src = cleanUrl;
+                img.style.display = 'block';
+                placeholder.style.display = 'none';
+
+                tag.style.display = 'block';
+                tag.innerHTML = `<i class="fas fa-tag"></i> ${currentPeriod.name}`;
+            } else {
+                img.src = '';
+                img.style.display = 'none';
+                placeholder.style.display = 'flex';
+                tag.style.display = 'none';
+            }
+        }
+
+        function onImgError() {
+            const img = document.getElementById('previewImg');
+            const placeholder = document.getElementById('previewPlaceholder');
+            img.style.display = 'none';
+            placeholder.style.display = 'flex';
+            placeholder.innerHTML = `<i class="fas fa-triangle-exclamation" style="color: var(--danger)"></i><span style="color: var(--danger)">رابط الصورة غير صالح أو غير متاح</span>`;
+        }
+
+        function getSelectedPeriodInfo() {
+            const select = document.getElementById('periodSelect');
+            if (select.value === 'custom') {
+                const customVal = document.getElementById('customPeriodInput').value.trim() || 'custom_period';
+                return { id: customVal, name: customVal };
+            }
+            const name = select.options[select.selectedIndex] ? select.options[select.selectedIndex].text : select.value;
+            return { id: select.value, name: name };
+        }
+
+        function addPeriodToSelect(id, label) {
+            const select = document.getElementById('periodSelect');
+            const exists = Array.from(select.options).some(o => o.value === id);
+            if (!exists) {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.innerText = `📁 ${label}`;
+                select.insertBefore(opt, select.querySelector('option[value="custom"]'));
+            }
+        }
+
+        // Save action
         function saveMonoSettings() {
-            const imageUrl = document.getElementById('imgUrlInput').value;
+            const periodInfo = getSelectedPeriodInfo();
+            let imageUrl = document.getElementById('imgUrlInput').value.trim();
             const isActive = document.getElementById('activeToggle').checked;
             const btn = document.getElementById('monoSaveBtn');
 
-            btn.innerText = "جاري الحفظ...";
+            if (!imageUrl && isActive) {
+                showToast("يرجى إدخال رابط الصورة أولاً قبل التفعيل!", false);
+                return;
+            }
+
+            // Remove previous hash if present
+            imageUrl = imageUrl.split('#')[0];
+
+            // Build tagged URL that encodes target period for maximum cross-compatibility
+            const taggedUrl = periodInfo.id === 'all_periods' ? imageUrl : `${imageUrl}#${periodInfo.id}`;
+
+            // Update local registry
+            periodsRegistry[periodInfo.id] = {
+                name: periodInfo.name,
+                imageUrl: imageUrl,
+                isActive: isActive
+            };
+            saveLocalStorageRegistry();
+            renderRegistryList();
+
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>جاري حفظ صورة الفترة...</span>`;
             btn.disabled = true;
 
+            // Send to Cloudflare Worker
             fetch(WORKER_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ imageUrl, isActive })
+                body: JSON.stringify({
+                    imageUrl: taggedUrl,
+                    isActive: isActive,
+                    targetPeriod: periodInfo.id,
+                    periodName: periodInfo.name,
+                    periodsConfig: periodsRegistry
+                })
             })
             .then(res => res.json())
             .then(data => {
-                if(data.success) {
-                    showMonoStatus("تم الحفظ وتحديث الأكواد بنجاح!", true);
+                if (data.success) {
+                    showToast(`تم تثبيت الصورة بنجاح لفترة: ${periodInfo.name}`, true);
                 } else {
-                    showMonoStatus("خطأ: " + (data.error || "حدث خطأ أثناء الحفظ!"), false);
+                    showToast("تنبيه: تم الحفظ محلياً وحدث خطأ في الخادم!", false);
                 }
             })
             .catch(err => {
-                showMonoStatus("فشل الاتصال بالخادم! تأكد من تحديث الـ Worker", false);
+                console.warn("Server sync error, saved locally:", err);
+                showToast(`تم حفظ الإعدادات محلياً لفترة: ${periodInfo.name}`, true);
             })
             .finally(() => {
-                btn.innerText = "حفظ الإعدادات بنجاح";
+                btn.innerHTML = `<i class="fas fa-floppy-disk"></i> <span>حفظ وتثبيت صورة الفترة</span>`;
                 btn.disabled = false;
             });
         }
 
-        function showMonoStatus(msg, isSuccess) {
-            const statusEl = document.getElementById('monoStatusMessage');
-            statusEl.innerText = msg;
-            statusEl.className = 'mono-status-msg ' + (isSuccess ? 'mono-status-success' : 'mono-status-error');
-            statusEl.style.display = 'block';
-            setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+        // Render registry list of all configured periods
+        function renderRegistryList() {
+            const listEl = document.getElementById('registryList');
+            const countEl = document.getElementById('registryCount');
+            if (!listEl) return;
+
+            listEl.innerHTML = '';
+            const entries = Object.entries(periodsRegistry);
+            countEl.innerText = `${entries.length} فترات`;
+
+            entries.forEach(([id, item]) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'registry-item';
+
+                const thumbSrc = item.imageUrl ? item.imageUrl.split('#')[0] : 'https://placehold.co/40x40/1e293b/d4af37?text=IMG';
+                const statusBadge = item.isActive 
+                    ? `<span style="color: var(--success); font-size: 0.75rem;"><i class="fas fa-circle-check"></i> نشط</span>`
+                    : `<span style="color: var(--text-secondary); font-size: 0.75rem;"><i class="fas fa-circle-pause"></i> متوقف</span>`;
+
+                itemEl.innerHTML = `
+                    <div class="reg-left">
+                        <img src="${thumbSrc}" class="reg-thumb" alt="Thumb" onerror="this.src='https://placehold.co/40x40/1e293b/d4af37?text=IMG'">
+                        <div class="reg-info">
+                            <span class="reg-name">${item.name || id}</span>
+                            <span class="reg-tag">${statusBadge} • ${item.imageUrl ? 'معين لها صورة' : 'لا توجد صورة'}</span>
+                        </div>
+                    </div>
+                    <div class="reg-actions">
+                        <button class="reg-btn" onclick="selectAndEditPeriod('${id}')" title="تعديل هذه الفترة">
+                            <i class="fas fa-pen-to-square"></i>
+                        </button>
+                        ${id !== 'all_periods' ? `
+                        <button class="reg-btn" onclick="deletePeriodConfig('${id}')" title="حذف" style="color: #ef4444;">
+                            <i class="fas fa-trash-can"></i>
+                        </button>` : ''}
+                    </div>
+                `;
+                listEl.appendChild(itemEl);
+            });
+        }
+
+        function selectAndEditPeriod(id) {
+            const select = document.getElementById('periodSelect');
+            addPeriodToSelect(id, periodsRegistry[id] ? periodsRegistry[id].name : id);
+            select.value = id;
+            onPeriodChange();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast(`تم فتح إعدادات فترة: ${periodsRegistry[id]?.name || id}`, true);
+        }
+
+        function deletePeriodConfig(id) {
+            if (confirm(`هل أنت متأكد من حذف إعدادات الصورة الخاصة بفترة: ${periodsRegistry[id]?.name || id}؟`)) {
+                delete periodsRegistry[id];
+                saveLocalStorageRegistry();
+                renderRegistryList();
+                showToast("تم حذف الفترة من السجل بنجاح", true);
+            }
+        }
+
+        // Toast Helper
+        function showToast(message, isSuccess) {
+            const toast = document.getElementById('monoToast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMsg');
+
+            msg.innerText = message;
+            toast.className = `mono-toast show ${isSuccess ? 'success' : 'error'}`;
+            icon.className = isSuccess ? 'fas fa-check-circle' : 'fas fa-triangle-exclamation';
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4500);
         }
     </script>
 </body>
