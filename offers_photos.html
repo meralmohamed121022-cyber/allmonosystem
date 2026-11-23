@@ -694,6 +694,21 @@
 
             <!-- Form -->
             <div class="form-section">
+                <!-- Dynamic Periods Sync Bar -->
+                <div class="sync-bar" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+                    <button type="button" class="label-action-btn" onclick="syncPeriodsFromOffersGit(false)" style="flex:1; min-width:180px; padding:10px 14px; border-radius:10px; background:rgba(99,102,241,0.2); border:1px solid rgba(99,102,241,0.5); color:#c7d2fe; cursor:pointer; font-size:12.5px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <i class="fas fa-arrows-rotate" id="syncSpinIcon"></i>
+                        <span>سحب الفترات من offersgit.html</span>
+                    </button>
+                    <button type="button" class="label-action-btn" onclick="document.getElementById('offersHtmlFileInput').click()" style="flex:1; min-width:180px; padding:10px 14px; border-radius:10px; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.5); color:#a7f3d0; cursor:pointer; font-size:12.5px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <i class="fas fa-file-code"></i>
+                        <span>📂 اختيار ملف offersgit.html محلياً</span>
+                    </button>
+                    <input type="file" id="offersHtmlFileInput" accept=".html,.htm" style="display:none;" onchange="handleOffersGitFileSelect(event)">
+                </div>
+                <div id="syncStatusNotice" style="display:none; font-size:12px; color:#38bdf8; margin-bottom:15px; padding:9px 14px; background:rgba(56,189,248,0.12); border-radius:10px; border:1px solid rgba(56,189,248,0.3); font-weight:600;">
+                </div>
+
                 <!-- 1. Period Selector -->
                 <div class="form-group">
                     <label class="form-label" for="periodSelect">
@@ -825,10 +840,176 @@
             }
         };
 
+        // Dynamic Periods Management from offersgit.html
+        const SYNCED_PERIODS_KEY = "mono_synced_periods_v1";
+        let syncedPeriodsList = [];
+
+        // Parse ALL_PERIODS_OFFERS array from offersgit.html text
+        function parsePeriodsFromHtml(html) {
+            if (!html) return [];
+            try {
+                const match = html.match(/const\s+ALL_PERIODS_OFFERS\s*=\s*(\[\s*\{[\s\S]*?\n\s*\])\s*;/);
+                if (!match) return [];
+                const arr = eval("(" + match[1] + ")");
+                return arr.map(p => ({
+                    id: p.id,
+                    label: p.label || p.id,
+                    start: p.start || '',
+                    end: p.end || ''
+                }));
+            } catch(e) {
+                console.error("Error parsing ALL_PERIODS_OFFERS:", e);
+                return [];
+            }
+        }
+
+        // Rebuild period select dropdown from periods list
+        function populateSelectWithPeriods(periods) {
+            if (!periods || periods.length === 0) return;
+            syncedPeriodsList = periods;
+            try {
+                localStorage.setItem(SYNCED_PERIODS_KEY, JSON.stringify(periods));
+            } catch(e) {}
+
+            const select = document.getElementById('periodSelect');
+            if (!select) return;
+
+            const currentVal = select.value;
+            select.innerHTML = '';
+
+            periods.forEach((p, idx) => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                const dateStr = (p.start && p.end) ? ` (${p.start} إلى ${p.end})` : '';
+                opt.innerText = `🎯 ${p.label || p.id}${dateStr}`;
+                select.appendChild(opt);
+
+                // Add to registry with nice display name if not yet configured
+                if (!periodsRegistry[p.id]) {
+                    periodsRegistry[p.id] = {
+                        name: `${p.label || p.id}${dateStr}`,
+                        imageUrl: "",
+                        isActive: false
+                    };
+                }
+            });
+
+            // General & Custom options
+            const generalOpt = document.createElement('option');
+            generalOpt.value = 'all_periods';
+            generalOpt.innerText = '🌐 جميع فترات العروض (عام لجميع الفترات)';
+            select.appendChild(generalOpt);
+
+            const customOpt = document.createElement('option');
+            customOpt.value = 'custom';
+            customOpt.innerText = '➕ إضافة فترة مخصصة يدوياً...';
+            select.appendChild(customOpt);
+
+            // Restore selection if valid
+            if (currentVal && select.querySelector(`option[value="${currentVal}"]`)) {
+                select.value = currentVal;
+            } else if (periods.length > 0) {
+                select.value = periods[0].id;
+            }
+
+            // Update badge / notice
+            const notice = document.getElementById('syncStatusNotice');
+            if (notice) {
+                notice.style.display = 'block';
+                notice.innerHTML = `<i class="fas fa-check-circle" style="color:#10b981; margin-left:6px;"></i> تم مزامنة ${periods.length} فترات عروض ديناميكياً من ملف offersgit.html بنجاح.`;
+            }
+
+            onPeriodChange();
+            renderRegistryList();
+        }
+
+        // Handle local file selection of offersgit.html
+        function handleOffersGitFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const html = e.target.result;
+                const periods = parsePeriodsFromHtml(html);
+                if (periods.length > 0) {
+                    populateSelectWithPeriods(periods);
+                    showToast(`تم سحب ${periods.length} فترات بنجاح من الملف!`, true);
+                } else {
+                    showToast("لم يتم العثور على مصفوفة ALL_PERIODS_OFFERS في هذا الملف!", false);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Fetch offersgit.html automatically from local/relative or fallback path
+        async function syncPeriodsFromOffersGit(isSilent = false) {
+            const icon = document.getElementById('syncSpinIcon');
+            if (icon) icon.className = 'fas fa-spinner fa-spin';
+
+            const possiblePaths = [
+                'offersgit.html',
+                '../offersgit.html',
+                '../kaph-main/New folder/offersgit.html',
+                'https://raw.githubusercontent.com/meralmohamed121022-cyber/photos/refs/heads/main/offersgit.html'
+            ];
+
+            let loadedPeriods = null;
+
+            for (const path of possiblePaths) {
+                try {
+                    const res = await fetch(`${path}?t=${new Date().getTime()}`);
+                    if (res.ok) {
+                        const html = await res.text();
+                        const periods = parsePeriodsFromHtml(html);
+                        if (periods && periods.length > 0) {
+                            loadedPeriods = periods;
+                            break;
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            if (icon) icon.className = 'fas fa-arrows-rotate';
+
+            if (loadedPeriods && loadedPeriods.length > 0) {
+                populateSelectWithPeriods(loadedPeriods);
+                if (!isSilent) showToast(`تم سحب وتحديث ${loadedPeriods.length} فترات عروض بنجاح!`, true);
+            } else {
+                // If network fetch fails, load cached periods from localStorage
+                try {
+                    const cached = localStorage.getItem(SYNCED_PERIODS_KEY);
+                    if (cached) {
+                        const parsed = JSON.parse(cached);
+                        if (parsed && parsed.length > 0) {
+                            populateSelectWithPeriods(parsed);
+                            if (!isSilent) showToast("تم تحميل فترات العروض المحفوظة سابقاً بنجاح", true);
+                            return;
+                        }
+                    }
+                } catch(e) {}
+
+                if (!isSilent) {
+                    showToast("تعذر جلب الملف عبر المتصفح مباشرة. اضغط على 'اختيار ملف offersgit.html محلياً' لتحديث الفترات فوراً.", false);
+                }
+            }
+        }
+
         // Load on startup
         window.addEventListener('DOMContentLoaded', () => {
             initLocalStorageRegistry();
+
+            // Load previously synced periods from cache first if present
+            try {
+                const cached = localStorage.getItem(SYNCED_PERIODS_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && parsed.length > 0) populateSelectWithPeriods(parsed);
+                }
+            } catch(e) {}
+
             loadMonoSettings();
+            syncPeriodsFromOffersGit(true); // background silent auto-sync
         });
 
         function initLocalStorageRegistry() {
