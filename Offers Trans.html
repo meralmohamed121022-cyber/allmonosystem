@@ -316,6 +316,9 @@
                         <button id="resetFilterBtn" type="button" style="display:none;" class="text-xs bg-rose-900/70 hover:bg-rose-800 text-rose-200 px-2.5 py-1.5 rounded-lg border border-rose-700 transition-colors cursor-pointer">
                             ✕ عرض كل الشيتات
                         </button>
+                        <button type="button" onclick="openCustomDateModal(null)" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-500 transition-colors cursor-pointer">
+                            📅 تخصيص تواريخ لأكواد / شيت
+                        </button>
                     </div>
                 </div>
 
@@ -1549,6 +1552,19 @@
                 if (savings) {
                     itemObj.savings = savings;
                 }
+                const rowStart = row.getAttribute('data-start-date') || '';
+                const rowEnd = row.getAttribute('data-end-date') || '';
+                const rowCustomDatesRaw = row.getAttribute('data-custom-dates') || '';
+                if (rowStart) itemObj.startDate = rowStart;
+                if (rowEnd) itemObj.endDate = rowEnd;
+                if (rowCustomDatesRaw) {
+                    try {
+                        const parsedCD = JSON.parse(rowCustomDatesRaw);
+                        if (parsedCD && Object.keys(parsedCD).length > 0) {
+                            itemObj.customDates = parsedCD;
+                        }
+                    } catch (e) {}
+                }
                 finalJsonData.push(itemObj);
             });
         }
@@ -1867,11 +1883,14 @@
                                 let isMilkFormat = colBundleType > -1;
                                 let forceArbahi = isArbahiSheet;
                                 
-                                if (colBundleType > -1 && row[colBundleType]) {
-                                    currentBundleType = row[colBundleType];
+                                if (colBundleType > -1 && row[colBundleType] && String(row[colBundleType]).trim() !== "") {
+                                    currentBundleType = String(row[colBundleType]).trim();
+                                    currentSavings = "";
                                 }
-                                if (colExtraTag > -1 && row[colExtraTag] !== undefined) {
+                                if (colExtraTag > -1 && row[colExtraTag] !== undefined && String(row[colExtraTag]).trim() !== "") {
                                     currentSavings = String(row[colExtraTag]).trim();
+                                } else {
+                                    currentSavings = "";
                                 }
                                 if (colOffer > -1 && row[colOffer]) {
                                     currentOffer = row[colOffer];
@@ -1883,12 +1902,12 @@
                                 else if (isMilkFormat && currentBundleType) {
                                     finalPromo = currentBundleType;
                                     if (currentSavings) {
-                                        finalSavings = currentSavings;
-                                        let numMatch = finalSavings.match(/-?\d+(\.\d+)?/);
+                                        let numMatch = currentSavings.replace(/^-/, '').match(/\d+(\.\d+)?/);
                                         if (numMatch) {
-                                            finalSavings = numMatch[0];
-                                            if (String(finalPromo).includes("%") && !finalSavings.startsWith("-")) {
-                                                finalSavings = "-" + finalSavings;
+                                            let val = parseFloat(numMatch[0]);
+                                            if (val > 0) {
+                                                const rounded = Math.round(val * 10) / 10;
+                                                finalSavings = (rounded % 1 === 0) ? String(Math.round(rounded)) : String(rounded);
                                             }
                                         }
                                     }
@@ -2249,10 +2268,19 @@ else if (/^\d+$/.test(sheetName)) {
                 const isArbahiChecked = !!offer.isArbahi;
                 tr.setAttribute('data-arbahi', isArbahiChecked ? 'true' : 'false');
                 tr.setAttribute('data-savings', offer.savings || '');
+                tr.setAttribute('data-start-date', offer.startDate || '');
+                tr.setAttribute('data-end-date', offer.endDate || '');
+                tr.setAttribute('data-custom-dates', offer.customDates ? JSON.stringify(offer.customDates) : '');
+                const hasCustomDateBadge = !!(offer.startDate || offer.endDate || (offer.customDates && Object.keys(offer.customDates).length > 0));
 
                 tr.innerHTML = `
                     <td class="px-2 py-2 md:px-4 md:py-4">
-                        <button onclick="confirmDeleteRow(this)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded">Delete</button>
+                        <div class="flex flex-col gap-1">
+                            <button onclick="confirmDeleteRow(this)" class="text-red-500 hover:text-red-700 bg-red-50 p-1.5 rounded text-xs font-bold">Delete</button>
+                            <button type="button" onclick="openCustomDateModal(this.closest('tr'))" class="row-date-btn ${hasCustomDateBadge ? 'bg-amber-500 text-slate-950' : 'bg-slate-700 text-amber-300'} hover:bg-amber-400 hover:text-slate-950 px-1.5 py-1 rounded text-[10px] font-bold transition-all cursor-pointer" title="تحديد تاريخ بداية ونهاية مخصص لهذا الصف أو لأكواد معينة بداخله">
+                                📅 ${hasCustomDateBadge ? 'مخصّص ✓' : 'تاريخ'}
+                            </button>
+                        </div>
                     </td>
                     <td class="px-2 py-2 md:px-4 md:py-4 text-xs font-bold text-gray-300 col-sheet">
                         <div class="flex items-center gap-1.5 justify-between">
@@ -2346,6 +2374,217 @@ else if (/^\d+$/.test(sheetName)) {
         const _p3 = "jZnJ1" + "rA3B" + "o3nn";
         document.getElementById('ghToken').value = _p1 + _p2 + _p3;
     </script>
+
+    <!-- 📅 Custom Date Modal (Per-Row or Global Codes/Sheet) -->
+    <div id="customDateModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-[9999] flex items-center justify-center p-4" dir="rtl">
+        <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl text-right">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                <h3 class="text-lg font-extrabold text-amber-400 flex items-center gap-2">
+                    <span>📅 تحديد تاريخ بداية ونهاية مخصص</span>
+                </h3>
+                <button type="button" onclick="closeCustomDateModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">&times;</button>
+            </div>
+
+            <div id="customDateScopeLabel" class="text-xs font-bold text-cyan-300 bg-slate-800/80 border border-slate-700 rounded-lg px-3 py-2 mb-4"></div>
+
+            <div id="customDateSheetFilterWrap" class="mb-3 hidden">
+                <label class="block text-xs font-bold text-slate-300 mb-1">تطبيق على شيت معين (اختياري — مثلاً: ARBAHI أو الكل):</label>
+                <select id="customDateSheetSelect" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2 text-xs text-white">
+                    <option value="">🌐 كل الشيتات (أي صف يحتوي على الأكواد)</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">تاريخ البداية (Start Date):</label>
+                    <input type="date" id="customStartDateInput" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2 text-xs text-white" dir="ltr">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">تاريخ النهاية (End Date):</label>
+                    <input type="date" id="customEndDateInput" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2 text-xs text-white" dir="ltr">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-slate-300 mb-1">
+                    أكواد معينة فقط (اتركه فارغاً لتطبيق التاريخ على كل أكواد الصف، أو اكتب الأكواد مفصولة بمسافة أو سطر):
+                </label>
+                <textarea id="customDateCodesInput" rows="4" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-xs text-white font-mono" dir="ltr" placeholder="مثال: 301094 301095 301096"></textarea>
+            </div>
+
+            <div class="flex flex-wrap gap-2 justify-between items-center pt-2 border-t border-slate-700">
+                <button type="button" onclick="clearCustomDatesTarget()" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer">
+                    🗑️ مسح التواريخ المخصصة
+                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="closeCustomDateModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2 rounded-lg text-xs font-bold cursor-pointer">
+                        إلغاء
+                    </button>
+                    <button type="button" onclick="saveCustomDateModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2 rounded-lg text-xs font-extrabold cursor-pointer">
+                        ✅ حفظ وتطبيق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let _activeDateTargetRow = null;
+
+        function openCustomDateModal(row) {
+            _activeDateTargetRow = row || null;
+            const modal = document.getElementById('customDateModal');
+            const scopeLabel = document.getElementById('customDateScopeLabel');
+            const sheetWrap = document.getElementById('customDateSheetFilterWrap');
+            const sheetSel = document.getElementById('customDateSheetSelect');
+            const startIn = document.getElementById('customStartDateInput');
+            const endIn = document.getElementById('customEndDateInput');
+            const codesIn = document.getElementById('customDateCodesInput');
+
+            if (row) {
+                const sName = (row.querySelector('.col-sheet-text') || row.querySelector('.col-sheet'))?.innerText.trim() || 'بدون اسم';
+                const arName = row.querySelector('.col-ar')?.innerText.trim() || '';
+                scopeLabel.innerText = `تخصيص صف: [${sName}] — ${arName}`;
+                sheetWrap.classList.add('hidden');
+                startIn.value = row.getAttribute('data-start-date') || '';
+                endIn.value = row.getAttribute('data-end-date') || '';
+                let cdList = [];
+                try {
+                    const parsed = JSON.parse(row.getAttribute('data-custom-dates') || '{}');
+                    cdList = Object.keys(parsed);
+                    if (cdList.length > 0 && !startIn.value && !endIn.value) {
+                        const first = parsed[cdList[0]];
+                        if (first) { startIn.value = first.start || ''; endIn.value = first.end || ''; }
+                    }
+                } catch (e) {}
+                codesIn.value = cdList.join(' ');
+            } else {
+                scopeLabel.innerText = 'تخصيص تاريخ بداية ونهاية لأكواد معينة عبر كل العروض أو شيت محدد';
+                sheetWrap.classList.remove('hidden');
+                sheetSel.innerHTML = '<option value="">🌐 كل الشيتات (أي صف يحتوي على الأكواد)</option>';
+                const seenSheets = new Set();
+                document.querySelectorAll('#resultsBody tr').forEach(r => {
+                    const sName = (r.querySelector('.col-sheet-text') || r.querySelector('.col-sheet'))?.innerText.trim() || '';
+                    if (sName && !seenSheets.has(sName)) {
+                        seenSheets.add(sName);
+                        const opt = document.createElement('option');
+                        opt.value = sName;
+                        opt.innerText = sName;
+                        sheetSel.appendChild(opt);
+                    }
+                });
+                startIn.value = '';
+                endIn.value = '';
+                codesIn.value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomDateModal() {
+            document.getElementById('customDateModal').classList.add('hidden');
+            _activeDateTargetRow = null;
+        }
+
+        function refreshRowDateButton(row) {
+            if (!row) return;
+            const btn = row.querySelector('.row-date-btn');
+            if (!btn) return;
+            const hasS = !!(row.getAttribute('data-start-date') || row.getAttribute('data-end-date'));
+            let hasCD = false;
+            try {
+                const cd = JSON.parse(row.getAttribute('data-custom-dates') || '{}');
+                hasCD = Object.keys(cd).length > 0;
+            } catch (e) {}
+            if (hasS || hasCD) {
+                btn.className = 'row-date-btn bg-amber-500 text-slate-950 hover:bg-amber-400 px-1.5 py-1 rounded text-[10px] font-bold transition-all cursor-pointer';
+                btn.innerText = '📅 مخصّص ✓';
+            } else {
+                btn.className = 'row-date-btn bg-slate-700 text-amber-300 hover:bg-amber-400 hover:text-slate-950 px-1.5 py-1 rounded text-[10px] font-bold transition-all cursor-pointer';
+                btn.innerText = '📅 تاريخ';
+            }
+        }
+
+        function saveCustomDateModal() {
+            const start = document.getElementById('customStartDateInput').value.trim();
+            const end = document.getElementById('customEndDateInput').value.trim();
+            const codesRaw = document.getElementById('customDateCodesInput').value.trim();
+            const targetCodes = codesRaw ? codesRaw.split(/[\s,;]+/).map(x => x.trim()).filter(Boolean) : [];
+
+            if (!start && !end) {
+                alert('يرجى تحديد تاريخ البداية أو النهاية أولاً!');
+                return;
+            }
+
+            if (_activeDateTargetRow) {
+                if (targetCodes.length === 0) {
+                    _activeDateTargetRow.setAttribute('data-start-date', start);
+                    _activeDateTargetRow.setAttribute('data-end-date', end);
+                } else {
+                    let existing = {};
+                    try { existing = JSON.parse(_activeDateTargetRow.getAttribute('data-custom-dates') || '{}'); } catch (e) {}
+                    targetCodes.forEach(code => { existing[code] = { start, end }; });
+                    _activeDateTargetRow.setAttribute('data-custom-dates', JSON.stringify(existing));
+                }
+                refreshRowDateButton(_activeDateTargetRow);
+            } else {
+                const sheetFilter = document.getElementById('customDateSheetSelect').value.trim();
+                if (targetCodes.length === 0 && !sheetFilter) {
+                    alert('يرجى إدخال الأكواد المراد تخصيصها أو اختيار شيت محدد!');
+                    return;
+                }
+                let updatedRows = 0;
+                document.querySelectorAll('#resultsBody tr').forEach(row => {
+                    const sName = (row.querySelector('.col-sheet-text') || row.querySelector('.col-sheet'))?.innerText.trim() || '';
+                    if (sheetFilter && sName !== sheetFilter) return;
+
+                    const rowCodesAttr = (row.getAttribute('data-codes') || '').split(/\s+/).filter(Boolean);
+                    if (targetCodes.length === 0) {
+                        row.setAttribute('data-start-date', start);
+                        row.setAttribute('data-end-date', end);
+                        refreshRowDateButton(row);
+                        updatedRows++;
+                    } else {
+                        const matched = targetCodes.filter(tc => rowCodesAttr.includes(tc));
+                        if (matched.length > 0) {
+                            let existing = {};
+                            try { existing = JSON.parse(row.getAttribute('data-custom-dates') || '{}'); } catch (e) {}
+                            matched.forEach(mc => { existing[mc] = { start, end }; });
+                            row.setAttribute('data-custom-dates', JSON.stringify(existing));
+                            refreshRowDateButton(row);
+                            updatedRows++;
+                        }
+                    }
+                });
+                alert(`✅ تم تطبيق التاريخ المخصص على ${updatedRows} صفوف بنجاح!`);
+            }
+
+            if (typeof updateFinalOutput === 'function') updateFinalOutput();
+            closeCustomDateModal();
+        }
+
+        function clearCustomDatesTarget() {
+            if (_activeDateTargetRow) {
+                _activeDateTargetRow.setAttribute('data-start-date', '');
+                _activeDateTargetRow.setAttribute('data-end-date', '');
+                _activeDateTargetRow.setAttribute('data-custom-dates', '');
+                refreshRowDateButton(_activeDateTargetRow);
+            } else {
+                const sheetFilter = document.getElementById('customDateSheetSelect').value.trim();
+                document.querySelectorAll('#resultsBody tr').forEach(row => {
+                    const sName = (row.querySelector('.col-sheet-text') || row.querySelector('.col-sheet'))?.innerText.trim() || '';
+                    if (sheetFilter && sName !== sheetFilter) return;
+                    row.setAttribute('data-start-date', '');
+                    row.setAttribute('data-end-date', '');
+                    row.setAttribute('data-custom-dates', '');
+                    refreshRowDateButton(row);
+                });
+            }
+            if (typeof updateFinalOutput === 'function') updateFinalOutput();
+            closeCustomDateModal();
+        }
+    </script>
+
 </body>
 
 </html>
