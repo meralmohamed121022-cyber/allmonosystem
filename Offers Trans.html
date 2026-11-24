@@ -210,8 +210,8 @@
                         <div class="flex items-center gap-2">
                             <span class="text-xl">🥛</span>
                             <div>
-                                <div class="text-sm font-bold text-amber-300">عروض الحليب / شيت أرباحي (Milk & Arbahi Offers)</div>
-                                <div class="text-xs text-amber-400/80">تفعيل تلقائي لبادج أرباحي (isArbahi) عند احتواء الشيت على كلمة أرباحي أو تفعيل هذا الخيار</div>
+                                <div class="text-sm font-bold text-amber-300">التعرف التلقائي على شيت أرباحي فقط (ARBAHI Detection)</div>
+                                <div class="text-xs text-amber-400/80">تمييز الشيتات المسماة (ARBAHI أو أرباحي) فقط دون غيرها كعروض أرباحي وإضافة البادج لها تلقائياً</div>
                             </div>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
@@ -1808,7 +1808,10 @@
                 let headerRowIdx = -1;
                 let colItem = -1, colDisc = -1, colPriceAfter = -1;
                 let colBundleType = -1, colExtraTag = -1, colOffer = -1;
-                let isArbahiSheet = /arbahi|arbahy|أرباحي|ارباحي/i.test(sheetName) || (document.getElementById("forceMilkArbahi") && document.getElementById("forceMilkArbahi").checked && (/milk|حليب|arbahi|ارباحي|أرباحي/i.test(sheetName) || /milk/i.test(document.getElementById("offerId").value || "")));
+                const cleanSheetName = String(sheetName || '').trim();
+                const isArbahiPattern = /arbahi|arbahy|أرباحي|ارباحي/i.test(cleanSheetName);
+                const autoDetectArbahi = document.getElementById("forceMilkArbahi") ? document.getElementById("forceMilkArbahi").checked : true;
+                let isArbahiSheet = autoDetectArbahi && isArbahiPattern;
 
                 for (let i = 0; i < Math.min(20, data.length); i++) {
                     const row = data[i];
@@ -1970,10 +1973,7 @@ else if (/^\d+$/.test(sheetName)) {
             const offersDB = [];
             for (let [groupKey, data] of Object.entries(offers_grouped)) {
                 let desc = data.originalDesc;
-                let isArbahiVal = data.forceArbahi || false;
-                if (data.savings && !data.forceArbahi) {
-                    isArbahiVal = String(desc).includes('+') ? true : false;
-                }
+                let isArbahiVal = !!data.forceArbahi;
                 
                 let offerObj = {
                     sheetName: data.sheetName,
@@ -1985,11 +1985,11 @@ else if (/^\d+$/.test(sheetName)) {
                     offerPrice: data.prices
                 };
                 
-                if (data.savings || data.forceArbahi) {
-                    offerObj.isArbahi = isArbahiVal;
-                    if (data.savings) {
-                        offerObj.savings = data.savings;
-                    }
+                if (isArbahiVal) {
+                    offerObj.isArbahi = true;
+                }
+                if (data.savings) {
+                    offerObj.savings = data.savings;
                 }
                 
                 offersDB.push(offerObj);
