@@ -610,6 +610,108 @@
         }
 
         /* 🔔 Status Toast */
+        
+        /* 📸 Device Upload Drop Zone */
+        .device-upload-zone {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(212, 175, 55, 0.06) 100%);
+            border: 2px dashed rgba(255, 107, 53, 0.4);
+            border-radius: 16px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 6px;
+            position: relative;
+            user-select: none;
+        }
+
+        .device-upload-zone:hover, .device-upload-zone.dragover {
+            border-color: var(--accent-orange);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.16) 0%, rgba(212, 175, 55, 0.14) 100%);
+            box-shadow: 0 0 25px rgba(255, 107, 53, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6b35 0%, #d97706 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.35);
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .device-upload-zone:hover .upload-zone-icon-box {
+            transform: scale(1.1) rotate(6deg);
+        }
+
+        .upload-zone-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: right;
+            flex: 1;
+        }
+
+        .upload-zone-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-zone-sub {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .upload-badge-tag {
+            font-size: 0.7rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 1px 7px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .upload-status-bar {
+            display: none;
+            font-size: 0.82rem;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            font-weight: 700;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .upload-status-bar.success {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+        }
+
+        .upload-status-bar.loading {
+            background: rgba(255, 107, 53, 0.12);
+            border: 1px solid rgba(255, 107, 53, 0.35);
+            color: var(--accent-orange);
+        }
+
         .mono-toast {
             position: fixed;
             bottom: 25px;
@@ -717,9 +819,8 @@
                     </label>
                     <div class="input-wrapper">
                         <select id="periodSelect" class="mono-select" onchange="onPeriodChange()">
-                            <option value="Nov_Milk_2274_2026_11_23_to_2026_12_03">🟢 Nov Milk 23 nov to 03 dec (الفترة الحالية)</option>
-                            <option value="novoffersmonthly24novto5dec">⏳ Nov Offers Monthly 24 nov to 05 dec</option>
-                            <option value="1794375841778_Nov_Category_-_WFD_Campaign_-2272__1_">🔴 Nov_Category 15 to 23 nov</option>
+                            <option value="1795510781511_Nov_milk-flyer_SHARED__1_">🥛 Nov_milk-25 nov to 7 dec (فترة عروض الحليب)</option>
+                            <option value="nov offers monthly 24 nov to 5 dec">🟢 Nov Offers Monthly 24 nov to 05 dec (الفترة الحالية - LIVE)</option>
                             <option value="all_periods">🌐 جميع فترات العروض (عام لجميع الفترات)</option>
                             <option value="custom">➕ إضافة فترة مخصصة جديدة...</option>
                         </select>
@@ -735,16 +836,49 @@
                     </div>
                 </div>
 
-                <!-- 2. Image URL Input -->
+                <!-- 2. Direct Device Image Upload Zone -->
                 <div class="form-group">
                     <div class="form-label">
-                        <span><i class="fas fa-image"></i> رابط الصورة (Image URL):</span>
-                        <a href="https://github.com/meralmohamed121022-cyber/photos" target="_blank" class="label-action-btn">
-                            <i class="fab fa-github"></i> رفع صورة على GitHub
-                        </a>
+                        <span><i class="fas fa-cloud-arrow-up"></i> رفع صورة مباشرة من جهازك:</span>
+                        <span class="upload-badge-tag">جديد ومباشر ⚡</span>
+                    </div>
+
+                    <div class="device-upload-zone" id="deviceDropZone" onclick="document.getElementById('deviceImgInput').click()" title="انقر لاختيار صورة من جهازك، أو اسحب الصورة وأفلتها هنا مباشرة">
+                        <div class="upload-zone-icon-box">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <div class="upload-zone-content">
+                            <div class="upload-zone-title">
+                                <span>اضغط لاختيار صورة من جهازك (أو اسحب الصورة هنا)</span>
+                            </div>
+                            <div class="upload-zone-sub">
+                                يمكنك أيضاً لصق الصورة مباشرة بـ <b>Ctrl + V</b> • يتم ضغطها وتحويلها لرابط فوري تلقائياً
+                            </div>
+                        </div>
+                        <input type="file" id="deviceImgInput" accept="image/*" style="display:none;" onchange="handleDeviceImageUpload(event)">
+                    </div>
+
+                    <div id="uploadStatusBar" class="upload-status-bar">
+                        <i class="fas fa-spinner fa-spin" id="uploadStatusIcon"></i>
+                        <span id="uploadStatusText">جاري معالجة وضغط الصورة...</span>
+                    </div>
+                </div>
+
+                <!-- 3. Image URL Input (Auto-generated or Manual) -->
+                <div class="form-group">
+                    <div class="form-label">
+                        <span><i class="fas fa-link"></i> رابط الصورة الناتج (Image URL):</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="label-action-btn" onclick="copyCurrentImgUrl()" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #34d399; cursor: pointer;">
+                                <i class="fas fa-copy"></i> نسخ الرابط
+                            </button>
+                            <a href="https://github.com/meralmohamed121022-cyber/photos" target="_blank" class="label-action-btn">
+                                <i class="fab fa-github"></i> مستودع GitHub
+                            </a>
+                        </div>
                     </div>
                     <div class="input-wrapper">
-                        <input type="text" id="imgUrlInput" class="mono-input" placeholder="https://raw.githubusercontent.com/.../photo.png" oninput="updateMonoPreview()">
+                        <input type="text" id="imgUrlInput" class="mono-input" placeholder="اختر صورة من جهازك بالأعلى ليتم توليد الرابط فوراً، أو الصق رابط خارجي هنا..." oninput="onImgUrlInputChanged()">
                         <i class="fas fa-link input-icon"></i>
                     </div>
                 </div>
@@ -818,23 +952,18 @@
 
         // Periods Database Registry
         let periodsRegistry = {
-            "Nov_Milk_2274_2026_11_23_to_2026_12_03": {
-                name: "Nov Milk 23 nov to 03 dec",
+            "1795510781511_Nov_milk-flyer_SHARED__1_": {
+                name: "Nov_milk-25 nov to 7 dec (فترة الحليب)",
                 imageUrl: "",
                 isActive: true
             },
-            "novoffersmonthly24novto5dec": {
-                name: "Nov Offers Monthly 24 nov to 05 dec",
-                imageUrl: "",
-                isActive: false
-            },
-            "1794375841778_Nov_Category_-_WFD_Campaign_-2272__1_": {
-                name: "Nov_Category 15 to 23 nov",
+            "nov offers monthly 24 nov to 5 dec": {
+                name: "Nov Offers Monthly 24 nov to 05 dec (الفترة الحالية)",
                 imageUrl: "",
                 isActive: false
             },
             "all_periods": {
-                name: "جميع فترات العروض (عام)",
+                name: "جميع فترات العروض (عام لجميع الفترات)",
                 imageUrl: "",
                 isActive: false
             }
@@ -847,23 +976,59 @@
         // Parse ALL_PERIODS_OFFERS array from offersgit.html text
         function parsePeriodsFromHtml(html) {
             if (!html) return [];
+            
+            // Method 1: Direct Regex Property Extraction (Fastest and immune to giant arrays / eval issues)
             try {
-                const match = html.match(/const\s+ALL_PERIODS_OFFERS\s*=\s*(\[\s*\{[\s\S]*?\n\s*\])\s*;/);
-                if (!match) return [];
-                const arr = eval("(" + match[1] + ")");
-                return arr.map(p => ({
-                    id: p.id,
-                    label: p.label || p.id,
-                    start: p.start || '',
-                    end: p.end || ''
-                }));
-            } catch(e) {
-                console.error("Error parsing ALL_PERIODS_OFFERS:", e);
-                return [];
+                const regex = /["']id["']\s*:\s*["']([^"']+)["']\s*,\s*["']label["']\s*:\s*["']([^"']+)["']\s*,\s*["']start["']\s*:\s*["']([^"']+)["']\s*,\s*["']end["']\s*:\s*["']([^"']+)["']/g;
+                let match;
+                const found = [];
+                const seenIds = new Set();
+                while ((match = regex.exec(html)) !== null) {
+                    const id = match[1];
+                    if (!seenIds.has(id)) {
+                        seenIds.add(id);
+                        found.push({
+                            id: id,
+                            label: match[2] || id,
+                            start: match[3] || '',
+                            end: match[4] || ''
+                        });
+                    }
+                }
+                if (found.length > 0) {
+                    console.log(`✅ Extracted ${found.length} periods via regex property matcher`);
+                    return found;
+                }
+            } catch (errRegex) {
+                console.warn("Regex parser notice:", errRegex);
             }
+
+            // Method 2: Sliced Array Evaluator
+            try {
+                const marker = "ALL_PERIODS_OFFERS = [";
+                const startIdx = html.indexOf(marker);
+                if (startIdx !== -1) {
+                    const semiIdx = html.indexOf("];", startIdx);
+                    if (semiIdx !== -1) {
+                        const jsonSlice = html.substring(startIdx + "ALL_PERIODS_OFFERS = ".length, semiIdx + 1);
+                        const arr = eval("(" + jsonSlice + ")");
+                        if (Array.isArray(arr) && arr.length > 0) {
+                            return arr.map(p => ({
+                                id: p.id,
+                                label: p.label || p.id,
+                                start: p.start || '',
+                                end: p.end || ''
+                            }));
+                        }
+                    }
+                }
+            } catch(e) {
+                console.error("Error parsing ALL_PERIODS_OFFERS slice:", e);
+            }
+
+            return [];
         }
 
-        // Rebuild period select dropdown from periods list
         function populateSelectWithPeriods(periods) {
             if (!periods || periods.length === 0) return;
             syncedPeriodsList = periods;
@@ -950,6 +1115,9 @@
             const possiblePaths = [
                 'offersgit.html',
                 '../offersgit.html',
+                '../../MONOSYSTEM STOCK/kaph-main_3/kaph-main/New folder/New folder/offersgit.html',
+                '../../MONOSYSTEM STOCK/kaph-main_3/kaph-main/offersgit.html',
+                '../../MONOSYSTEM STOCK/offersgit.html',
                 '../kaph-main/New folder/offersgit.html',
                 'https://raw.githubusercontent.com/meralmohamed121022-cyber/photos/refs/heads/main/offersgit.html'
             ];
@@ -996,6 +1164,202 @@
         }
 
         // Load on startup
+        
+        // ==========================================
+        // 📸 نظام رفع ومعالجة الصور المباشر من الجهاز
+        // ==========================================
+
+        // معالجة اختيار صورة من ملف الجهاز
+        function handleDeviceImageUpload(event) {
+            const file = event.target.files ? event.target.files[0] : null;
+            if (!file) return;
+            processAndApplyImageFile(file);
+        }
+
+        // ضغط ومعالجة ملف الصورة وتوليد الرابط تلقائياً
+        function processAndApplyImageFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                showToast("يرجى اختيار ملف صورة صالح (JPG, PNG, WEBP, GIF)", false);
+                return;
+            }
+
+            const origSizeKB = Math.round(file.size / 1024);
+            showUploadStatus(`جاري ضغط ومعالجة الصورة (${origSizeKB} KB)...`, true);
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    try {
+                        // استخدام Canvas لضبط الأبعاد وضغط الصورة لتحميل فائق السرعة
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        // الحد الأقصى للأبعاد 1200px لضمان الدقة والسرعة الفائقة
+                        const MAX_DIM = 1200;
+                        if (width > MAX_DIM || height > MAX_DIM) {
+                            if (width > height) {
+                                height = Math.round((height * MAX_DIM) / width);
+                                width = MAX_DIM;
+                            } else {
+                                width = Math.round((width * MAX_DIM) / height);
+                                height = MAX_DIM;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // الحفظ بصيغة JPEG بجودة 0.85 (أو PNG إذا كانت صورة شفافة)
+                        const isPng = file.type === 'image/png';
+                        const dataUrl = canvas.toDataURL(isPng ? 'image/png' : 'image/jpeg', 0.85);
+                        const newSizeKB = Math.round((dataUrl.length * (3/4)) / 1024);
+
+                        // تعيين الرابط فورياً في الحقل وتحديث المعاينة
+                        const urlInput = document.getElementById('imgUrlInput');
+                        urlInput.value = dataUrl;
+                        updateMonoPreview();
+
+                        showUploadStatus(`✅ تم تجهيز وضغط الصورة (${newSizeKB} KB) وتوليد الرابط تلقائياً!`, false, true);
+                        showToast("تم توليد رابط الصورة من جهازك بنجاح! اضغط حفظ للاعتماد.", true);
+                    } catch(err) {
+                        console.error("Canvas compression error:", err);
+                        // Fallback: استخدام DataURL الأصلي مباشرة
+                        document.getElementById('imgUrlInput').value = e.target.result;
+                        updateMonoPreview();
+                        showUploadStatus(`✅ تم توليد رابط الصورة بنجاح (${origSizeKB} KB)!`, false, true);
+                    }
+                };
+                img.onerror = function() {
+                    showUploadStatus("تعذر قراءة ملف الصورة!", false, false);
+                    showToast("تعذر تحميل ملف الصورة المحدد!", false);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showUploadStatus(msg, isLoading, isSuccess = false) {
+            const bar = document.getElementById('uploadStatusBar');
+            const icon = document.getElementById('uploadStatusIcon');
+            const txt = document.getElementById('uploadStatusText');
+            if (!bar) return;
+
+            bar.style.display = 'flex';
+            txt.innerText = msg;
+
+            if (isLoading) {
+                bar.className = 'upload-status-bar loading';
+                icon.className = 'fas fa-spinner fa-spin';
+            } else if (isSuccess) {
+                bar.className = 'upload-status-bar success';
+                icon.className = 'fas fa-circle-check';
+            } else {
+                bar.className = 'upload-status-bar';
+                icon.className = 'fas fa-circle-exclamation';
+            }
+        }
+
+        // نسخ الرابط الحالي
+        function copyCurrentImgUrl() {
+            const url = document.getElementById('imgUrlInput').value.trim();
+            if (!url) {
+                showToast("لا يوجد رابط صورة لنسخه!", false);
+                return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast("تم نسخ رابط الصورة إلى الحافظة بنجاح! 📋", true);
+                }).catch(() => fallbackCopy(url));
+            } else {
+                fallbackCopy(url);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast("تم نسخ رابط الصورة إلى الحافظة بنجاح! 📋", true);
+        }
+
+        // التصحيح التلقائي للروابط عند اللصق
+        function cleanAndRepairImageUrl(url) {
+            if (!url) return '';
+            let u = url.trim();
+
+            // إصلاح حالة النسخ المقطوع مثل "ontent.com/meralmohamed121022..."
+            if (u.startsWith('ontent.com/') || u.startsWith('raw.githubusercontent.com/')) {
+                u = 'https://raw.githubuserc' + u.replace(/^ontent\.com\//, '');
+                if (!u.startsWith('https://')) u = 'https://' + u;
+            } else if (u.includes('githubusercontent.com') && !u.startsWith('http')) {
+                u = 'https://' + u;
+            }
+
+            // إصلاح روابط الـ Blob في GitHub لتحويلها إلى Raw مباشر
+            if (u.includes('github.com') && u.includes('/blob/')) {
+                u = u.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+            }
+
+            return u;
+        }
+
+        function onImgUrlInputChanged() {
+            const input = document.getElementById('imgUrlInput');
+            const repaired = cleanAndRepairImageUrl(input.value);
+            if (repaired !== input.value) {
+                input.value = repaired;
+            }
+            updateMonoPreview();
+        }
+
+        // دعم السحب والإفلات (Drag & Drop) ولصق الحافظة (Ctrl+V)
+        function initDragDropAndPaste() {
+            const dropZone = document.getElementById('deviceDropZone');
+            const previewWin = document.getElementById('previewWindow');
+
+            [dropZone, previewWin].forEach(elem => {
+                if (!elem) return;
+                elem.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    elem.classList.add('dragover');
+                });
+                elem.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    elem.classList.remove('dragover');
+                });
+                elem.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    elem.classList.remove('dragover');
+                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        processAndApplyImageFile(e.dataTransfer.files[0]);
+                    }
+                });
+            });
+
+            // دعم لصق صورة مباشرة بـ Ctrl+V في أي مكان بالصفحة
+            window.addEventListener('paste', (e) => {
+                if (e.clipboardData && e.clipboardData.items) {
+                    for (let item of e.clipboardData.items) {
+                        if (item.type.indexOf('image') !== -1) {
+                            const file = item.getAsFile();
+                            if (file) {
+                                processAndApplyImageFile(file);
+                                showToast("تم استلام الصورة من الحافظة ومعالجتها بنجاح! 📋", true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             initLocalStorageRegistry();
 
@@ -1008,6 +1372,7 @@
                 }
             } catch(e) {}
 
+            initDragDropAndPaste();
             loadMonoSettings();
             syncPeriodsFromOffersGit(true); // background silent auto-sync
         });
