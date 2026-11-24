@@ -975,8 +975,35 @@
         // Parse ALL_PERIODS_OFFERS array from offersgit.html text
         function parsePeriodsFromHtml(html) {
             if (!html) return [];
-            
-            // Method 1: Direct Regex Property Extraction (Fastest and immune to giant arrays / eval issues)
+
+            // Method 1: Exact Offers Trans marker extraction
+            try {
+                const startMarker = "const ALL_PERIODS_OFFERS = ";
+                const endMarker = "function parseLocalDate";
+                const offersStartIdx = html.indexOf(startMarker);
+                const endMarkerIdx = offersStartIdx !== -1 ? html.indexOf(endMarker, offersStartIdx) : -1;
+                if (offersStartIdx !== -1 && endMarkerIdx !== -1) {
+                    let arrayStr = html.substring(offersStartIdx + startMarker.length, endMarkerIdx);
+                    const lastBracketIdx = arrayStr.lastIndexOf(']');
+                    if (lastBracketIdx !== -1) {
+                        arrayStr = arrayStr.substring(0, lastBracketIdx + 1);
+                        const arr = (new Function(`return ${arrayStr};`))();
+                        if (Array.isArray(arr) && arr.length > 0) {
+                            console.log(`✅ Extracted ${arr.length} periods via Offers Trans method`);
+                            return arr.map(p => ({
+                                id: p.id,
+                                label: p.label || p.id,
+                                start: p.start || '',
+                                end: p.end || ''
+                            }));
+                        }
+                    }
+                }
+            } catch (e1) {
+                console.warn("Method 1 parser notice:", e1);
+            }
+
+            // Method 2: Direct Regex Property Extraction
             try {
                 const regex = /["']id["']\s*:\s*["']([^"']+)["']\s*,\s*["']label["']\s*:\s*["']([^"']+)["']\s*,\s*["']start["']\s*:\s*["']([^"']+)["']\s*,\s*["']end["']\s*:\s*["']([^"']+)["']/g;
                 let match;
@@ -1002,32 +1029,10 @@
                 console.warn("Regex parser notice:", errRegex);
             }
 
-            // Method 2: Sliced Array Evaluator
-            try {
-                const marker = "ALL_PERIODS_OFFERS = [";
-                const startIdx = html.indexOf(marker);
-                if (startIdx !== -1) {
-                    const semiIdx = html.indexOf("];", startIdx);
-                    if (semiIdx !== -1) {
-                        const jsonSlice = html.substring(startIdx + "ALL_PERIODS_OFFERS = ".length, semiIdx + 1);
-                        const arr = eval("(" + jsonSlice + ")");
-                        if (Array.isArray(arr) && arr.length > 0) {
-                            return arr.map(p => ({
-                                id: p.id,
-                                label: p.label || p.id,
-                                start: p.start || '',
-                                end: p.end || ''
-                            }));
-                        }
-                    }
-                }
-            } catch(e) {
-                console.error("Error parsing ALL_PERIODS_OFFERS slice:", e);
-            }
-
             return [];
         }
 
+        // Rebuild period select dropdown from periods list
         function populateSelectWithPeriods(periods) {
             if (!periods || periods.length === 0) return;
             syncedPeriodsList = periods;
@@ -1214,7 +1219,7 @@
             }
         }
 
-        // 🔄 سحب الفترات مباشرة من ريبو kaph على GitHub
+        // 🔄 سحب الفترات مباشرة من ريبو kaph على GitHub (بنفس آلية Offers Trans عبر Blobs API لتجنب قيود الـ 1MB و CORS)
         async function syncPeriodsFromKaphRepo(isSilent = false) {
             const icon = document.getElementById('syncSpinIcon');
             if (icon) icon.className = 'fas fa-spinner fa-spin';
@@ -1227,11 +1232,13 @@
             }
 
             try {
-                const url = 'https://api.github.com/repos/meralmohamed121022-cyber/kaph/contents/offersgit.html';
-                const res = await fetch(url, {
+                const repo = 'meralmohamed121022-cyber/kaph';
+                const filePath = 'offersgit.html';
+                const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}?t=${Date.now()}`;
+                const res = await fetch(apiUrl, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3.raw'
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
                 });
 
@@ -1239,7 +1246,27 @@
                     throw new Error(`GitHub error ${res.status} ${res.statusText}`);
                 }
 
-                const rawHtml = await res.text();
+                const fileData = await res.json();
+                let base64Content = fileData.content;
+
+                // إذا كان الملف أكبر من 1MB فإن GitHub يرسله عبر Git Blobs API
+                if (!base64Content || base64Content.trim() === '') {
+                    const blobRes = await fetch(`https://api.github.com/repos/${repo}/git/blobs/${fileData.sha}`, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    if (!blobRes.ok) {
+                        throw new Error(`Failed to fetch Blob: ${blobRes.status} ${blobRes.statusText}`);
+                    }
+                    const blobData = await blobRes.json();
+                    base64Content = blobData.content;
+                }
+
+                base64Content = base64Content.replace(/\s/g, '');
+                const rawHtml = decodeURIComponent(escape(atob(base64Content)));
+
                 const periods = parsePeriodsFromHtml(rawHtml);
 
                 if (periods && periods.length > 0) {
@@ -1283,7 +1310,7 @@
             const res = await fetch(uploadApiUrl, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `token ${token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/vnd.github.v3+json'
                 },
